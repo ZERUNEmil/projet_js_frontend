@@ -2,7 +2,7 @@
 // However, the JS has still to be loaded for each Bootstrap's component that needs it.
 // Here, because our JS component 'Navbar' has the same name as Navbar Bootstrap's component
 // we change the name of the imported Bootstrap's 'Navbar' component
-import { Navbar as BootstrapNavbar} from "bootstrap";
+import { Navbar as BootstrapNavbar } from "bootstrap";
 
 /**
  * Render the Navbar which is styled by using Bootstrap
@@ -12,11 +12,11 @@ import { Navbar as BootstrapNavbar} from "bootstrap";
  */
 
 const Navbar = () => {
-  const navbarWrapper = document.querySelector("#navbarWrapper");
-  let navbar = `
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+	const navbarWrapper = document.querySelector("#navbarWrapper");
+	let navbar = `
+  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark align-center">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Add your brand here</a>
+          <a class="navbar-brand" href="#">All'Asta</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -31,17 +31,20 @@ const Navbar = () => {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#" data-uri="/">Home</a>
+                <a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" data-uri="/new">New Page</a>
-              </li>                        
+                <a class="nav-link" href="#" data-uri="/enchères">Enchères</a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
+              </li>                       
             </ul>
           </div>
         </div>
       </nav>
-  `;  
-  navbarWrapper.innerHTML = navbar;
+  `;
+	navbarWrapper.innerHTML = navbar;
 };
 
 export default Navbar;
