@@ -5,7 +5,7 @@ import { Redirect } from "../Router/Router";
  * Render the NewPage :
  * Just an example to demonstrate how to use the router to "redirect" to a new page
  */
-function RegisterPage() {
+function SigninPage() {
 	// Deal with your NewPage content here
 	const pageDiv = document.querySelector("#page");
 	pageDiv.innerHTML = `<br> Deal with the content of your RegisterPage <br>`;
@@ -22,4 +22,4 @@ function RegisterPage() {
 	pageDiv.appendChild(submit);
 }
 
-export default RegisterPage;
+export default SigninPage;
