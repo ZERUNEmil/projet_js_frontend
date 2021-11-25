@@ -34,7 +34,7 @@ const Navbar = () => {
 				</ul>
 				<ul class="nav navbar-nav ml-auto w-100 justify-content-end">
 					<li class="nav-item">
-						<a class="nav-link" href="#" data-uri="/register">Register</a>
+						<a class="nav-link" href="#" data-uri="/signin">Sign In</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#" data-uri="/login">Log in</a>
