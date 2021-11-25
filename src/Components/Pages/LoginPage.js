@@ -7,7 +7,7 @@ import { Redirect } from "../Router/Router";
 function LoginPage() {
 	// Deal with your NewPage content here
 	const pageDiv = document.querySelector("#page");
-	pageDiv.innerHTML = "";
+	pageDiv.innerHTML = `<br> Deal with the content of your LoginPage <br>`;
 	// create a login form
 	const submit = document.createElement("input");
 	submit.value = "Go back to HomePage";

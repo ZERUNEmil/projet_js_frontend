@@ -16,7 +16,7 @@ const Navbar = () => {
 	// if (user ?
 	let navbar = `
   <nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center navbar-dark bg-dark">
-			<a href="/" class="navbar-brand d-flex w-50 mr-auto">All'Asta</a>
+			<a href="#" data-uri="/" class="navbar-brand d-flex w-50 mr-auto">All'Asta</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
 				<span class="navbar-toggler-icon"></span>
 			</button>

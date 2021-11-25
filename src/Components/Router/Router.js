@@ -1,4 +1,6 @@
 import HomePage from "../Pages/HomePage";
+import AnnoncesPage from "../Pages/AnnoncesPage";
+import VendeursPage from "../Pages/VendeursPage";
 import RegisterPage from "../Pages/RegisterPage";
 import LoginPage from "../Pages/LoginPage";
 import ProfilPage from "../Pages/ProfilPage";
@@ -6,6 +8,8 @@ import ProfilPage from "../Pages/ProfilPage";
 // Configure your routes here
 const routes = {
 	"/": HomePage,
+	"/annonces": AnnoncesPage,
+	"/vendeurs": VendeursPage,
 	"/register": RegisterPage,
 	"/login": LoginPage,
 	"/profil": ProfilPage

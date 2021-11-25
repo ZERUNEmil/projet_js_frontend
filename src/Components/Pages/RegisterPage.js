@@ -8,7 +8,7 @@ import { Redirect } from "../Router/Router";
 function RegisterPage() {
 	// Deal with your NewPage content here
 	const pageDiv = document.querySelector("#page");
-	pageDiv.innerHTML = "";
+	pageDiv.innerHTML = `<br> Deal with the content of your RegisterPage <br>`;
 	// create a register form
 	const submit = document.createElement("input");
 	submit.value = "Go back to HomePage";
