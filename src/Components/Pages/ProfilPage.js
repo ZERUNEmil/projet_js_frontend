@@ -1,12 +1,10 @@
-import { Redirect } from "../Router/Router";
-
 /**
- * Render the HomePage
+ * Render the ProfilPage
  */
 
-const HomePage = () => {
+const ProfilPage = () => {
 	const pageDiv = document.querySelector("#page");
 	pageDiv.innerHTML = "Deal with the content of your HomePage";
 };
 
-export default HomePage;
+export default ProfilPage;

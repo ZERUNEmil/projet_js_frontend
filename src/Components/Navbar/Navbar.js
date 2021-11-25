@@ -13,37 +13,67 @@ import { Navbar as BootstrapNavbar } from "bootstrap";
 
 const Navbar = () => {
 	const navbarWrapper = document.querySelector("#navbarWrapper");
+	// if (user ?
 	let navbar = `
-  <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark align-center">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">All'Asta</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" data-uri="/enchères">Enchères</a>
-              </li> 
-              <li class="nav-item">
-                <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-              </li>                       
-            </ul>
-          </div>
-        </div>
-      </nav>
+  <nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center navbar-dark bg-dark">
+			<a href="/" class="navbar-brand d-flex w-50 mr-auto">All'Asta</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="navbar-collapse collapse w-100" id="Navbar">
+				<ul class="navbar-nav w-100 justify-content-center">
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-uri="/register">Register</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#" data-uri="/login">Log in</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
   `;
+	// :
+	// `
+	//   <nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center navbar-dark bg-dark">
+	// 		<a href="/" class="navbar-brand d-flex w-50 mr-auto">All'Asta</a>
+	// 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+	// 			<span class="navbar-toggler-icon"></span>
+	// 		</button>
+	// 		<div class="navbar-collapse collapse w-100" id="Navbar">
+	// 			<ul class="navbar-nav w-100 justify-content-center">
+	// 				<li class="nav-item">
+	// 					<a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
+	// 				</li>
+	// 				<li class="nav-item">
+	// 					<a class="nav-link" href="#" data-uri="/Annonces">Annonces</a>
+	// 				</li>
+	// 				<li class="nav-item">
+	// 					<a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
+	// 				</li>
+	// 			</ul>
+	// 			<ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+	// 				<li class="nav-item">
+	// 					<a class="nav-link" href="#" date-uri="/profil">Profil</a>
+	// 				</li>
+	// 				<li class="nav-item">
+	// 					<a class="nav-link" href="#" date-uri="/">Log Out</a>
+	// 				</li>
+	// 			</ul>
+	// 		</div>
+	// 	</nav>
+	// `;
+	// )
 	navbarWrapper.innerHTML = navbar;
 };
 
