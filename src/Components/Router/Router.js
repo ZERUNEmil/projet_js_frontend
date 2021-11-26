@@ -10,7 +10,7 @@ const routes = {
 	"/": HomePage,
 	"/annonces": AnnoncesPage,
 	"/vendeurs": VendeursPage,
-	"/register": SigninPage,
+	"/signin": SigninPage,
 	"/login": LoginPage,
 	"/profil": ProfilPage
 };
