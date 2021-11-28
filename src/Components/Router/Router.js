@@ -1,7 +1,7 @@
 import HomePage from "../Pages/HomePage";
 import AnnoncesPage from "../Pages/AnnoncesPage";
 import VendeursPage from "../Pages/VendeursPage";
-import SigninPage from "../Pages/SigninPage";
+import SignupPage from "../Pages/SignupPage";
 import LoginPage from "../Pages/LoginPage";
 import ProfilPage from "../Pages/ProfilPage";
 
@@ -10,7 +10,7 @@ const routes = {
 	"/": HomePage,
 	"/annonces": AnnoncesPage,
 	"/vendeurs": VendeursPage,
-	"/signin": SigninPage,
+	"/signup": SignupPage,
 	"/login": LoginPage,
 	"/profil": ProfilPage
 };

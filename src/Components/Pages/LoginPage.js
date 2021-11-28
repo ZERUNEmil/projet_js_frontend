@@ -18,7 +18,7 @@ function LoginPage() {
 							<div class="mt-md-4 pb-3">
 
 								<h2 class="fw-bold mb-4 text-uppercase">Login</h2>
-								<p class="text-white-50 mb-5">Please enter your login and password!</p>
+								<p class="text-white-50 mb-5">Veuillez entrer votre email et mot de passe</p>
 
 								<div class="form-outline form-white mb-4">
 									<input type="email" id="typeEmailX" class="form-control form-control-lg" />
@@ -27,10 +27,10 @@ function LoginPage() {
 
 								<div class="form-outline form-white mb-4">
 									<input type="password" id="typePasswordX" class="form-control form-control-lg" />
-									<label class="form-label" for="typePasswordX">Password</label>
+									<label class="form-label" for="typePasswordX">Mot de passe</label>
 								</div>
 
-								<p class="small mb-4 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+								<p class="small mb-4 pb-lg-2"><a class="text-white-50" href="#!">Mot de passe oublié ?</a></p>
 
 								<button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
 
@@ -40,7 +40,7 @@ function LoginPage() {
 									<a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
 								</div>
 								
-								<p class="mt-4">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a></p>
+								<p class="mt-4">Vous n'avez pas encore de compte ? <a href="#!" class="text-white-50 fw-bold">Sign Up</a></p>
 							</div>
 
 

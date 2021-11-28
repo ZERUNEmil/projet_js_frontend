@@ -14,8 +14,38 @@ import { Navbar as BootstrapNavbar } from "bootstrap";
 const Navbar = () => {
 	const navbarWrapper = document.querySelector("#navbarWrapper");
 	// if (user ?
+	// let navbar = `
+	// 		<nav class="navbar navbar-light bg-light navbar-expand-md bg-faded justify-content-center">
+	// 			<a href="#" data-uri="/" class="navbar-brand d-flex w-50 px-3 mr-auto">All'Asta</a>
+	// 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+	// 				<span class="navbar-toggler-icon"></span>
+	// 			</button>
+	// 			<div class="navbar-collapse collapse w-100" id="Navbar">
+	// 				<ul class="navbar-nav w-100 justify-content-center">
+	// 					<li class="nav-item">
+	// 						<a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
+	// 					</li>
+	// 					<li class="nav-item">
+	// 						<a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
+	// 					</li>
+	// 					<li class="nav-item">
+	// 						<a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
+	// 					</li>
+	// 				</ul>
+	// 				<ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
+	// 					<li class="nav-item">
+	// 						<a class="nav-link" href="#" data-uri="/profil">Profil</a>
+	// 					</li>
+	// 					<li class="nav-item">
+	// 						<a class="nav-link" href="#" data-uri="/">Log out</a>
+	// 					</li>
+	// 				</ul>
+	// 			</div>
+	// 		</nav>
+	// 	`;
+	// :
 	let navbar = `
-  		<nav class="navbar navbar-light bg-light navbar-expand-md bg-faded justify-content-center">
+		<nav class="navbar navbar-light bg-light navbar-expand-md bg-faded justify-content-center">
 			<a href="#" data-uri="/" class="navbar-brand d-flex w-50 px-3 mr-auto">All'Asta</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
 				<span class="navbar-toggler-icon"></span>
@@ -34,7 +64,7 @@ const Navbar = () => {
 				</ul>
 				<ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
 					<li class="nav-item">
-						<a class="nav-link" href="#" data-uri="/signin">Sign In</a>
+						<a class="nav-link" href="#" data-uri="/signup">Sign Up</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#" data-uri="/login">Log in</a>
@@ -42,37 +72,7 @@ const Navbar = () => {
 				</ul>
 			</div>
 		</nav>
-  		`;
-	// :
-	// 	`
-	// 	<nav class="navbar navbar-light bg-light navbar-expand-md bg-faded justify-content-center">
-	// 		<a href="#" data-uri="/" class="navbar-brand d-flex w-50 px-3 mr-auto">All'Asta</a>
-	// 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
-	// 			<span class="navbar-toggler-icon"></span>
-	// 		</button>
-	// 		<div class="navbar-collapse collapse w-100" id="Navbar">
-	// 			<ul class="navbar-nav w-100 justify-content-center">
-	// 				<li class="nav-item">
-	// 					<a class="nav-link" aria-current="page" href="#" data-uri="/">Accueil</a>
-	// 				</li>
-	// 				<li class="nav-item">
-	// 					<a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
-	// 				</li>
-	// 				<li class="nav-item">
-	// 					<a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-	// 				</li>
-	// 			</ul>
-	// 			<ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
-	// 				<li class="nav-item">
-	// 					<a class="nav-link" href="#" data-uri="/profil">Profil</a>
-	// 				</li>
-	// 				<li class="nav-item">
-	// 					<a class="nav-link" href="#" data-uri="/">Log out</a>
-	// 				</li>
-	// 			</ul>
-	// 		</div>
-	// 	</nav>
-	// 	`;
+	`;
 	// );
 	navbarWrapper.innerHTML = navbar;
 };
