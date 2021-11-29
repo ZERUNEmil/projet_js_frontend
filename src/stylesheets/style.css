@@ -1,4 +1,11 @@
+/*
+** Palette de couleur
+** #7D0633 - #31112C - #F2A07B - #FBDCC4
+*/
 
-#page{
+body {
+    background-color: #31112C;
+}
+#page {
     color: white;
 }
