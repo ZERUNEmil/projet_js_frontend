@@ -1,13 +1,12 @@
-import { Redirect } from "../Router/Router";
+import {Redirect} from "../Router/Router";
 
 /**
  * Render the NewPage :
  * Just an example to demonstrate how to use the router to "redirect" to a new page
  */
 function LoginPage() {
-	// Deal with your NewPage content here
-	const pageDiv = document.querySelector("#page");
-	pageDiv.innerHTML = `
+    const pageDiv = document.querySelector("#page");
+    pageDiv.innerHTML = `
 	<section class="gradient-custom">
 		<div class="container py-4">
 			<div class="row d-flex justify-content-center align-items-center h-100">
