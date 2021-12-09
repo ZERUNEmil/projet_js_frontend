@@ -1,55 +1,83 @@
+import HomePage from "./HomePage";
 import {Redirect} from "../Router/Router";
-
+import Navbar from "../Navbar/Navbar";
 /**
- * Render the NewPage :
- * Just an example to demonstrate how to use the router to "redirect" to a new page
+ * View the Login form :
+ * render a login page into the #page div (formerly login function)
  */
 function LoginPage() {
-    const pageDiv = document.querySelector("#page");
-    pageDiv.innerHTML = `
-	<section class="gradient-custom">
-		<div class="container py-4">
-			<div class="row d-flex justify-content-center align-items-center h-100">
-				<div class="col-12 col-md-8 col-lg-6 col-xl-5">
-					<div class="card bg-dark text-white" style="border-radius: 1rem;">
-						<div class="card-body px-5 py-4 text-center">
+  // reset #page div
+  const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML = "";
+  // create a login form
+  const form = document.createElement("form");
+  form.className = "p-5";
 
-							<div class="mt-md-4 pb-3">
+  //email
+  const email = document.createElement("input");
+  email.type = "text";
+  email.id = "email";
+  email.placeholder = "email";
+  email.required = true;
+  email.className = "form-control mb-3";
 
-								<h2 class="fw-bold mb-4 text-uppercase">Login</h2>
-								<p class="text-white-50 mb-5">Veuillez entrer votre email et mot de passe</p>
-
-								<div class="form-outline form-white mb-4">
-									<input type="email" id="typeEmailX" class="form-control form-control-lg" />
-									<label class="form-label" for="typeEmailX">Email</label>
-								</div>
-
-								<div class="form-outline form-white mb-4">
-									<input type="password" id="typePasswordX" class="form-control form-control-lg" />
-									<label class="form-label" for="typePasswordX">Mot de passe</label>
-								</div>
-
-								<p class="small mb-4 pb-lg-2"><a class="text-white-50" href="#!">Mot de passe oublié ?</a></p>
-
-								<button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
-								<div class="d-flex justify-content-center text-center mt-3 pt-1">
-									<a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-									<a href="#!" class="text-white"><i class="fab fa-twitter mx-4 fa-lg"></i></a>
-									<a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-								</div>
-								
-								<p class="mt-4">Vous n'avez pas encore de compte ? <a href="#!" class="text-white-50 fw-bold">Sign Up</a></p>
-							</div>
+  //email
+  const password = document.createElement("input");
+  password.type = "password";
+  password.id = "password";
+  password.required = true;
+  password.placeholder = "password";
+  password.className = "form-control mb-3";
 
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	`;
+  const submit = document.createElement("input");
+  submit.value = "Login";
+  submit.type = "submit";
+  submit.className = "btn btn-danger";
+  form.appendChild(email);
+  form.appendChild(password);
+  form.appendChild(submit);
+
+  form.addEventListener("submit", onSubmit);
+  pageDiv.appendChild(form);
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    console.log("credentials", email.value, password.value);
+    try {
+      const options = {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        body: JSON.stringify({
+          email: email.value,
+          password: password.value,
+        }), // body data type must match "Content-Type" header
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
+
+      if (!response.ok) {
+        throw new Error(
+          "fetch error : " + response.status + " : " + response.statusText
+        );
+      }
+      const user = await response.json(); // json() returns a promise => we wait for the data
+      console.log("user authenticated", user);
+      // what to do whith the token ? To be dealt with in next step
+
+      // Rerender the navbar for an authenticated user : temporary step prior to deal with token
+      Navbar({isAuthenticated:true});
+
+      // call the HomePage via the Router
+      Redirect("/");
+    } catch (error) {
+      console.error("LoginPage::error: ", error);
+    }
+  }
 }
 
 export default LoginPage;
