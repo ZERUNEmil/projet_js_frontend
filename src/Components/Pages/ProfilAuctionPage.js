@@ -6,23 +6,39 @@ import "../../stylesheets/profileStyle.css";
  * Render the ProfilPage
  */
 
-const ProfilAuctionPage = () => {
+const ProfilAuctionPage = async () => {
     const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
-	let user = getSessionObject("user");
-	console.log(user);
-	if(! user) return Redirect("/login");
+	let userEmail = getSessionObject("user");
+	console.log(userEmail);
+	if(! userEmail) return Redirect("/login");
 
-	// reset #page div
-	const pageDiv = document.querySelector("#page");
-	pageDiv.innerHTML = "";
+	// Collecting the info of the user
+	try{
+		const response = await fetch("/api/users/"+userEmail.email);
 
-	const structure = document.createElement("section");
+		if(!response.ok){
+			throw new Error(
+				"fetch error : " + Response.status + " : " + response.statusText
+			);
+		}
 
-	addTabContent(user, structure, images);
+		const user = await response.json();
+	
 
-	pageDiv.appendChild(structure);
-}
+		// reset #page div
+		const pageDiv = document.querySelector("#page");
+		pageDiv.innerHTML = "";
+
+		const structure = document.createElement("section");
+
+		addTabContent(user, structure, images);
+
+		pageDiv.appendChild(structure);
+	} catch (error){
+		console.error("ProfilView::error: " + error);
+	}
+};
 
 function addTabContent(user, structure, images){
 	structure.className = "py-5 my-5";
@@ -32,7 +48,7 @@ function addTabContent(user, structure, images){
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
-	title.textContent = "Account Settings";
+	title.textContent = "Welcome, " + user.username;
 
 	const account = document.createElement("div");
 	account.className = "shadow rounded-lg d-block d-sm-flex";
@@ -47,7 +63,7 @@ function addTabContent(user, structure, images){
 	usersPicture.className = "img-circle text-center mb-3";
 
 	const picture = document.createElement("img");
-	picture.src = images['user2.jpg'];
+	picture.src = images[user.profil_picture];
 	picture.alt = "User\'s picture";
 
 	const userName = document.createElement("h4");
