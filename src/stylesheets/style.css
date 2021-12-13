@@ -1,11 +1,24 @@
 /*
 ** Palette de couleur
 ** #7D0633 - #31112C - #F2A07B - #FBDCC4
+
+    class => .
+    id => #
 */
+
+
 
 body {
     background-color: #31112C;
 }
+
+
 #page {
     color: white;
+}
+
+
+#login-form{
+    margin:10px auto;
+    width: 700px;
 }
