@@ -19,7 +19,6 @@ function LoginPage() {
   
 
   //email
-  
   const email = document.createElement("input");
   email.type = "text";
   email.id = "email";
@@ -27,7 +26,7 @@ function LoginPage() {
   email.required = true;
   email.className = "form-control mb-3";
 
-  //email
+  //password
   const password = document.createElement("input");
   password.type = "password";
   password.id = "password";
@@ -41,9 +40,14 @@ function LoginPage() {
   submit.type = "submit";
   submit.className = "btn btn-danger";
 
+  //error message
+  const message = document.createElement("div");
+  message.id = "message";
+
   form.appendChild(email);
   form.appendChild(password);
   form.appendChild(submit);
+  form.appendChild(message);
 
   form.addEventListener("submit", onSubmit);
   pageDiv.appendChild(form);
@@ -85,9 +89,19 @@ function LoginPage() {
       Redirect("/");
     } catch (error) {
       console.error("LoginPage::error: ", error);
-      alert("Attention : Aucun compte correspondant");
+      errorLogin();
+      //alert("Attention : Aucun compte correspondant");
     }
   }
 }
+
+function errorLogin() {
+  console.log("alert");
+  const alertDiv = document.getElementById("message");
+  alertDiv.innerHTML=`<br><div class="alert alert-danger" role="alert">
+     Attention : Aucun compte correspondant</div>`;
+  throw new Error("fetch error");
+}
+
 
 export default LoginPage;

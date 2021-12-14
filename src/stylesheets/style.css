@@ -18,7 +18,16 @@ body {
 }
 
 
-#login-form{
+#login-form, #signup-form{
     margin:10px auto;
     width: 700px;
+}
+
+
+.login-form-new{
+    color: white;
+    border-radius: 80pt;
+    border-color : white;
+    border-width: 1px;
+    border-style: solid;
 }
