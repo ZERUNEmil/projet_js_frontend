@@ -6,6 +6,12 @@
     id => #
 */
 
+/*red     #7d0633
+  purpul     #31112c
+  lightPurpul     #3f1739;
+  pink     #f2a07b
+  lightPink     #fbdcc4
+*/
 
 
 body {
@@ -18,16 +24,8 @@ body {
 }
 
 
-#login-form, #signup-form{
-    margin:10px auto;
-    width: 700px;
-}
 
-
-.login-form-new{
-    color: white;
-    border-radius: 80pt;
-    border-color : white;
-    border-width: 1px;
-    border-style: solid;
+.login-form , .signup-form{
+	background-color: #3f1739;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.76) !important;
 }

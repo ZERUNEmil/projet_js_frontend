@@ -2,17 +2,11 @@ import HomePage from "./HomePage";
 import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import { setSessionObject } from "../../utils/session";
-/**
- * View the Login form :
- * render a login page into the #page div (formerly login function)
- */
-function LoginPage() {
+import { getSessionObject } from "../../utils/session";
 
 
-  // reset #page div
-  const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = "";
-  // create a login form
+
+/**    Version 1
   const form = document.createElement("form");
   form.className = "p-5";
   form.id ="login-form";
@@ -48,9 +42,59 @@ function LoginPage() {
   form.appendChild(password);
   form.appendChild(submit);
   form.appendChild(message);
+ */
 
-  form.addEventListener("submit", onSubmit);
-  pageDiv.appendChild(form);
+
+//    Version 2
+ let loginPage =`
+ <form id="loginForm">
+   <div class="container py-4"><br><br>
+     <div class="row d-flex justify-content-center align-items-center h-100">
+       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+         <div class="login-form" style="border-radius: 1rem;">
+           <div class="card-body px-5 py-4 text-center">
+             <div class="mt-md-4 pb-3">
+               <h2 class="fw-bold mb-4 text-uppercase">Login</h2>
+               <p class="text-white-50 mb-5">Veuillez entrer votre email et mot de passe</p><br>
+               <div class="form-outline form-white mb-4">
+                 <input type="email" id="email" class="form-control form-control-lg" />
+                 <label class="form-label" for="email">Email</label>
+               </div>
+               <div class="form-outline form-white mb-4">
+                 <input type="password" id="password" class="form-control form-control-lg" />
+                 <label class="form-label" for="pasword">Mot de passe</label><br><br>
+               </div>
+               <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button><br><br>								
+               <p class="mt-4">Vous n'avez pas encore de compte ? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a></p>
+               <div id="message"></div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+  </div>
+ </form>
+ `;
+
+
+function LoginPage() {
+  // reset #page div
+
+  const pageDiv = document.querySelector("#page");
+  
+  pageDiv.innerHTML = loginPage;
+  const loginForm = document.getElementById("loginForm");
+
+  let user = getSessionObject("user");
+  if (user) {
+    // re-render the navbar for the authenticated user
+    Navbar();
+    Redirect("/");
+  } else {
+    loginForm.addEventListener("submit", onSubmit);
+  }
+};
+
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -89,17 +133,16 @@ function LoginPage() {
       Redirect("/");
     } catch (error) {
       console.error("LoginPage::error: ", error);
-      errorLogin();
+      errorMessage('Aucun compte correspondant');
       //alert("Attention : Aucun compte correspondant");
     }
   }
-}
 
-function errorLogin() {
+function errorMessage(message) {
   console.log("alert");
   const alertDiv = document.getElementById("message");
-  alertDiv.innerHTML=`<br><div class="alert alert-danger" role="alert">
-     Attention : Aucun compte correspondant</div>`;
+  alertDiv.innerHTML=
+  '<br><div class="alert alert-danger" role="alert">  Attention : '+ message  + ' </div>';
   throw new Error("fetch error");
 }
 

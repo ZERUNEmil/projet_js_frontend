@@ -3,18 +3,10 @@ import HomePage from "./HomePage";
 import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import { setSessionObject } from "../../utils/session";
+import { getSessionObject } from "../../utils/session";
+import "../../stylesheets/profileStyle.css";
 
-/**
- * View the Signup form :
- * render a Signup page into the #page div (formerly render function)
- */
- 
- 
- 
-function SignupPage() {
-  // reset #page div
-  const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML = "";
+ /*    version 1
   // create a login form
   const form = document.createElement("form");
   form.className = "p-5";  
@@ -84,21 +76,107 @@ function SignupPage() {
 
   form.addEventListener("submit", onSubmit);
   pageDiv.appendChild(form);
+ */
+ 
+ //    version 2     align-items-center 
+  let signupPage =`
+  <form id="signupForm">
+	<div class="container-md">
+		<br>
+		<br>
+		<div class="signup-form" style="border-radius: 1rem;">
+			<div class="card-body px-5 py-4 text-center">
+				<h2 class="fw-bold mb-4 text-uppercase">Signup</h2>
+				<p class="text-white-50 mb-5">
+					Remplissez les champs avec vos données
+				</p>
+				<br>
+				<div class="row">
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							<i class="fa fa-user"></i>
+							<input type="text" id="firstName" class="form-control form-control-lg" placeholder="Prénom" required /><br>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							<i class="fa fa-user"></i>
+							<input type="text" id="lastName" class="form-control form-control-lg" placeholder="Nom" required /><br>
+						</div>
+					</div>
+				</div>
+				<div class="form-outline form-white mb-4">
+					<i class="fa fa-envelope"></i>
+					<input type="email" id="email" class="form-control form-control-lg" placeholder="Email" required /><br>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							<i class="fa fa-lock"></i>
+							<input type="password" id="password1" class="form-control form-control-lg" placeholder="Mot de passe" required /><br>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							<i class="fa fa-lock"></i>
+							<input type="password" id="password2" class="form-control form-control-lg" placeholder="Confirmation du mot de passe" required /></div>
+					</div>
+				</div>
+				<div class="form-outline form-white mb-4">
+					<i class="fa fa-user"></i>
+					<input type="text" id="address" class="form-control form-control-lg" placeholder="Adresse " />
+					<label class="form-label" for="address">Optionnel</label><br>
+			<br><br>
+					<button class="btn btn-outline-light btn-lg px-5" type="submit">Sign Up</button>
+					<br>
+					<p class="mt-4">
+						Vous avez déjà un compte ?
+						<a href="/login" class="text-white-50 fw-bold">Login</a>
+					</p>
+					<div id="message"></div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<br>
+	<br>
+  `;
+  
+  
+function SignupPage() {
+  // reset #page div
+  const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML = "";
 
+  pageDiv.innerHTML = signupPage;
+  const signupForm = document.getElementById("signupForm");
+
+  let user = getSessionObject("user");
+  if (user) {
+    // re-render the navbar for the authenticated user
+    Navbar();
+    Redirect("/");
+  } else {
+    signupForm.addEventListener("submit", onSubmit);
+  }
+};
+
+ 
   async function onSubmit(e) {
     e.preventDefault();
-    const username = document.getElementById("username");
-    const userlastname = document.getElementById("userlastname");
-    const password = document.getElementById("password");
+    const username = document.getElementById("firstName");
+    const userlastname = document.getElementById("lastName");
+    const password = document.getElementById("password1");
     const password2 = document.getElementById("password2");
     const email = document.getElementById("email");
-    const address = document.getElementById("address");
-    if(password.value !== password2.value){
-      errorPassewords();
-    }
+    const address = document.getElementById("address");  
 
+    if(password.value !== password2.value){
+      errorMessage('Les mots de passe ne corespondent pas');
+    }
+    
     if(! email.value.match('[a-zA-Z0-9+.-]+@[a-zA-Z0-9+.-]+.[a-zA-Z0-9+.-]+')){
-      errorEmail();
+      errorMessage('Cette email n\'est pas valide');
     }
 
     console.log("credentials", username.value, userlastname.value, password.value, email.value, address.value,  );
@@ -120,7 +198,7 @@ function SignupPage() {
       const response = await fetch("/api/auths/signup", options); // fetch return a promise => we wait for the response
 
       if (!response.ok) {
-        errorSignup();
+        errorMessage('Cette email existe déjà');
       }
 
       const user = await response.json(); // json() returns a promise => we wait for the data
@@ -135,38 +213,19 @@ function SignupPage() {
       Redirect("/");
     } catch (error) {
       console.error("SignupPage::error: ", error);
-      errorSignup();
+      errorMessage('Cette email existe déjà');
     }
   }
-}
 
 
 
-function errorPassewords() {
+
+function errorMessage(message) {
   console.log("alert");
   const alertDiv = document.getElementById("message");
-  alertDiv.innerHTML=`<br><div class="alert alert-danger" role="alert">
-     Attention : Les mots de passe sont differents</div>`;
+  alertDiv.innerHTML=
+  '<br><div class="alert alert-danger" role="alert">  Attention : '+ message  + ' </div>';
   throw new Error("fetch error");
 }
-
-function errorEmail() {
-  console.log("alert");
-  const alertDiv = document.getElementById("message");
-  alertDiv.innerHTML=`<br><div class="alert alert-danger" role="alert">
-     Attention : Cette email n'est pas valide</div>`;
-  throw new Error("fetch error");
-}
-
-function errorSignup() {
-  console.log("alert");
-  const alertDiv = document.getElementById("message");
-  alertDiv.innerHTML=`<br><div class="alert alert-danger" role="alert">
-     Attention : Cette email existe déjà</div>`;
-  throw new Error("fetch error");
-}
-
-
-
 
 export default SignupPage;
