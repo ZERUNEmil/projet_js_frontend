@@ -4,7 +4,10 @@ import "../node_modules/@fortawesome/fontawesome-free/js/all";
 
 import Navbar from "./Components/Navbar/Navbar";
 import { Router } from "./Components/Router/Router";
+import Footer from "./Components/Footer/Footer";
 
 Navbar();
 
 Router(); // The router will automatically load the root page
+
+Footer(); // Improve the header with dynamic HTML generation

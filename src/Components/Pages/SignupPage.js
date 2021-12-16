@@ -138,8 +138,8 @@ import "../../stylesheets/profileStyle.css";
 			</div>
 		</div>
 	</form>
-	<br>
-	<br>
+	<br><br>
+	<br><br>
   `;
   
   
