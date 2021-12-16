@@ -1,5 +1,7 @@
 import HomePage from "../Pages/HomePage";
 import AnnoncesPage from "../Pages/AnnoncesPage";
+import AuctionAddPage from "../Pages/AuctionAddPage"
+import AuctionUpdatePage from "../Pages/AuctionUpdatePage";
 import VendeursPage from "../Pages/VendeursPage";
 import SignupPage from "../Pages/SignupPage";
 import LoginPage from "../Pages/LoginPage";
@@ -12,6 +14,8 @@ import ProfilAuctionPage from "../Pages/ProfilAuctionPage";
 const routes = {
 	"/": HomePage,
 	"/annonces": AnnoncesPage,
+	"/auction/add": AuctionAddPage,
+	"/auction/update": AuctionUpdatePage,
 	"/vendeurs": VendeursPage,
 	"/signup": SignupPage,
 	"/login": LoginPage,
@@ -36,7 +40,7 @@ const Router = () => {
 
 		if (uri) {
 			e.preventDefault();
-			/* use Web History API to add current page URL to the user's navigation history 
+			/* use Web History API to add current page URL to the user's navigation history
        & set right URL in the browser (instead of "#") */
 			window.history.pushState({}, uri, window.location.origin + uri);
 			/* render the requested component
