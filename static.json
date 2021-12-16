@@ -1,17 +1,17 @@
 {
     "root": "dist/",
     "routes": {
-    "/**": "index.html"
+        "/**": "index.html"
     },
     "https_only": true,
     "headers": {
-    "/**": {
-    "Strict-TransportSecurity": "max-age=31557600"
-    }
+        "/**": {
+            "Strict-TransportSecurity": "max-age=31557600"
+        }
     },
     "proxies": {
-    "/api/": {
-    "origin": "https://ipl-web2-projet-frontend.herokuapp.com/api/"
+        "/api/": {
+            "origin": "https://ipl-web2-projet-frontend.herokuapp.com/api/"
+        }
     }
-    }
-   }
+}
