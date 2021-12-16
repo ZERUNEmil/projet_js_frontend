@@ -6,6 +6,7 @@ body {
 
 .shadow {
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.76) !important;
+	background: #3f1739;
 }
 
 .profile-tab-nav {
@@ -33,7 +34,7 @@ body {
 
 .nav-pills .nav-link.active {
 	color: #F2A07B;
-	background-color: #31112C;
+	background-color: #3f1739;
 }
 
 .img-circle img {

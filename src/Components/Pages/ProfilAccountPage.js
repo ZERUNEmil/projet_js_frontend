@@ -24,6 +24,8 @@ const ProfilAccountPage = async () => {
 		}
 
 		const user = await response.json();
+
+		console.log(user);
 	
 
 		// reset #page div
@@ -49,7 +51,7 @@ function addTabContent(user, structure, images){
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
-	title.textContent = "Welcome, " + user.username;
+	title.textContent = "Welcome, " + user.firstname;
 
 	const account = document.createElement("div");
 	account.className = "shadow rounded-lg d-block d-sm-flex";
@@ -69,7 +71,7 @@ function addTabContent(user, structure, images){
 
 	const userName = document.createElement("h4");
 	userName.className = "text-center";
-	userName.textContent = user.username;
+	userName.textContent = user.firstname;
 
 	const navigation = document.createElement("div");
 	navigation.className = "nav flex-column nav-pills";
