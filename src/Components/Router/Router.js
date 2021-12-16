@@ -3,7 +3,10 @@ import AnnoncesPage from "../Pages/AnnoncesPage";
 import VendeursPage from "../Pages/VendeursPage";
 import SignupPage from "../Pages/SignupPage";
 import LoginPage from "../Pages/LoginPage";
-import ProfilPage from "../Pages/ProfilPage";
+import Logout from "../Logout/Logout";
+import ProfilAccountPage from "../Pages/ProfilAccountPage";
+import ProfilCreditsPage from "../Pages/ProfilCreditsPage";
+import ProfilAuctionPage from "../Pages/ProfilAuctionPage";
 
 // Configure your routes here
 const routes = {
@@ -12,7 +15,10 @@ const routes = {
 	"/vendeurs": VendeursPage,
 	"/signup": SignupPage,
 	"/login": LoginPage,
-	"/profil": ProfilPage
+	"/logout": Logout,
+	"/profil": ProfilAccountPage,
+	"/profil/credits": ProfilCreditsPage,
+	"/profil/auction": ProfilAuctionPage
 };
 
 /**

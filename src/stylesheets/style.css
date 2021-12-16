@@ -1,4 +1,50 @@
+/*
+** Palette de couleur
+** #7D0633 - #31112C - #F2A07B - #FBDCC4
 
-#page{
+    class => .
+    id => #
+*/
+
+/*red     #7d0633
+  purpul     #31112c
+  lightPurpul     #3f1739;
+  pink     #f2a07b
+  lightPink     #fbdcc4
+*/
+
+
+body {
+    background-color: #31112C;
+}
+
+
+#page {
     color: white;
+}
+#linkFooter{
+    background-color: #55204d;
+}
+
+footer , #infosFooter {
+    
+    text-align: center;
+    color: #3f1739 ;
+    background-color: #dddddd;
+    
+}
+
+#copyrightFooter {
+    
+    text-align: center;
+    color: #3f1739 ;
+    background-color: #b3b3b3;
+    
+}
+
+
+
+.login-form , .signup-form{
+	background-color: #3f1739;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.76) !important;
 }
