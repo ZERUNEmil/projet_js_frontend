@@ -1,6 +1,8 @@
 /**
  * Render the HomePage
  */
+ import {Redirect} from "../Router/Router";
+ import Navbar from "../Navbar/Navbar";
 import starryNightImage from "../../img/StarryNight.jpg";
 import criImage from "../../img/cri.jpg";
 import soleilImage from"../../img/soleil.jpg";
