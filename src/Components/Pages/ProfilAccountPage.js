@@ -56,6 +56,18 @@ function addTabContent(user, structure, images){
 	const account = document.createElement("div");
 	account.className = "shadow rounded-lg d-block d-sm-flex";
 
+	container.appendChild(title);
+	
+	addChoiceNav(account, user, images);
+
+	addInfoNav(account, user);
+
+
+	container.appendChild(account);
+	structure.appendChild(container);
+}
+
+function addChoiceNav(account, user, images){
 	const choices = document.createElement("div");
 	choices.className = "profile-tab-nav border-right";
 
@@ -79,26 +91,162 @@ function addTabContent(user, structure, images){
 	navigation.setAttribute("role", "tablist");
 	navigation.setAttribute("aria-orientation", "vertical");
 
-	addNavActive("Account", "account", navigation);
-	addNavInactive("Credits", "credits", navigation);
-	addNavInactive("Auction history", "auction", navigation);
+	addNavActive("Profil", "account", navigation);
+	addNavInactive("Crédits", "credits", navigation);
+	addNavInactive("Historique d'enchères", "auction", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
 	content.id = "v-pills-tabContent";
-
-
 	
-	container.appendChild(title);
 	usersPicture.appendChild(picture);
 	userPresentation.appendChild(usersPicture);
 	userPresentation.appendChild(userName);
 	choices.appendChild(userPresentation);
 	choices.appendChild(navigation);
 	account.appendChild(choices);
+}
 
-	container.appendChild(account);
-	structure.appendChild(container);
+function addInfoNav(account, user){
+	const infoTop = document.createElement("div");
+	infoTop.className = "tab-content p-4 p-md-5";
+
+	const info = document.createElement("div");
+	info.className = "tab-pane fade show active";
+
+	const title = document.createElement("h3");
+	title.className = "mb-4";
+	title.innerText = "Profil";
+
+	const rows = document.createElement("div");
+	rows.className = "row";
+
+	addInfoContent(rows, user.firstname, "Prénom");
+	addInfoContent(rows, user.lastname, "Nom de famille");
+	addInfoContent(rows, user.email, "Email");
+	
+	// addInfoContent(rows, "", "Nouveau mot de passe");
+	// addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
+
+	const buttons = document.createElement("div");
+
+	const submitButton = document.createElement("button");
+	submitButton.className = "btn btn-primary";
+	submitButton.type = "submit";
+	submitButton.innerText = "Mettre à jour";
+
+	const cancelButton = document.createElement("button");
+	cancelButton.className = "btn btn-secondary";
+	cancelButton.type = "cancel";
+	cancelButton.innerText = "Annuler";
+
+	const message = document.createElement("div");
+	message.id = "message";
+
+
+
+	info.appendChild(title);
+	info.appendChild(rows);
+	submitButton.addEventListener("click", onSubmit, user);
+	buttons.appendChild(submitButton);
+	cancelButton.addEventListener("click", onCancel);
+	buttons.appendChild(cancelButton);
+	info.appendChild(buttons);
+	info.appendChild(message);
+	infoTop.appendChild(info);
+	account.appendChild(infoTop);
+}
+
+async function onSubmit(e){
+	e.preventDefault();
+
+	const newFirstname = document.getElementById("Prénom").value;
+	if (newFirstname === ""){
+		errorMessage("Veuillez remplir votre prénom.");
+		return;
+	} 
+	const newLastname = document.getElementById("Nom de famille").value;
+	if (newLastname === "") {
+		errorMessage("Veuillez remplir votre nom de famille.");
+		return;
+	}
+	const newEmail = document.getElementById("Email").value;
+	if (newEmail === "") {
+		errorMessage("Veuillez remplir votre email.");
+		return;
+	}
+
+	let userEmail = getSessionObject("user");
+
+	emptyErrorMessage();
+
+	try {
+		const options = {
+		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
+		  body: JSON.stringify({
+			email: newEmail,
+			firstname: newFirstname,
+			lastname: newLastname,
+		  }), // body data type must match "Content-Type" header
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		};
+		
+		console.log(userEmail);
+	   
+		const response = await fetch("/api/users/" + userEmail.email + "/updateProfil", options); // fetch return a promise => we wait for the response
+  
+		if (!response.ok) {
+			if (response.status === 304) errorMessage("Compte non-modifié");
+			if (response.status === 420) errorMessage("Paramètres invalides");
+		  	throw new Error(
+				"fetch error : " + response.status + " : " + response.statusText
+		  	);
+		}
+		const user = await response.json(); // json() returns a promise => we wait for the data
+		console.log( user);
+  
+		Redirect("/profil");
+
+	} catch (error) {
+	console.log(error.fetch);
+	console.error("ProfilPage::error: ", error);
+	}
+
+
+}
+
+async function onCancel(e){
+	e.preventDefault();
+	document.getElementById("Prénom").value = document.getElementById("Prénom").getAttribute("content");
+	document.getElementById("Nom de famille").value = document.getElementById("Nom de famille").getAttribute("content");
+	document.getElementById("Email").value = document.getElementById("Email").getAttribute("content");
+}
+
+function addInfoContent(row, content, contentName){
+	const info = document.createElement("div");
+	info.className = "col-md-6";
+
+	const textContent = document.createElement("div");
+	textContent.className = "form-group";
+
+	const label = document.createElement("label");
+	label.innerText = contentName;
+
+	const input = document.createElement("input");
+	input.id = contentName;
+	input.type = "text";
+	input.className = "form-control";
+	input.value = content;
+	input.setAttribute("content", content);
+
+
+	textContent.appendChild(label);
+	textContent.appendChild(input);
+	info.appendChild(textContent);
+
+	row.appendChild(info);
 }
 
 function addNavActive(nameNav, namePage, destination){
@@ -112,11 +260,11 @@ function addNavActive(nameNav, namePage, destination){
 	nav.setAttribute("aria-selected", "false");
 
 	const name = document.createElement("i");
-	if (nameNav === "Account"){
+	if (nameNav === "Profil"){
 		name.className = "fa fa-home text-center mr-1";
-	}else if(nameNav === "Credits"){
+	}else if(nameNav === "Crédits"){
 		name.className = "fa fa-dollar-sign text-center mr-1";
-	}else if(nameNav === "Auction history"){
+	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
 	}
 	
@@ -141,11 +289,11 @@ function addNavInactive(nameNav, namePage, destination){
 	nav.setAttribute("aria-selected", "false");
 
 	const name = document.createElement("i");
-	if (nameNav === "Account"){
+	if (nameNav === "Profil"){
 		name.className = "fa fa-home text-center mr-1";
-	}else if(nameNav === "Credits"){
+	}else if(nameNav === "Crédits"){
 		name.className = "fa fa-dollar-sign text-center mr-1";
-	}else if(nameNav === "Auction history"){
+	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
 	}
 	
@@ -165,6 +313,18 @@ function importAll(r) {
 	let images = {};
 	r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
 	return images;
+}
+
+function errorMessage(message) {
+	console.log("alert");
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML=
+	'<br><div class="alert alert-danger" role="alert" id="message">  Attention : '+ message  + ' </div>';
+}
+
+function emptyErrorMessage(){
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML= '<div id="message"></div>';
 }
 
 export default ProfilAccountPage;
