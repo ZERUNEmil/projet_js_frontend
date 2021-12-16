@@ -1,6 +1,6 @@
 import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
-import {getSessionObject} from "../../utils/session";
+import {getSessionObject, setSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
 let auctionAddPage = `
@@ -73,10 +73,12 @@ let auctionAddPage = `
 						</div>
 					</div>
 					<div class="col">
-						<div class="form-check form-outline form-white mb-4">
-							<input type="checkbox" id="signed" class="form-control form-control-lg form-check-input" placeholder="1" required/>
-							L'oeuvre est-elle signée ?
-						</div>
+                        <select id="signed" class="form-select">
+                            <option Selected>Selectionnez une option</option>
+                            <option value="yes">Oui</option>
+                            <option value="no">Non</option>
+                        </select>
+						L'auteur a-t-il signé l'oeuvre ?
 					</div>
 				</div>
 				<div class="row">
@@ -108,7 +110,7 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="Location" class="form-control form-control-lg" placeholder="" required/>
+							<input type="text" id="location" class="form-control form-control-lg" placeholder="" required/>
 							Localisation actuelle
 						</div>
 					</div>
@@ -158,7 +160,7 @@ let auctionAddPage = `
                     Description - <i>Optionnel</i>
                 </div>
 				<div class="form-outline form-white mb-4 pb-4">
-					<input type="file" id="piecePicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple required/>
+					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple required/>
 					Image(s) pour illustrer l'oeuvre (jpeg ou png)
 				</div>
 				
@@ -187,6 +189,39 @@ function AuctionAddPage() {
     } else {
         auctionAddForm.addEventListener("submit", onSubmit);
     }
+}
+
+async function onSubmit(e) {
+    e.preventDefault();
+
+    // Auction
+    const auctionName = document.getElementById("auctionName");
+    const startedDateTime = document.getElementById("startedDateTime");
+    const startedPrice = document.getElementById("startedPrice");
+    const duration = document.getElementById("duration");
+    const auctionDescription = document.getElementById("auctionDescription");
+    const auctionPicture = document.getElementById("auctionPicture");
+
+    // Piece
+    const pieceName = document.getElementById("pieceName");
+    const artist = document.getElementById("artist");
+    const signed = document.getElementById("signed");
+    const type = document.getElementById("type");
+    const art_movement = document.getElementById("art_movement");
+    const size = document.getElementById("size");
+    const collection = document.getElementById("collection");
+    const location = document.getElementById("location");
+    const partner = document.getElementById("partner");
+    const creationPlace = document.getElementById("creationPlace");
+    const preciseDate = document.getElementById("preciseDate");
+    const millenium = document.getElementById("millenium");
+    const firstCentury = document.getElementById("firstCentury");
+    const secondCentury = document.getElementById("secondCentury");
+    const pieceDescription = document.getElementById("pieceDescription");
+    const piecePictures = document.getElementById("piecePictures");
+
+    
+
 }
 
 export default AuctionAddPage;
