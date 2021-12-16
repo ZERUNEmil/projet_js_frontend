@@ -27,7 +27,7 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="datetime-local" id="startedDateTime" class="form-control form-control-lg" placeholder=""/>
+							<input type="datetime-local" id="startDateTime" class="form-control form-control-lg" placeholder=""/>
 							Date de début - <i>Optionnel</i>
 						</div>
 					</div>
@@ -35,7 +35,7 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="number" min="1" step="0.01" id="startedPrice" class="form-control form-control-lg" placeholder="1"/>
+							<input type="number" min="1" step="1" id="startPrice" class="form-control form-control-lg" placeholder="1"/>
 							Prix de départ - <i>Optionnel</i>
 						</div>
 					</div>
@@ -90,7 +90,7 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="art_movement" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="artMovement" class="form-control form-control-lg" placeholder="" required />
 							Mouvement
 						</div>
 					</div>
@@ -196,8 +196,8 @@ async function onSubmit(e) {
 
     // Auction
     const auctionName = document.getElementById("auctionName");
-    const startedDateTime = document.getElementById("startedDateTime");
-    const startedPrice = document.getElementById("startedPrice");
+    const startedDateTime = document.getElementById("startDateTime");
+    const startedPrice = document.getElementById("startPrice");
     const duration = document.getElementById("duration");
     const auctionDescription = document.getElementById("auctionDescription");
     const auctionPicture = document.getElementById("auctionPicture");
@@ -207,7 +207,7 @@ async function onSubmit(e) {
     const artist = document.getElementById("artist");
     const signed = document.getElementById("signed");
     const type = document.getElementById("type");
-    const art_movement = document.getElementById("art_movement");
+    const artMovement = document.getElementById("artMovement");
     const size = document.getElementById("size");
     const collection = document.getElementById("collection");
     const location = document.getElementById("location");
