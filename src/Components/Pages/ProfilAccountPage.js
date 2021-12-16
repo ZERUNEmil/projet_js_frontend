@@ -305,10 +305,6 @@ function addNavInactive(nameNav, namePage, destination){
 	destination.appendChild(navLi);
 }
 
-function addTab(nameTab, destination){
-
-}
-
 function importAll(r) {
 	let images = {};
 	r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
