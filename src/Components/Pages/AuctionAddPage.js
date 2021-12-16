@@ -22,36 +22,36 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							<input type="text" id="auctionName" class="form-control form-control-lg" placeholder="" required />
-							Nom de l'annonce - <i>Requis</i>
+							Nom de l'annonce
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							<input type="datetime-local" id="startedDateTime" class="form-control form-control-lg" placeholder=""/>
-							Date de début
+							Date de début - <i>Optionnel</i>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input input type="number" min="1" step="0.01" id="startedPrice" class="form-control form-control-lg" placeholder="1"/>
-							Prix de départ
+							<input type="number" min="1" step="0.01" id="startedPrice" class="form-control form-control-lg" placeholder="1"/>
+							Prix de départ - <i>Optionnel</i>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder="1"/>
-							Durée (en nombre de jours)
+							Durée (en nombre de jours) - <i>Optionnel</i>
 					</div>
 				</div>
 				<div class="form-outline form-white mb-4">
-					<input type="text-area" id="auctionDescription" class="form-control form-control-lg" placeholder=""/>
-					Description
+					<input type="text" id="auctionDescription" class="form-control form-control-lg" placeholder=""/>
+					Description - <i>Optionnel</i>
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
-					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple/>
-					Photo de couverture de l'annonce (jpeg ou png)
+					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse"/>
+					Photo de couverture de l'annonce (jpeg ou png) - <i>Optionnel</i>
 				</div>
 			
 				<hr>
@@ -68,13 +68,13 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="artist" class="form-control form-control-lg" placeholder=""/>
+							<input type="text" id="artist" class="form-control form-control-lg" placeholder="" required/>
 							Nom de l'artiste
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-check form-outline form-white mb-4">
-							<input type="checkbox" id="signed" class="form-control form-control-lg form-check-input" placeholder="1"/>
+							<input type="checkbox" id="signed" class="form-control form-control-lg form-check-input" placeholder="1" required/>
 							L'oeuvre est-elle signée ?
 						</div>
 					</div>
@@ -102,13 +102,13 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="collection" class="form-control form-control-lg" placeholder="" required />
-							Collection
+							<input type="text" id="collection" class="form-control form-control-lg" placeholder=""/>
+							Collection - <i>Optionnel</i>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="Location" class="form-control form-control-lg" placeholder=""/>
+							<input type="text" id="Location" class="form-control form-control-lg" placeholder="" required/>
 							Localisation actuelle
 						</div>
 					</div>
@@ -116,13 +116,13 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="partner" class="form-control form-control-lg" placeholder="" required />
-							Commanditaire
+							<input type="text" id="partner" class="form-control form-control-lg" placeholder=""/>
+							Commanditaire - <i>Optionnel</i>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="text" id="creationPlace" class="form-control form-control-lg" placeholder=""/>
+							<input type="text" id="creationPlace" class="form-control form-control-lg" placeholder="" required/>
 							Lieu de création
 						</div>
 					</div>
@@ -131,7 +131,7 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							<input type="date" id="preciseDate" class="form-control form-control-lg" placeholder=""/>
-							Date Precise (si connue)
+							Date Precise (si connue) - <i>Optionnel</i>
 						</div>
 					</div>
 					<div class="col">
@@ -142,21 +142,25 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder=""/>
+							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder="" required />
 							Siècle - 1
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							<input type="number" min="1" max="21" step="1" id="secondCentury" class="form-control form-control-lg" placeholder="" required />
-							Siècle - 2
+							<input type="number" min="1" max="21" step="1" id="secondCentury" class="form-control form-control-lg" placeholder=""/>
+							Siècle - 2 - <i>Optionnel</i>
 						</div>
 					</div>
 				</div>
                 <div class="form-outline form-white mb-4">
-                    <input type="text-area" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
-                    Description
+                    <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
+                    Description - <i>Optionnel</i>
                 </div>
+				<div class="form-outline form-white mb-4 pb-4">
+					<input type="file" id="piecePicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple required/>
+					Image(s) pour illustrer l'oeuvre (jpeg ou png)
+				</div>
 				
                 <div>
                     <button class="btn btn-outline-light btn-lg px-5" type="submit">Ajouter votre annonce</button>
@@ -183,6 +187,6 @@ function AuctionAddPage() {
     } else {
         auctionAddForm.addEventListener("submit", onSubmit);
     }
-};
+}
 
 export default AuctionAddPage;
