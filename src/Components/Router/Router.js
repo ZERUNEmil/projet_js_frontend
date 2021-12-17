@@ -9,6 +9,8 @@ import Logout from "../Logout/Logout";
 import ProfilAccountPage from "../Pages/ProfilAccountPage";
 import ProfilCreditsPage from "../Pages/ProfilCreditsPage";
 import ProfilAuctionPage from "../Pages/ProfilAuctionPage";
+import ProfilSecurityPage from "../Pages/ProfilSecurityPage";
+import ProfilAdressPage from "../Pages/ProfilAdressPage";
 
 // Configure your routes here
 const routes = {
@@ -20,9 +22,11 @@ const routes = {
 	"/signup": SignupPage,
 	"/login": LoginPage,
 	"/logout": Logout,
-	"/profil": ProfilAccountPage,
+	"/profil/account": ProfilAccountPage,
 	"/profil/credits": ProfilCreditsPage,
-	"/profil/auction": ProfilAuctionPage
+	"/profil/auction": ProfilAuctionPage,
+	"/profil/security": ProfilSecurityPage,
+	"/profil/adress": ProfilAdressPage
 };
 
 /**
