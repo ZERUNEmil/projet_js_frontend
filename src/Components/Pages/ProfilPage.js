@@ -24,7 +24,7 @@ const ProfilPage = async () => {
 	pageDiv.appendChild(structure);
 };
 
-async function getUser(){
+export async function getUser(){
     let userEmail = getSessionObject("user");
 	if(! userEmail) return Redirect("/login");
 
