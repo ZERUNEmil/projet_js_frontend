@@ -12,7 +12,7 @@ import { addAdressChoiceNav, addAdressInfoNav } from "./ProfilAdressPage.mjs";
  * Render the ProfilPage
  */
 
-const ProfilAccountPage = async () => {
+const ProfilPage = async () => {
 	// reset #page div
 	const pageDiv = document.querySelector("#page");
 	pageDiv.innerHTML = "";
@@ -303,4 +303,4 @@ export function emptyErrorMessage(){
 	alertDiv.innerHTML= '<div id="message"></div>';
 }
 
-export default ProfilAccountPage;
+export default ProfilPage;

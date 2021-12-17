@@ -1,9 +1,9 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { generateCreditsPage, addInfoContent, addInfoContentNotModify, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
+import { addSensitiveInfoContent, addInfoContentNotModify, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
 
-export function addCreditsChoiceNav(account, user, images){
+export function addSecurityChoiceNav(account, user, images){
 	const choices = document.createElement("div");
 	choices.className = "profile-tab-nav border-right";
 
@@ -29,9 +29,9 @@ export function addCreditsChoiceNav(account, user, images){
 	navigation.setAttribute("aria-orientation", "vertical");
 
 	addNavInactive("Profil", "Account", navigation);
-	addNavInactive("Sécurité", "Security", navigation);
+	addNavActive("Sécurité", "Security", navigation);
 	addNavInactive("Adresse", "Adress", navigation);
-	addNavActive("Crédits", "Credits", navigation);
+	addNavInactive("Crédits", "Credits", navigation);
 	addNavInactive("Historique d'enchères", "Auction", navigation);
 
 	const content = document.createElement("div");
@@ -46,7 +46,7 @@ export function addCreditsChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
-export function addCreditsInfoNav(account, user){
+export function addSecurityInfoNav(account, user){
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
@@ -60,10 +60,10 @@ export function addCreditsInfoNav(account, user){
 	const rows = document.createElement("div");
 	rows.className = "row";
 	
-	addInfoContentNotModify(rows, user.effective_balance, "Vos crédits");
-	addInfoContentNotModify(rows, user.shadow_balance, "Crédités pré-débité");
-	// rows.innerHTML += "<p></p>";
-	addInfoContent(rows, "", "Crédits à ajouter");
+	// addInfoContentNotModify(rows, user.effective_balance, "Vos crédits");
+	// addInfoContentNotModify(rows, user.shadow_balance, "Crédités pré-débité");
+	// // rows.innerHTML += "<p></p>";
+	// addInfoContent(rows, "", "Crédits à ajouter");
 
 
 	const buttons = document.createElement("div");
