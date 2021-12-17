@@ -73,11 +73,17 @@ let auctionAddPage = `
 						</div>
 					</div>
 					<div class="col">
-                        <select id="signed" class="form-select">
-                            <option Selected>Selectionnez une option</option>
-                            <option value="yes">Oui</option>
-                            <option value="no">Non</option>
-                        </select>
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col form-check ml-3">
+                                    <input type="radio" class="form-check-input" name="signed" id="signedTrue">Oui</input>
+                                </div>
+                                <div class="col form-check mr-3">
+                                    <input type="radio" class="form-check-input" name="signed" id="signedFalse" checked>Non</input>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                            </select>
 						L'auteur a-t-il signé l'oeuvre ?
 					</div>
 				</div>
@@ -220,7 +226,7 @@ async function onSubmit(e) {
     const pieceDescription = document.getElementById("pieceDescription");
     const piecePictures = document.getElementById("piecePictures");
 
-    
+
 
 }
 
