@@ -6,7 +6,7 @@ import "../../stylesheets/profileStyle.css";
  * Render the ProfilPage
  */
 
-const ProfilCreditsPage = async () => {
+const ProfilSecurityPage = async () => {
 	const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
 	let userEmail = getSessionObject("user");
@@ -56,6 +56,8 @@ function addTabContent(user, structure, images){
 	
 	addChoiceNav(account, user, images);
 
+    addInfoNav(account, user);
+
 
 	container.appendChild(account);
 	structure.appendChild(container);
@@ -86,9 +88,9 @@ function addChoiceNav(account, user, images){
 	navigation.setAttribute("aria-orientation", "vertical");
 
 	addNavInactive("Profil", "account", navigation);
-	addNavInactive("Sécurité", "security", navigation);
+	addNavActive("Sécurité", "security", navigation);
 	addNavInactive("Adresse", "adress", navigation);
-	addNavActive("Crédits", "credits", navigation);
+	addNavInactive("Crédits", "credits", navigation);
 	addNavInactive("Historique d'enchères", "auction", navigation);
 
 	const content = document.createElement("div");
@@ -101,6 +103,169 @@ function addChoiceNav(account, user, images){
 	choices.appendChild(userPresentation);
 	choices.appendChild(navigation);
 	account.appendChild(choices);
+}
+
+function addInfoNav(account, user){
+	const infoTop = document.createElement("div");
+	infoTop.className = "tab-content p-4 p-md-5";
+
+	const info = document.createElement("div");
+	info.className = "tab-pane fade show active";
+
+	const title = document.createElement("h3");
+	title.className = "mb-4";
+	title.innerText = "Profil";
+
+	const rows = document.createElement("div");
+	rows.className = "row";
+	
+    addInfoContent(rows, "", "Ancien mot de passe");
+    rows.innerHTML += "<p></p>";
+	addInfoContent(rows, "", "Nouveau mot de passe");
+	addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
+
+	const buttons = document.createElement("div");
+
+	const submitButton = document.createElement("button");
+	submitButton.className = "btn btn-outline-light btn-lg px-5";
+	submitButton.type = "submit";
+	submitButton.innerText = "Mettre à jour";
+
+	const cancelButton = document.createElement("button");
+	cancelButton.className = "btn btn-outline-secondary btn-lg px-5";
+	cancelButton.type = "cancel";
+	cancelButton.innerText = "Annuler";
+
+	const message = document.createElement("div");
+	message.id = "message";
+
+
+
+	info.appendChild(title);
+	info.appendChild(rows);
+	submitButton.addEventListener("click", onSubmit, user);
+	buttons.appendChild(submitButton);
+	cancelButton.addEventListener("click", onCancel);
+	buttons.appendChild(cancelButton);
+	info.appendChild(buttons);
+	info.appendChild(message);
+	infoTop.appendChild(info);
+	account.appendChild(infoTop);
+}
+
+async function onSubmit(e){
+	e.preventDefault();
+
+    const lastPassword = document.getElementById("Ancien mot de passe").value;
+    if (lastPassword === ""){
+        errorMessage("Veuillez remplir votre ancien mot de passe.");
+        return;
+    }
+
+	const newPassword = document.getElementById("Nouveau mot de passe").value;
+	if (newPassword === ""){
+		errorMessage("Veuillez remplir votre nouveau mot de passe.");
+		return;
+	} 
+	const secondNewPassword = document.getElementById("Confirmer le nouveau mot de passe").value;
+	if (secondNewPassword === "") {
+		errorMessage("Veuillez confirmer votre mot de passe.");
+		return;
+	}
+
+    if (newPassword != secondNewPassword){
+        errorMessage("Les mots de passe ne correspondent pas.");
+        return;
+    }
+
+	let userEmail = getSessionObject("user");
+
+    try {
+        const options = {
+          method: "POST", // *GET, POST, PUT, DELETE, etc.
+          body: JSON.stringify({
+            email: userEmail.email,
+            password: lastPassword,
+          }), // body data type must match "Content-Type" header
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+  
+       
+        const response = await fetch("/api/auths/login", options); // fetch return a promise => we wait for the response
+  
+        if (!response.ok) {
+            errorMessage("Votre ancien mot de passe n'est pas correct.");
+            return;
+        }
+      } catch (error) {
+        console.error("ProfilSecurityPage::error: ", error);
+      }
+
+	emptyErrorMessage();
+
+	try {
+		const options = {
+		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
+		  body: JSON.stringify({
+			password: newPassword,
+		  }), // body data type must match "Content-Type" header
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		};
+		
+	   
+		const response = await fetch("/api/users/" + userEmail.email + "/updatePassword", options); // fetch return a promise => we wait for the response
+  
+		if (!response.ok) {
+			if (response.status === 304) errorMessage("Compte non-modifié");
+			if (response.status === 420) errorMessage("Paramètres invalides");
+		  	throw new Error(
+				"fetch error : " + response.status + " : " + response.statusText
+		  	);
+		}
+		const user = await response.json(); // json() returns a promise => we wait for the data
+  
+        notificationMessage("Modification réussie.");
+
+	} catch (error) {
+	console.error("ProfilPage::error: ", error);
+	}
+
+
+}
+
+async function onCancel(e){
+	e.preventDefault();
+	document.getElementById("Nouveau mot de passe").value = "";
+	document.getElementById("Confirmer le nouveau mot de passe").value = "";
+}
+
+function addInfoContent(row, content, contentName){
+	const info = document.createElement("div");
+	info.className = "col-md-6";
+
+	const textContent = document.createElement("div");
+	textContent.className = "form-group";
+
+	const label = document.createElement("label");
+	label.innerText = contentName;
+
+	const input = document.createElement("input");
+	input.id = contentName;
+	input.type = "password";
+	input.className = "form-control";
+	input.value = content;
+	input.setAttribute("content", content);
+
+
+	textContent.appendChild(label);
+	textContent.appendChild(input);
+	info.appendChild(textContent);
+
+	row.appendChild(info);
 }
 
 function addNavActive(nameNav, namePage, destination){
@@ -179,9 +344,16 @@ function errorMessage(message) {
 	'<br><div class="alert alert-danger" role="alert" id="message">  Attention : '+ message  + ' </div>';
 }
 
+function notificationMessage(message) {
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML=
+	'<br><div class="alert alert-success" role="alert" id="message">'+ message  + ' </div>';
+}
+
 function emptyErrorMessage(){
 	const alertDiv = document.getElementById("message");
 	alertDiv.innerHTML= '<div id="message"></div>';
 }
 
-export default ProfilCreditsPage;
+
+export default ProfilSecurityPage;

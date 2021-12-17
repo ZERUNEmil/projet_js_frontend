@@ -6,7 +6,7 @@ import "../../stylesheets/profileStyle.css";
  * Render the ProfilPage
  */
 
-const ProfilCreditsPage = async () => {
+const ProfilAdressPage = async () => {
 	const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
 	let userEmail = getSessionObject("user");
@@ -87,8 +87,8 @@ function addChoiceNav(account, user, images){
 
 	addNavInactive("Profil", "account", navigation);
 	addNavInactive("Sécurité", "security", navigation);
-	addNavInactive("Adresse", "adress", navigation);
-	addNavActive("Crédits", "credits", navigation);
+	addNavActive("Adresse", "adress", navigation);
+	addNavInactive("Crédits", "credits", navigation);
 	addNavInactive("Historique d'enchères", "auction", navigation);
 
 	const content = document.createElement("div");
@@ -184,4 +184,4 @@ function emptyErrorMessage(){
 	alertDiv.innerHTML= '<div id="message"></div>';
 }
 
-export default ProfilCreditsPage;
+export default ProfilAdressPage;
