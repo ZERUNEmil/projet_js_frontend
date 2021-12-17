@@ -23,7 +23,7 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Nom de l'annonce - <i>Requis</i>
+							Nom de l'annonce - <i style="color: red;">Requis</i>
 							<input type="text" id="auctionName" class="form-control form-control-lg" placeholder="" required />
 						</div>
 					</div>
@@ -43,7 +43,7 @@ let auctionAddPage = `
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Durée (en nombre de jours)
+							Durée de l'enchère <i style="color: grey; font-size: 12px;">(en nombre de jours)</i>
 							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder="1"/>
 					</div>
 				</div>
@@ -52,7 +52,7 @@ let auctionAddPage = `
 					<input type="text" id="auctionDescription" class="form-control form-control-lg" placeholder=""/>
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
-					Photo de couverture de l'annonce (jpeg ou png)
+					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
 					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse"/>
 				</div>
 			
@@ -94,13 +94,29 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Type
-							<input type="text" id="type" class="form-control form-control-lg" placeholder=""/>
+							<select class="form-select form-select-lg mb-3" id="type">
+                                <option selected value="0">Selectionnez le type</option>
+                                <option value="1">Peinture</option>
+                                <option value="2">Sculpture</option>
+                                <option value="3">Photographie</option>
+                                <option value="4">Autre</option>
+                            </select>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Mouvement
-							<input type="text" id="artMovement" class="form-control form-control-lg" placeholder=""/>
+                            <select class="form-select form-select-lg mb-3" id="artMovement">
+                                <option selected value="0">Selectionnez le mouvement</option>
+                                <option value="1">Réalisme</option>
+                                <option value="2">Impressionnisme</option>
+                                <option value="3">Fauvisme</option>
+                                <option value="4">Expressionnisme</option>
+                                <option value="5">Cubisme</option>
+                                <option value="6">Futurisme</option>
+                                <option value="7">Surréalisme</option>
+                                <option value="8">Autre</option>
+                            </select>
 						</div>
 					</div>
 					<div class="col">
@@ -113,6 +129,12 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
+							Commanditaire
+							<input type="text" id="partner" class="form-control form-control-lg" placeholder=""/>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-outline form-white mb-4">
 							Collection
 							<input type="text" id="collection" class="form-control form-control-lg" placeholder=""/>
 						</div>
@@ -122,26 +144,12 @@ let auctionAddPage = `
 							Localisation actuelle
 							<input type="text" id="location" class="form-control form-control-lg" placeholder=""/>
 						</div>
-					</div>
-				</div>
+				    </div>
+                </div>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Commanditaire
-							<input type="text" id="partner" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Lieu de création
-							<input type="text" id="creationPlace" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Date Precise (si connue)
+							Date Precise <i style="color: grey; font-size: 12px;">(si connue)</i>
 							<input type="date" id="preciseDate" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
@@ -169,7 +177,7 @@ let auctionAddPage = `
                     <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
                 </div>
 				<div class="form-outline form-white mb-4 pb-4">
-					Image(s) pour illustrer l'oeuvre (jpeg ou png)
+					Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
 					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple/>
 				</div>
 				
@@ -219,10 +227,9 @@ async function onSubmit(e) {
     const type = document.getElementById("type");
     const artMovement = document.getElementById("artMovement");
     const size = document.getElementById("size");
+    const partner = document.getElementById("partner");
     const collection = document.getElementById("collection");
     const location = document.getElementById("location");
-    const partner = document.getElementById("partner");
-    const creationPlace = document.getElementById("creationPlace");
     const preciseDate = document.getElementById("preciseDate");
     const millenium = document.getElementById("millenium");
     const firstCentury = document.getElementById("firstCentury");
