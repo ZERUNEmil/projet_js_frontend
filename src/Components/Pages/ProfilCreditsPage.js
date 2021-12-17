@@ -7,10 +7,9 @@ import "../../stylesheets/profileStyle.css";
  */
 
 const ProfilCreditsPage = async () => {
-    const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
+	const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
 	let userEmail = getSessionObject("user");
-	console.log(userEmail);
 	if(! userEmail) return Redirect("/login");
 
 	// Collecting the info of the user
@@ -48,11 +47,21 @@ function addTabContent(user, structure, images){
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
-	title.textContent = "Welcome, " + user.username;
+	title.textContent = "Welcome, " + user.firstname;
 
 	const account = document.createElement("div");
 	account.className = "shadow rounded-lg d-block d-sm-flex";
 
+	container.appendChild(title);
+	
+	addChoiceNav(account, user, images);
+
+
+	container.appendChild(account);
+	structure.appendChild(container);
+}
+
+function addChoiceNav(account, user, images){
 	const choices = document.createElement("div");
 	choices.className = "profile-tab-nav border-right";
 
@@ -68,7 +77,7 @@ function addTabContent(user, structure, images){
 
 	const userName = document.createElement("h4");
 	userName.className = "text-center";
-	userName.textContent = user.username;
+	userName.textContent = user.firstname;
 
 	const navigation = document.createElement("div");
 	navigation.className = "nav flex-column nav-pills";
@@ -76,26 +85,22 @@ function addTabContent(user, structure, images){
 	navigation.setAttribute("role", "tablist");
 	navigation.setAttribute("aria-orientation", "vertical");
 
-	addNavInactive("Account", "", navigation);
-	addNavActive("Credits", "/credits", navigation);
-	addNavInactive("Auction history", "/auction", navigation);
+	addNavInactive("Profil", "account", navigation);
+	addNavInactive("Sécurité", "security", navigation);
+	addNavInactive("Adresse", "adress", navigation);
+	addNavActive("Crédits", "credits", navigation);
+	addNavInactive("Historique d'enchères", "auction", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
 	content.id = "v-pills-tabContent";
-
-
 	
-	container.appendChild(title);
 	usersPicture.appendChild(picture);
 	userPresentation.appendChild(usersPicture);
 	userPresentation.appendChild(userName);
 	choices.appendChild(userPresentation);
 	choices.appendChild(navigation);
 	account.appendChild(choices);
-
-	container.appendChild(account);
-	structure.appendChild(container);
 }
 
 function addNavActive(nameNav, namePage, destination){
@@ -109,12 +114,16 @@ function addNavActive(nameNav, namePage, destination){
 	nav.setAttribute("aria-selected", "false");
 
 	const name = document.createElement("i");
-	if (nameNav === "Account"){
+	if (nameNav === "Profil"){
 		name.className = "fa fa-home text-center mr-1";
-	}else if(nameNav === "Credits"){
+	}else if(nameNav === "Crédits"){
 		name.className = "fa fa-dollar-sign text-center mr-1";
-	}else if(nameNav === "Auction history"){
+	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
+	}else if(nameNav === "Sécurité"){
+		name.className = "fa fa-lock text-center mr-1";
+	}else if(nameNav === "Adresse"){
+		name.className = "fa fa-home text-center mr-1";
 	}
 	
 
@@ -132,18 +141,22 @@ function addNavInactive(nameNav, namePage, destination){
 	nav.className="nav-link";
 	nav.id = nameNav+"-tab";
 	nav.setAttribute("data-toggle", "pill");
-	nav.href = "/profil"+namePage;
+	nav.href = "/profil/"+namePage;
 	nav.setAttribute("role", "tab");
 	nav.setAttribute("aria-controls", nameNav);
 	nav.setAttribute("aria-selected", "false");
 
 	const name = document.createElement("i");
-	if (nameNav === "Account"){
+	if (nameNav === "Profil"){
 		name.className = "fa fa-home text-center mr-1";
-	}else if(nameNav === "Credits"){
+	}else if(nameNav === "Crédits"){
 		name.className = "fa fa-dollar-sign text-center mr-1";
-	}else if(nameNav === "Auction history"){
+	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
+	}else if(nameNav === "Sécurité"){
+		name.className = "fa fa-lock text-center mr-1";
+	}else if(nameNav === "Adresse"){
+		name.className = "fa fa-home text-center mr-1";
 	}
 	
 
@@ -154,15 +167,21 @@ function addNavInactive(nameNav, namePage, destination){
 	destination.appendChild(navLi);
 }
 
-function addTab(nameTab, destination){
-
-
-}
-
 function importAll(r) {
 	let images = {};
 	r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
 	return images;
+}
+
+function errorMessage(message) {
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML=
+	'<br><div class="alert alert-danger" role="alert" id="message">  Attention : '+ message  + ' </div>';
+}
+
+function emptyErrorMessage(){
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML= '<div id="message"></div>';
 }
 
 export default ProfilCreditsPage;
