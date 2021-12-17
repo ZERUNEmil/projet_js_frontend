@@ -84,7 +84,9 @@ let auctionUpdatePage = `
 						</div>
 					</div>
 					<div class="col">
-						L'auteur a-t-il signé l'oeuvre ?
+						<div class="pb-3">
+    						L'auteur a-t-il signé l'oeuvre ?
+						</div>
 						<div class="row">
 							<div class="col"></div>
 							<div class="col form-check ml-3">
