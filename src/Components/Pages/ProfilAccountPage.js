@@ -10,7 +10,6 @@ const ProfilAccountPage = async () => {
 	const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
 	let userEmail = getSessionObject("user");
-	console.log(userEmail);
 	if(! userEmail) return Redirect("/login");
 
 	// Collecting the info of the user
@@ -24,8 +23,6 @@ const ProfilAccountPage = async () => {
 		}
 
 		const user = await response.json();
-
-		console.log(user);
 	
 
 		// reset #page div
@@ -44,7 +41,6 @@ const ProfilAccountPage = async () => {
 
 function addTabContent(user, structure, images){
 	structure.className = "py-5 my-5";
-	console.log(user);
 
 	const container = document.createElement("div");
 	container.classList.add("container");
@@ -92,6 +88,8 @@ function addChoiceNav(account, user, images){
 	navigation.setAttribute("aria-orientation", "vertical");
 
 	addNavActive("Profil", "account", navigation);
+	addNavInactive("Sécurité", "security", navigation);
+	addNavInactive("Adresse", "adress", navigation);
 	addNavInactive("Crédits", "credits", navigation);
 	addNavInactive("Historique d'enchères", "auction", navigation);
 
@@ -131,12 +129,12 @@ function addInfoNav(account, user){
 	const buttons = document.createElement("div");
 
 	const submitButton = document.createElement("button");
-	submitButton.className = "btn btn-primary";
+	submitButton.className = "btn btn-outline-light btn-lg px-5";
 	submitButton.type = "submit";
 	submitButton.innerText = "Mettre à jour";
 
 	const cancelButton = document.createElement("button");
-	cancelButton.className = "btn btn-secondary";
+	cancelButton.className = "btn btn-outline-secondary btn-lg px-5";
 	cancelButton.type = "cancel";
 	cancelButton.innerText = "Annuler";
 
@@ -193,7 +191,6 @@ async function onSubmit(e){
 		  },
 		};
 		
-		console.log(userEmail);
 	   
 		const response = await fetch("/api/users/" + userEmail.email + "/updateProfil", options); // fetch return a promise => we wait for the response
   
@@ -205,12 +202,10 @@ async function onSubmit(e){
 		  	);
 		}
 		const user = await response.json(); // json() returns a promise => we wait for the data
-		console.log( user);
   
 		Redirect("/profil");
 
 	} catch (error) {
-	console.log(error.fetch);
 	console.error("ProfilPage::error: ", error);
 	}
 
@@ -266,6 +261,10 @@ function addNavActive(nameNav, namePage, destination){
 		name.className = "fa fa-dollar-sign text-center mr-1";
 	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
+	}else if(nameNav === "Sécurité"){
+		name.className = "fa fa-lock text-center mr-1";
+	}else if(nameNav === "Adresse"){
+		name.className = "fa fa-home text-center mr-1";
 	}
 	
 
@@ -295,6 +294,10 @@ function addNavInactive(nameNav, namePage, destination){
 		name.className = "fa fa-dollar-sign text-center mr-1";
 	}else if(nameNav === "Historique d'enchères"){
 		name.className = "fa fa-history text-center mr-1";
+	}else if(nameNav === "Sécurité"){
+		name.className = "fa fa-lock text-center mr-1";
+	}else if(nameNav === "Adresse"){
+		name.className = "fa fa-home text-center mr-1";
 	}
 	
 
@@ -312,7 +315,6 @@ function importAll(r) {
 }
 
 function errorMessage(message) {
-	console.log("alert");
 	const alertDiv = document.getElementById("message");
 	alertDiv.innerHTML=
 	'<br><div class="alert alert-danger" role="alert" id="message">  Attention : '+ message  + ' </div>';
