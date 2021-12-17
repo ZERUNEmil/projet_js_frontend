@@ -50,22 +50,14 @@ export function addAuctionChoiceNav(account, user, images){
 
 export function addAuctionInfoNav(account, user){
 	const infoTop = document.createElement("div");
-<<<<<<< HEAD
-	infoTop.className = "tab-content p-4 p-md-5";
-=======
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
->>>>>>> ciara
 
 	const info = document.createElement("div");
 	info.className = "tab-pane fade show active";
 
 	const title = document.createElement("h3");
 	title.className = "mb-4";
-<<<<<<< HEAD
-	title.innerText = "Profil";
-=======
 	title.innerText = "Historique d'enchères";
->>>>>>> ciara
 
 	const rows = document.createElement("div");
 	rows.className = "row";

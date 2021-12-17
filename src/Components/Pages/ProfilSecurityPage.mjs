@@ -1,16 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-<<<<<<< HEAD:src/Components/Pages/ProfilSecurityPage.mjs
-import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage } from "./ProfilPage.js";
-=======
-<<<<<<< Updated upstream:src/Components/Pages/ProfilSecurityPage.js
-=======
 import { generateSecurityPage, addSensitiveInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
->>>>>>> Stashed changes:src/Components/Pages/ProfilSecurityPage.mjs
->>>>>>> ciara:src/Components/Pages/ProfilSecurityPage.js
-
-
 
 export function addSecurityChoiceNav(account, user, images){
 	const choices = document.createElement("div");
@@ -55,16 +46,8 @@ export function addSecurityChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
-<<<<<<< HEAD:src/Components/Pages/ProfilSecurityPage.mjs
-export function addSecurityInfoNav(account, user){
-=======
-<<<<<<< Updated upstream:src/Components/Pages/ProfilSecurityPage.js
-function addInfoNav(account, user){
-=======
-export function addSecurityInfoNav(account, user){
 
->>>>>>> Stashed changes:src/Components/Pages/ProfilSecurityPage.mjs
->>>>>>> ciara:src/Components/Pages/ProfilSecurityPage.js
+export function addSecurityInfoNav(account, user){
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
