@@ -3,8 +3,6 @@ import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
 import { generateCreditsPage, addInfoContent, addInfoContentNotModify, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
 
-
-
 export function addCreditsChoiceNav(account, user, images){
 	const choices = document.createElement("div");
 	choices.className = "profile-tab-nav border-right";
