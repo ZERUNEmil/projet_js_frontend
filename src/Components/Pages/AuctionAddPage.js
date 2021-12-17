@@ -3,6 +3,8 @@ import Navbar from "../Navbar/Navbar";
 import {getSessionObject, setSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
+let user = getSessionObject("user");
+
 let auctionAddPage = `
   <form id="auctionAddForm">
   <br>
@@ -21,13 +23,13 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Nom de l'annonce
+							Nom de l'annonce - <i>Requis</i>
 							<input type="text" id="auctionName" class="form-control form-control-lg" placeholder="" required />
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Date de début - <i>Optionnel</i>
+							Date de début
 							<input type="datetime-local" id="startDateTime" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
@@ -35,22 +37,22 @@ let auctionAddPage = `
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Prix de départ - <i>Optionnel</i>
+							Prix de départ
 							<input type="number" min="1" step="1" id="startPrice" class="form-control form-control-lg" placeholder="1"/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Durée (en nombre de jours) - <i>Optionnel</i>
+							Durée (en nombre de jours)
 							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder="1"/>
 					</div>
 				</div>
 				<div class="form-outline form-white mb-4">
-					Description - <i>Optionnel</i>
+					Description
 					<input type="text" id="auctionDescription" class="form-control form-control-lg" placeholder=""/>
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
-					Photo de couverture de l'annonce (jpeg ou png) - <i>Optionnel</i>
+					Photo de couverture de l'annonce (jpeg ou png)
 					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse"/>
 				</div>
 			
@@ -63,17 +65,19 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Nom de l'oeuvre
-							<input type="text" id="pieceName" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="pieceName" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Nom de l'artiste
-							<input type="text" id="artist" class="form-control form-control-lg" placeholder="" required/>
+							<input type="text" id="artist" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
-						L'auteur a-t-il signé l'oeuvre ?
+						<div class="mb-3">
+						    L'auteur a-t-il signé l'oeuvre ?
+						</div>
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
@@ -90,83 +94,83 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Type
-							<input type="text" id="type" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="type" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Mouvement
-							<input type="text" id="artMovement" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="artMovement" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Dimension
-							<input type="text" id="size" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="size" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
                 </div>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Collection - <i>Optionnel</i>
+							Collection
 							<input type="text" id="collection" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Localisation actuelle
-							<input type="text" id="location" class="form-control form-control-lg" placeholder="" required/>
+							<input type="text" id="location" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Commanditaire - <i>Optionnel</i>
+							Commanditaire
 							<input type="text" id="partner" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Lieu de création
-							<input type="text" id="creationPlace" class="form-control form-control-lg" placeholder="" required/>
+							<input type="text" id="creationPlace" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Date Precise (si connue) - <i>Optionnel</i>
+							Date Precise (si connue)
 							<input type="date" id="preciseDate" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Millenaire
-							<input type="number" min="-10" max="2" step="1" id="millenium" class="form-control form-control-lg" placeholder="" required />
+							<input type="number" min="-10" max="2" step="1" id="millenium" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Siècle - 1
-							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder="" required />
+							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
-							Siècle - 2 - <i>Optionnel</i>
+							Siècle - 2
 							<input type="number" min="1" max="21" step="1" id="secondCentury" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 				</div>
                 <div class="form-outline form-white mb-4">
-                    Description - <i>Optionnel</i>
+                    Description
                     <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
                 </div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image(s) pour illustrer l'oeuvre (jpeg ou png)
-					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple required/>
+					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple/>
 				</div>
 				
                 <div>
@@ -180,24 +184,25 @@ let auctionAddPage = `
 
 
 function AuctionAddPage() {
+    if (!user)
+        Redirect("/login");
+
     // reset #page div
     const pageDiv = document.querySelector("#page");
-    pageDiv.innerHTML = "";
 
+    pageDiv.innerHTML = "";
     pageDiv.innerHTML = auctionAddPage;
+
     const auctionAddForm = document.getElementById("auctionAddForm");
 
-    let user = getSessionObject("user");
-    if (!user) {
-        Navbar();
-        Redirect("/login");
-    } else {
-        auctionAddForm.addEventListener("submit", onSubmit);
-    }
+    auctionAddForm.addEventListener("submit", onSubmit);
 }
+
 
 async function onSubmit(e) {
     e.preventDefault();
+
+    let userEmail = user.email;
 
     // Auction
     const auctionName = document.getElementById("auctionName");
