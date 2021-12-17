@@ -58,6 +58,7 @@ async function addTabContent(structure){
 	const title = document.createElement("h1");
 	title.className = "mb-5";
 	title.textContent = "Welcome, " + user.firstname;
+	title.id = "title";
 
 	const account = document.createElement("div");
 	account.className = "shadow rounded-lg d-block d-sm-flex";

@@ -135,19 +135,22 @@ async function onSubmit(e){
   
 		if (!response.ok) {
 			if (response.status === 304) errorMessage("Compte non-modifié");
-			if (response.status === 420) errorMessage("Paramètres invalides");
+			if (response.status === 420) errorMessage("Adresse email déjà utilisée");
 			else errorMessage("Erreur lors de l'ajout");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
 		const user = await response.json(); // json() returns a promise => we wait for the data
+
+		if (userEmail.email != newEmail) Redirect("/logout");
 		
 		await generateAccountPage();
 
-		notificationMessage("Modification réussie.");
+		const divFirstname = document.getElementById("title")
+		divFirstname.innerText = "Welcome, " + newFirstname;
 
-		if (userEmail.email != newEmail) Redirect("/logout");
+		notificationMessage("Modification réussie.");
 
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
