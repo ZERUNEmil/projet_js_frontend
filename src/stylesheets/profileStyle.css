@@ -27,6 +27,7 @@ body {
 	border-radius: 0;
 	color: #FBDCC4;
 	margin: 10px;
+	cursor: pointer;
 }
 .nav-pills a.nav-link i {
 	width: 20px;
@@ -42,4 +43,8 @@ body {
 	width: 200px;
 	border-radius: 100%;
 	border: 5px solid #fff;
+}
+
+.btn {
+	margin: 10px;
 }
