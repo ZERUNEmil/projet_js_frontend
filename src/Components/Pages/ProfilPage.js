@@ -50,7 +50,7 @@ async function addTabContent(structure){
     const user = await getUser();
     const images = importAll(require.context('../../img/users', false, /\.(png|jpe?g|svg)$/));
 
-	structure.className = "py-5 my-5";
+	structure.className = "my-3";
 
 	const container = document.createElement("div");
 	container.classList.add("container");
@@ -72,7 +72,7 @@ async function addTabContent(structure){
 	structure.appendChild(container);
 }
 
-async function generateAccountPage(){
+export async function generateAccountPage(){
     const user = await getUser();
     const images = document.getElementById("UsersPicture").src;
 
@@ -85,7 +85,7 @@ async function generateAccountPage(){
 	addAccountInfoNav(account, user);
 }
 
-async function generateSecurityPage(){
+export async function generateSecurityPage(){
     const user = await getUser();
     const images = document.getElementById("UsersPicture").src;
 
@@ -97,7 +97,7 @@ async function generateSecurityPage(){
 	addSecurityInfoNav(account, user);
 }
 
-async function generateCreditsPage(){
+export async function generateCreditsPage(){
     const user = await getUser();
     const images = document.getElementById("UsersPicture").src;
 
@@ -109,7 +109,7 @@ async function generateCreditsPage(){
 	addCreditsInfoNav(account, user);
 }
 
-async function generateAuctionPage(){
+export async function generateAuctionPage(){
     const user = await getUser();
     const images = document.getElementById("UsersPicture").src;
 
@@ -121,7 +121,7 @@ async function generateAuctionPage(){
 	addAuctionInfoNav(account, user);
 }
 
-async function generateAdressPage(){
+export async function generateAdressPage(){
     const user = await getUser();
     const images = document.getElementById("UsersPicture").src;
 
@@ -130,7 +130,8 @@ async function generateAdressPage(){
 
     addAdressChoiceNav(account, user, images);
 
-	addAdressInfoNav(account, user);
+	await addAdressInfoNav(account, user);
+
 }
 
 function onWindow(e){
@@ -159,6 +160,55 @@ export function addInfoContent(row, content, contentName){
 	input.className = "form-control";
 	input.value = content;
 	input.setAttribute("content", content);
+
+
+	textContent.appendChild(label);
+	textContent.appendChild(input);
+	info.appendChild(textContent);
+
+	row.appendChild(info);
+}
+
+export function addSensitiveInfoContent(row, content, contentName){
+	const info = document.createElement("div");
+	info.className = "col-md-6";
+
+	const textContent = document.createElement("div");
+	textContent.className = "form-group";
+
+	const label = document.createElement("label");
+	label.innerText = contentName;
+
+	const input = document.createElement("input");
+	input.id = contentName;
+	input.type = "password";
+	input.className = "form-control";
+	input.value = content;
+	input.setAttribute("content", content);
+
+
+	textContent.appendChild(label);
+	textContent.appendChild(input);
+	info.appendChild(textContent);
+
+	row.appendChild(info);
+}
+
+export function addInfoContentNotModify(row, content, contentName){
+	const info = document.createElement("div");
+	info.className = "col-md-6";
+
+	const textContent = document.createElement("div");
+	textContent.className = "form-group";
+
+	const label = document.createElement("label");
+	label.innerText = contentName;
+
+	const input = document.createElement("text");
+	input.id = contentName;
+	input.type = "text";
+	input.className = "form-control";
+	input.innerText = content;
 
 
 	textContent.appendChild(label);
@@ -239,6 +289,13 @@ export function errorMessage(message) {
 	const alertDiv = document.getElementById("message");
 	alertDiv.innerHTML=
 	'<br><div class="alert alert-danger" role="alert" id="message">  Attention : '+ message  + ' </div>';
+}
+
+export function notificationMessage(message){
+	const alertDiv = document.getElementById("message");
+	alertDiv.innerHTML=
+	'<br><div class="alert alert-success" role="alert" id="message">'+ message + '</div>';
+
 }
 
 export function emptyErrorMessage(){

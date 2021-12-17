@@ -1,7 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage } from "./ProfilPage.js";
+import { generateAccountPage, addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
 
 
 export function addAccountChoiceNav(account, user, images){
@@ -49,7 +49,7 @@ export function addAccountChoiceNav(account, user, images){
 
 export function addAccountInfoNav(account, user){
 	const infoTop = document.createElement("div");
-	infoTop.className = "tab-content p-4 p-md-5";
+	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
 	const info = document.createElement("div");
 	info.className = "tab-pane fade show active";
@@ -64,9 +64,6 @@ export function addAccountInfoNav(account, user){
 	addInfoContent(rows, user.firstname, "Prénom");
 	addInfoContent(rows, user.lastname, "Nom de famille");
 	addInfoContent(rows, user.email, "Email");
-	
-	// addInfoContent(rows, "", "Nouveau mot de passe");
-	// addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
 
 	const buttons = document.createElement("div");
 
@@ -139,13 +136,18 @@ async function onSubmit(e){
 		if (!response.ok) {
 			if (response.status === 304) errorMessage("Compte non-modifié");
 			if (response.status === 420) errorMessage("Paramètres invalides");
+			else errorMessage("Erreur lors de l'ajout");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
 		const user = await response.json(); // json() returns a promise => we wait for the data
-  
-		Redirect("/profil");
+		
+		await generateAccountPage();
+
+		notificationMessage("Modification réussie.");
+
+		if (userEmail.email != newEmail) Redirect("/logout");
 
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
@@ -156,7 +158,5 @@ async function onSubmit(e){
 
 async function onCancel(e){
 	e.preventDefault();
-	document.getElementById("Prénom").value = document.getElementById("Prénom").getAttribute("content");
-	document.getElementById("Nom de famille").value = document.getElementById("Nom de famille").getAttribute("content");
-	document.getElementById("Email").value = document.getElementById("Email").getAttribute("content");
+	await generateAccountPage();
 }

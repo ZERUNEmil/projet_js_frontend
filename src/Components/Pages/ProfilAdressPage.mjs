@@ -1,7 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage } from "./ProfilPage.js";
+import { generateAdressPage, addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
 
 
 
@@ -48,22 +48,35 @@ export function addAdressChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
-export function addAdressInfoNav(account, user){
+export async function addAdressInfoNav(account, user){
+	let adress = await getAdress();
+	if (! adress.number){
+		adress.number = "";
+		adress.street = "";
+		adress.box = "";
+		adress.city = "";
+		adress.postalCode = "";
+		adress.country = "";
+	}
 	const infoTop = document.createElement("div");
-	infoTop.className = "tab-content p-4 p-md-5";
+	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
 	const info = document.createElement("div");
 	info.className = "tab-pane fade show active";
 
 	const title = document.createElement("h3");
 	title.className = "mb-4";
-	title.innerText = "Profil";
+	title.innerText = "Adresse";
 
 	const rows = document.createElement("div");
 	rows.className = "row";
 	
-	// addInfoContent(rows, "", "Nouveau mot de passe");
-	// addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
+    addInfoContent(rows, adress.number, "Numéro");
+	addInfoContent(rows, adress.street, "Rue");
+	addInfoContent(rows, adress.box, "Boîte");
+	addInfoContent(rows, adress.city, "Ville");
+	addInfoContent(rows, adress.postalCode, "Code postal");
+	addInfoContent(rows, adress.country, "Pays");
 
 	const buttons = document.createElement("div");
 
@@ -97,65 +110,146 @@ export function addAdressInfoNav(account, user){
 async function onSubmit(e){
 	e.preventDefault();
 
-	const newFirstname = document.getElementById("Prénom").value;
-	if (newFirstname === ""){
-		errorMessage("Veuillez remplir votre prénom.");
-		return;
-	} 
-	const newLastname = document.getElementById("Nom de famille").value;
-	if (newLastname === "") {
-		errorMessage("Veuillez remplir votre nom de famille.");
+	const number = document.getElementById("Numéro").value;
+	if (number === ""){
+		errorMessage("Veuillez remplir le numéro.");
 		return;
 	}
-	const newEmail = document.getElementById("Email").value;
-	if (newEmail === "") {
-		errorMessage("Veuillez remplir votre email.");
+	const street = document.getElementById("Rue").value;
+	if (street === "") {
+		errorMessage("Veuillez remplir votre rue.");
+		return;
+	}
+	const box = document.getElementById("Boîte").value;
+	const city = document.getElementById("Ville").value;
+	if (city === "") {
+		errorMessage("Veuillez remplir votre ville.");
+		return;
+	}
+	const postalCode = document.getElementById("Code postal").value;
+	if (postalCode === "") {
+		errorMessage("Veuillez remplir votre code postal.");
+		return;
+	}
+	const country = document.getElementById("Pays").value;
+	if (country === "") {
+		errorMessage("Veuillez remplir votre pays.");
 		return;
 	}
 
 	let userEmail = getSessionObject("user");
 
+	// Est-ce que l'adresse existe déjà ?
+	const adress = await getAdress();
+
 	emptyErrorMessage();
+
+	if (adress.number != undefined){
+		try {
+			const options = {
+			  method: "PUT", // *GET, POST, PUT, DELETE, etc.
+			  body: JSON.stringify({
+				number: number,
+				street: street,
+				box: box,
+				city: city,
+				postalCode: postalCode,
+				country: country,
+			  }), // body data type must match "Content-Type" header
+			  headers: {
+				"Content-Type": "application/json",
+			  },
+			};
+			
+		   
+			const response = await fetch("/api/users/" + userEmail.email + "/updateAdress", options); // fetch return a promise => we wait for the response
+	  
+			if (!response.ok) {
+				if (response.status === 304) errorMessage("Adresse non-modifié");
+				if (response.status === 420) errorMessage("Paramètres invalides");
+				  throw new Error(
+					"fetch error : " + response.status + " : " + response.statusText
+				  );
+			}
+			const user = await response.json(); // json() returns a promise => we wait for the data
+
+			await generateAdressPage();
+
+			notificationMessage("Modification réussie !");
+	
+		} catch (error) {
+		console.error("ProfilPage::error: ", error);
+		}
+	} else {
+		try {
+			const options = {
+				method: "PUT", // *GET, POST, PUT, DELETE, etc.
+				body: JSON.stringify({
+				  number: number,
+				  street: street,
+				  box: box,
+				  city: city,
+				  postalCode: postalCode,
+				  country: country,
+				}), // body data type must match "Content-Type" header
+				headers: {
+				  "Content-Type": "application/json",
+				},
+			  };
+			
+		   
+			const response = await fetch("/api/users/" + userEmail.email + "/setAdress", options); // fetch return a promise => we wait for the response
+	  
+			if (!response.ok) {
+				if (response.status === 304) errorMessage("Adresse non-enregistrée");
+				if (response.status === 420) errorMessage("Paramètres invalides");
+				  throw new Error(
+					"fetch error : " + response.status + " : " + response.statusText
+				  );
+			}
+			const user = await response.json(); // json() returns a promise => we wait for the data
+			
+			await generateAdressPage();
+			
+			notificationMessage("Enregistrement réussi !");
+		} catch (error) {
+		console.error("ProfilPage::error: ", error);
+		}
+	}
+	
+}
+
+async function onCancel(e){
+	e.preventDefault();
+	await generateAdressPage();
+}
+
+async function getAdress(){
+	let userEmail = getSessionObject("user");
 
 	try {
 		const options = {
-		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
-		  body: JSON.stringify({
-			email: newEmail,
-			firstname: newFirstname,
-			lastname: newLastname,
-		  }), // body data type must match "Content-Type" header
+		  method: "GET", // *GET, POST, PUT, DELETE, etc.
 		  headers: {
 			"Content-Type": "application/json",
 		  },
 		};
 		
 	   
-		const response = await fetch("/api/users/" + userEmail.email + "/updateProfil", options); // fetch return a promise => we wait for the response
+		const response = await fetch("/api/users/" + userEmail.email + "/getAdress", options); // fetch return a promise => we wait for the response
   
 		if (!response.ok) {
-			if (response.status === 304) errorMessage("Compte non-modifié");
 			if (response.status === 420) errorMessage("Paramètres invalides");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
-		const user = await response.json(); // json() returns a promise => we wait for the data
-  
-		Redirect("/profil");
-
+		const adress = await response.json(); // json() returns a promise => we wait for the data
+		
+		return adress;
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
 	}
-
-
-}
-
-async function onCancel(e){
-	e.preventDefault();
-	document.getElementById("Prénom").value = document.getElementById("Prénom").getAttribute("content");
-	document.getElementById("Nom de famille").value = document.getElementById("Nom de famille").getAttribute("content");
-	document.getElementById("Email").value = document.getElementById("Email").getAttribute("content");
 }
 
 

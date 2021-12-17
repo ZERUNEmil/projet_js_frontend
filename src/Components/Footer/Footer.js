@@ -10,27 +10,6 @@ const Footer = () => {
   <div class="container p-4" id="infosFooter">
 
 
-    <!-- Section: Names -->
-    <section class="">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Vanmuysewinkel</h5>
-        </div>
-  
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Croquet</h5>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Edwards</h5>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Zerun</h5>
-        </div>
-      </div><br><br>
-    </section>
-    <!-- Section: Links -->
 
 
     
@@ -76,5 +55,27 @@ const Footer = () => {
         footerDiv.innerHTML = footer;     
 };
 
+
+// <!-- Section: Names -->
+// <section class="">
+//   <div class="row">
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Vanmuysewinkel</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Croquet</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Edwards</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Zerun</h5>
+//     </div>
+//   </div><br><br>
+// </section>
+// <!-- Section: Links -->
 
 export default Footer;

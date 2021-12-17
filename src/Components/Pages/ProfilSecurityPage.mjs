@@ -1,7 +1,14 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
+<<<<<<< HEAD:src/Components/Pages/ProfilSecurityPage.mjs
 import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage } from "./ProfilPage.js";
+=======
+<<<<<<< Updated upstream:src/Components/Pages/ProfilSecurityPage.js
+=======
+import { generateSecurityPage, addSensitiveInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
+>>>>>>> Stashed changes:src/Components/Pages/ProfilSecurityPage.mjs
+>>>>>>> ciara:src/Components/Pages/ProfilSecurityPage.js
 
 
 
@@ -48,24 +55,33 @@ export function addSecurityChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
+<<<<<<< HEAD:src/Components/Pages/ProfilSecurityPage.mjs
 export function addSecurityInfoNav(account, user){
+=======
+<<<<<<< Updated upstream:src/Components/Pages/ProfilSecurityPage.js
+function addInfoNav(account, user){
+=======
+export function addSecurityInfoNav(account, user){
+
+>>>>>>> Stashed changes:src/Components/Pages/ProfilSecurityPage.mjs
+>>>>>>> ciara:src/Components/Pages/ProfilSecurityPage.js
 	const infoTop = document.createElement("div");
-	infoTop.className = "tab-content p-4 p-md-5";
+	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
 	const info = document.createElement("div");
 	info.className = "tab-pane fade show active";
 
 	const title = document.createElement("h3");
 	title.className = "mb-4";
-	title.innerText = "Profil";
+	title.innerText = "Sécurité";
 
 	const rows = document.createElement("div");
 	rows.className = "row";
 	
-    addInfoContent(rows, "", "Ancien mot de passe");
-    rows.innerHTML += "<p></p>";
-	addInfoContent(rows, "", "Nouveau mot de passe");
-	addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
+    addSensitiveInfoContent(rows, "", "Ancien mot de passe");
+	rows.innerHTML += "<p></p>";
+	addSensitiveInfoContent(rows, "", "Nouveau mot de passe");
+	addSensitiveInfoContent(rows, "", "Confirmer le mot de passe");
 
 	const buttons = document.createElement("div");
 
@@ -110,7 +126,7 @@ async function onSubmit(e){
 		errorMessage("Veuillez remplir votre nouveau mot de passe.");
 		return;
 	} 
-	const secondNewPassword = document.getElementById("Confirmer le nouveau mot de passe").value;
+	const secondNewPassword = document.getElementById("Confirmer le mot de passe").value;
 	if (secondNewPassword === "") {
 		errorMessage("Veuillez confirmer votre mot de passe.");
 		return;
@@ -165,12 +181,15 @@ async function onSubmit(e){
 		if (!response.ok) {
 			if (response.status === 304) errorMessage("Compte non-modifié");
 			if (response.status === 420) errorMessage("Paramètres invalides");
+			else errorMessage("Erreur lors de l'ajout");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
 		const user = await response.json(); // json() returns a promise => we wait for the data
   
+		await generateSecurityPage();
+
         notificationMessage("Modification réussie.");
 
 	} catch (error) {
@@ -182,6 +201,6 @@ async function onSubmit(e){
 
 async function onCancel(e){
 	e.preventDefault();
-	document.getElementById("Nouveau mot de passe").value = "";
-	document.getElementById("Confirmer le nouveau mot de passe").value = "";
+
+	await generateSecurityPage();
 }
