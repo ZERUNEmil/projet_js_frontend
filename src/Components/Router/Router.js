@@ -6,11 +6,7 @@ import VendeursPage from "../Pages/VendeursPage";
 import SignupPage from "../Pages/SignupPage";
 import LoginPage from "../Pages/LoginPage";
 import Logout from "../Logout/Logout";
-import ProfilAccountPage from "../Pages/ProfilAccountPage";
-import ProfilCreditsPage from "../Pages/ProfilCreditsPage";
-import ProfilAuctionPage from "../Pages/ProfilAuctionPage";
-import ProfilSecurityPage from "../Pages/ProfilSecurityPage";
-import ProfilAdressPage from "../Pages/ProfilAdressPage";
+import ProfilPage from "../Pages/ProfilPage";
 
 // Configure your routes here
 const routes = {
@@ -22,11 +18,7 @@ const routes = {
 	"/signup": SignupPage,
 	"/login": LoginPage,
 	"/logout": Logout,
-	"/profil/account": ProfilAccountPage,
-	"/profil/credits": ProfilCreditsPage,
-	"/profil/auction": ProfilAuctionPage,
-	"/profil/security": ProfilSecurityPage,
-	"/profil/adress": ProfilAdressPage
+	"/profil": ProfilPage
 };
 
 /**
