@@ -2,6 +2,7 @@ import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import {getSessionObject, setSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
+import {emptyErrorMessage, errorMessage, generateAccountPage, notificationMessage} from "./ProfilPage";
 
 let user = getSessionObject("user");
 
@@ -30,7 +31,7 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Date de début
-							<input type="datetime-local" id="startDateTime" class="form-control form-control-lg" placeholder=""/>
+							<input type="datetime-local" id="startTime" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 				</div>
@@ -38,13 +39,13 @@ let auctionAddPage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Prix de départ
-							<input type="number" min="1" step="1" id="startPrice" class="form-control form-control-lg" placeholder="1"/>
+							<input type="number" min="0" step="1" id="startPrice" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Durée de l'enchère <i style="color: grey; font-size: 12px;">(en nombre de jours)</i>
-							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder="1"/>
+							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder=""/>
 					</div>
 				</div>
 				<div class="form-outline form-white mb-4">
@@ -81,10 +82,10 @@ let auctionAddPage = `
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signedTrue">Oui</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="1">Oui</input>
                                 </div>
                                 <div class="col form-check mr-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signedFalse" checked>Non</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="2" checked>Non</input>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -213,32 +214,108 @@ async function onSubmit(e) {
     let userEmail = user.email;
 
     // Auction
-    const auctionName = document.getElementById("auctionName");
-    const startedDateTime = document.getElementById("startDateTime");
-    const startedPrice = document.getElementById("startPrice");
-    const duration = document.getElementById("duration");
-    const auctionDescription = document.getElementById("auctionDescription");
-    const auctionPicture = document.getElementById("auctionPicture");
+    const auctionName = document.getElementById.valueOf("auctionName").value;
+    if (auctionName === "") {
+        errorMessage("Veuillez remplir le nom de l'annonce.");
+        return;
+    }
+    emptyErrorMessage();
+    const auctionDescription = document.getElementById("auctionDescription").value;
+    const startPrice = document.getElementById("startPrice").value;
+    const duration = document.getElementById("duration").value;
+    const startTime = document.getElementById("startTime").value;
+    const auctionPicture = document.getElementById("auctionPicture").value;
 
     // Piece
-    const pieceName = document.getElementById("pieceName");
-    const artist = document.getElementById("artist");
-    const signed = document.getElementById("signed");
-    const type = document.getElementById("type");
-    const artMovement = document.getElementById("artMovement");
-    const size = document.getElementById("size");
-    const partner = document.getElementById("partner");
-    const collection = document.getElementById("collection");
-    const location = document.getElementById("location");
-    const preciseDate = document.getElementById("preciseDate");
-    const millenium = document.getElementById("millenium");
-    const firstCentury = document.getElementById("firstCentury");
-    const secondCentury = document.getElementById("secondCentury");
-    const pieceDescription = document.getElementById("pieceDescription");
-    const piecePictures = document.getElementById("piecePictures");
+    const pieceName = document.getElementById("pieceName").value;
+    const pieceDescription = document.getElementById("pieceDescription").value;
+    const artist = document.getElementById("artist").value;
+    let signed = document.getElementById("signed").value;
+    if(signed === 1) signed = true;
+    else signed = false;
+    const partner = document.getElementById("partner").value;
+    const collection = document.getElementById("collection").value;
+    let type = document.getElementById("type").value;
+    if (type === 0) type = "";
+    else if (type === 1) type = "Réalisme";
+    else if (type === 2) type = "Impressionnisme";
+    else if (type === 3) type = "Fauvisme";
+    else if (type === 4) type = "Expressionnisme";
+    else if (type === 5) type = "Cubisme";
+    else if (type === 6) type = "Futurisme";
+    else if (type === 7) type = "Surréalisme";
+    else if (type === 8) type = "Autre";
+    const size = document.getElementById("size").value;
+    let artMovement = document.getElementById("artMovement").value;
+    if (artMovement === 0) type = "";
+    else if (artMovement === 1) type = "Peinture";
+    else if (artMovement === 2) type = "Sculpture";
+    else if (artMovement === 3) type = "Photographie";
+    else if (artMovement === 4) type = "Autre";
+    const location = document.getElementById("location").value;
+    const preciseDate = document.getElementById("preciseDate").value;
+    const millenium = document.getElementById("millenium").value;
+    const firstCentury = document.getElementById("firstCentury").value;
+    const secondCentury = document.getElementById("secondCentury").value;
 
+    // Piece_Picture TODO comment géré ça ? ...
+    const piecePictures = document.getElementById("piecePictures").value;
 
+    try {
+        // Add auction
+        const optionsAuction = {
+                method: "PUT", // *GET, POST, PUT, DELETE, etc.
+                body: JSON.stringify({
+                    name: auctionName,
+                    description: auctionDescription,
+                    start_price: startPrice,
+                    day_duration: duration,
+                    start_time: startTime,
+                    status: "In progress",
+                    owner: userEmail,
+                    cover_photo: auctionPicture,
+                }), // body data type must match "Content-Type" header
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
 
+        const responseAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
+
+        if (!responseAuction.ok) errorMessage("Une erreur s'est produite lors de l'ajout de l'annonce.");
+
+        const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
+
+        notificationMessage("Création de l'annonce réussie.");
+
+        let idAuction = auction.id_auction;
+
+        // Add Piece
+        const optionsPiece = {
+            name: pieceName,
+            description: pieceDescription,
+            artist: artist,
+            signed: signed,
+            partner: partner,
+            collection: collection,
+            type: type,
+            size: size,
+            art_movement: artMovement,
+            location: location,
+            id_auction: idAuction,
+        }
+
+        const responsePiece = await fetch("/api/pieces/" + idAuction + "/addPiece", optionsPiece);
+
+        if (!responsePiece.ok) errorMessage("Une erreur s'est produite lors de l'ajout de l'oeuvre.")
+
+        const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
+
+        // Add PiecePictures
+
+    } catch (error) {
+        console.error("ProfilPage::error: ", error);
+    }
 }
 
 export default AuctionAddPage;

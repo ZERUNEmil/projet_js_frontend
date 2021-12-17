@@ -28,7 +28,6 @@ let auctionUpdatePage = `
 				
 				<p class="text-white-50 mb-4">
 					Remplissez les champs necessaire pour l'ANNONCE ci-dessous
-				</p>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
@@ -39,7 +38,7 @@ let auctionUpdatePage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Date de début
-							<input type="datetime-local" id="startDateTime" class="form-control form-control-lg" placeholder=""/>
+							<input type="datetime-local" id="startTime" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 				</div>
@@ -47,13 +46,13 @@ let auctionUpdatePage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Prix de départ
-							<input type="number" min="1" step="1" id="startPrice" class="form-control form-control-lg" placeholder="1"/>
+							<input type="number" min="0" step="1" id="startPrice" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Durée de l'enchère <i style="color: grey; font-size: 12px;">(en nombre de jours)</i>
-							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder="1"/>
+							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder=""/>
 					</div>
 				</div>
 				<div class="form-outline form-white mb-4">
@@ -90,10 +89,10 @@ let auctionUpdatePage = `
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signedTrue">Oui</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="1">Oui</input>
                                 </div>
                                 <div class="col form-check mr-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signedFalse" checked>Non</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="2" checked>Non</input>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -124,7 +123,7 @@ let auctionUpdatePage = `
                                 <option value="5">Cubisme</option>
                                 <option value="6">Futurisme</option>
                                 <option value="7">Surréalisme</option>
-                                <option value="8">Autres</option>
+                                <option value="8">Autre</option>
                             </select>
 						</div>
 					</div>
@@ -191,7 +190,7 @@ let auctionUpdatePage = `
 				</div>
 				
                 <div>
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Ajouter votre annonce</button>
+                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Modifier votre annonce</button>
                 </div>
             </div>
         </div>
