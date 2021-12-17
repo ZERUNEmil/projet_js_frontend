@@ -92,7 +92,7 @@ import { getSessionObject } from "../../utils/session";
                             <a class="nav-link" href="#" data-uri="/logout">Log out</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/profil/account">Profil</a>
+                            <a class="nav-link" href="#" data-uri="/profil">Profil</a>
                         </li>
                     </ul>
                 </div>
