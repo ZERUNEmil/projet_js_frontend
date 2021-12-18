@@ -128,7 +128,7 @@ async function addInfoLine(body, content){
 						if (line["email"] === user.email && line["Statut"]) td.innerText = "Remportée";
 						else if (line["Statut"]) td.innerText = "Perdue";
 						else td.innerText = "En cours";
-					}else if (key === "Montant" || key === "Enchère max"){
+					}else if (key === "Votre enchère max" || key === "Enchère max"){
 						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
 					}else td.innerText = value;
 					tr.appendChild(td);
