@@ -2,9 +2,6 @@ import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import {getSessionObject, setSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
-import {emptyErrorMessage, errorMessage, generateAccountPage, notificationMessage} from "./ProfilPage";
-
-let user = getSessionObject("user");
 
 let auctionAddPage = `
   <form id="auctionAddForm">
@@ -54,7 +51,7 @@ let auctionAddPage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse"/>
+					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder=""/>
 				</div>
 			
 				<hr>
@@ -192,12 +189,12 @@ let auctionAddPage = `
   `;
 
 
-function AuctionAddPage() {
+const AuctionAddPage = async () => {
+    let user = getSessionObject("user");
+
+    if (!user) return Redirect("/login");
+
     // reset #page div
-
-    if (!user)
-        Redirect("/login");
-
     const pageDiv = document.querySelector("#page");
 
     pageDiv.innerHTML = "";
@@ -210,31 +207,33 @@ function AuctionAddPage() {
 
 async function onSubmit(e) {
     e.preventDefault();
-
-    let userEmail = user.email;
+    let userEmail = getSessionObject("user").email;
 
     // Auction
-    const auctionName = document.getElementById.valueOf("auctionName").value;
+    let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
-        errorMessage("Veuillez remplir le nom de l'annonce.");
+        alert("Veuillez remplir le nom de l'annonce.");
         return;
     }
-    emptyErrorMessage();
-    const auctionDescription = document.getElementById("auctionDescription").value;
-    const startPrice = document.getElementById("startPrice").value;
-    const duration = document.getElementById("duration").value;
-    const startTime = document.getElementById("startTime").value;
-    const auctionPicture = document.getElementById("auctionPicture").value;
+
+    let auctionDescription = document.getElementById("auctionDescription").value;
+    let startPrice = document.getElementById("startPrice").value;
+    if (startPrice === "") startPrice = 0;
+    let duration = document.getElementById("duration").value;
+    if (duration === "") duration = 1;
+    let startTime = document.getElementById("startTime").value;
+    if (startTime === '') startTime = '2021-12-16 12:32';
+    let coverPhoto = document.getElementById("coverPhoto").value;
 
     // Piece
-    const pieceName = document.getElementById("pieceName").value;
-    const pieceDescription = document.getElementById("pieceDescription").value;
-    const artist = document.getElementById("artist").value;
+    let pieceName = document.getElementById("pieceName").value;
+    let pieceDescription = document.getElementById("pieceDescription").value;
+    let artist = document.getElementById("artist").value;
     let signed = document.getElementById("signed").value;
-    if(signed === 1) signed = true;
+    if (signed === 1) signed = true;
     else signed = false;
-    const partner = document.getElementById("partner").value;
-    const collection = document.getElementById("collection").value;
+    let partner = document.getElementById("partner").value;
+    let collection = document.getElementById("collection").value;
     let type = document.getElementById("type").value;
     if (type === 0) type = "";
     else if (type === 1) type = "Réalisme";
@@ -245,77 +244,84 @@ async function onSubmit(e) {
     else if (type === 6) type = "Futurisme";
     else if (type === 7) type = "Surréalisme";
     else if (type === 8) type = "Autre";
-    const size = document.getElementById("size").value;
+    let size = document.getElementById("size").value;
     let artMovement = document.getElementById("artMovement").value;
     if (artMovement === 0) type = "";
     else if (artMovement === 1) type = "Peinture";
     else if (artMovement === 2) type = "Sculpture";
     else if (artMovement === 3) type = "Photographie";
     else if (artMovement === 4) type = "Autre";
-    const location = document.getElementById("location").value;
-    const millenium = document.getElementById("millenium").value;
-    const firstCentury = document.getElementById("firstCentury").value;
-    const secondCentury = document.getElementById("secondCentury").value;
-    const preciseDate = document.getElementById("preciseDate").value;
+    let location = document.getElementById("location").value;
+    let millenium = document.getElementById("millenium").value;
+    let firstCentury = document.getElementById("firstCentury").value;
+    let secondCentury = document.getElementById("secondCentury").value;
+    let preciseDate = document.getElementById("preciseDate").value;
 
     // Piece_Picture TODO comment géré ça ? ...
-    const piecePictures = document.getElementById("piecePictures").value;
+    let piecePictures = document.getElementById("piecePictures").value;
 
     try {
         // Add auction
         const optionsAuction = {
-                method: "PUT", // *GET, POST, PUT, DELETE, etc.
-                body: JSON.stringify({
-                    name: auctionName,
-                    description: auctionDescription,
-                    start_price: startPrice,
-                    day_duration: duration,
-                    start_time: startTime,
-                    cover_photo: auctionPicture,
-                }), // body data type must match "Content-Type" header
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: auctionName,
+                description: auctionDescription,
+                start_price: startPrice,
+                day_duration: duration,
+                start_time: startTime,
+                cover_photo: coverPhoto,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        console.log(optionsAuction);
 
         const responseAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
 
-        if (!responseAuction.ok) errorMessage("Une erreur s'est produite lors de l'ajout de l'annonce.");
+        if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'ajout de l'annonce.");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
-        notificationMessage("Création de l'annonce réussie.");
-
+        alert("Création de l'annonce réussie.");
 
         // Add Piece
 
         let idAuction = auction.id_auction;
 
         const optionsPiece = {
-            name: pieceName,
-            description: pieceDescription,
-            artist: artist,
-            signed: signed,
-            partner: partner,
-            collection: collection,
-            type: type,
-            size: size,
-            art_movement: artMovement,
-            location: location,
-            id_auction: idAuction,
-            millenium: millenium,
-            first_century: firstCentury,
-            second_century: secondCentury,
-            precise_date: preciseDate,
-        }
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: pieceName,
+                description: pieceDescription,
+                artist: artist,
+                signed: signed,
+                partner: partner,
+                collection: collection,
+                type: type,
+                size: size,
+                art_movement: artMovement,
+                location: location,
+                id_auction: idAuction,
+                millenium: millenium,
+                first_century: firstCentury,
+                second_century: secondCentury,
+                precise_date: preciseDate,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
 
         const responsePiece = await fetch("/api/pieces/" + idAuction + "/addPiece", optionsPiece);
 
-        if (!responsePiece.ok) errorMessage("Une erreur s'est produite lors de l'ajout de l'oeuvre.")
+        if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de l'oeuvre.")
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        notificationMessage("Création de l'oeuvre réussie.")
+        alert("Création de l'oeuvre réussie.")
 
         // Add PiecePictures
 
@@ -329,7 +335,7 @@ async function onSubmit(e) {
         console.error("AuctionAddPage::error: ", error);
     }
 
-    Redirect("/");
+    return Redirect("/");
 }
 
 export default AuctionAddPage;
