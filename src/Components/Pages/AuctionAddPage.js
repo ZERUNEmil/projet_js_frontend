@@ -193,18 +193,18 @@ let auctionAddPage = `
 
 
 function AuctionAddPage() {
+    // reset #page div
+
     if (!user)
         Redirect("/login");
 
-    // reset #page div
     const pageDiv = document.querySelector("#page");
 
     pageDiv.innerHTML = "";
     pageDiv.innerHTML = auctionAddPage;
 
     const auctionAddForm = document.getElementById("auctionAddForm");
-
-    auctionAddForm.addEventListener("submit", onSubmit);
+    auctionAddForm.addEventListener("submit", onSubmit, user);
 }
 
 
@@ -253,10 +253,10 @@ async function onSubmit(e) {
     else if (artMovement === 3) type = "Photographie";
     else if (artMovement === 4) type = "Autre";
     const location = document.getElementById("location").value;
-    const preciseDate = document.getElementById("preciseDate").value;
     const millenium = document.getElementById("millenium").value;
     const firstCentury = document.getElementById("firstCentury").value;
     const secondCentury = document.getElementById("secondCentury").value;
+    const preciseDate = document.getElementById("preciseDate").value;
 
     // Piece_Picture TODO comment géré ça ? ...
     const piecePictures = document.getElementById("piecePictures").value;
@@ -271,8 +271,6 @@ async function onSubmit(e) {
                     start_price: startPrice,
                     day_duration: duration,
                     start_time: startTime,
-                    status: "In progress",
-                    owner: userEmail,
                     cover_photo: auctionPicture,
                 }), // body data type must match "Content-Type" header
                 headers: {
@@ -288,9 +286,11 @@ async function onSubmit(e) {
 
         notificationMessage("Création de l'annonce réussie.");
 
-        let idAuction = auction.id_auction;
 
         // Add Piece
+
+        let idAuction = auction.id_auction;
+
         const optionsPiece = {
             name: pieceName,
             description: pieceDescription,
@@ -303,6 +303,10 @@ async function onSubmit(e) {
             art_movement: artMovement,
             location: location,
             id_auction: idAuction,
+            millenium: millenium,
+            first_century: firstCentury,
+            second_century: secondCentury,
+            precise_date: preciseDate,
         }
 
         const responsePiece = await fetch("/api/pieces/" + idAuction + "/addPiece", optionsPiece);
@@ -311,11 +315,21 @@ async function onSubmit(e) {
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
+        notificationMessage("Création de l'oeuvre réussie.")
+
         // Add PiecePictures
 
+        let idPiece = piece.id_piece;
+
+        const optionsPiecePicture = {
+            id_piece: idPiece,
+        }
+
     } catch (error) {
-        console.error("ProfilPage::error: ", error);
+        console.error("AuctionAddPage::error: ", error);
     }
+
+    Redirect("/");
 }
 
 export default AuctionAddPage;
