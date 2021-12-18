@@ -1,11 +1,11 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { addInfoContent, addInfoLine, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, generateAuctionPage } from "./ProfilPage.js";
+import { addInfoContent, addInfoLine, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, generateMyAuctionPage } from "./ProfilPage.js";
 
 
 
-export function addAuctionChoiceNav(account, user, images){
+export function addMyAuctionChoiceNav(account, user, images){
 	const choices = document.createElement("div");
 	choices.className = "profile-tab-nav border-right";
 
@@ -34,8 +34,8 @@ export function addAuctionChoiceNav(account, user, images){
 	addNavInactive("Sécurité", "Security", navigation);
 	addNavInactive("Adresse", "Adress", navigation);
 	addNavInactive("Crédits", "Credits", navigation);
-	addNavActive("Historique d'enchères", "Auction", navigation);
-	addNavInactive("Mes annonces", "Annonces", navigation);
+	addNavInactive("Historique d'enchères", "Auction", navigation);
+	addNavActive("Mes annonces", "Annonces", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
@@ -49,7 +49,7 @@ export function addAuctionChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
-export async function addAuctionInfoNav(account, user){
+export async function addMyAuctionInfoNav(account, user){
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
 

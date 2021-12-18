@@ -33,6 +33,7 @@ export function addCreditsChoiceNav(account, user, images){
 	addNavInactive("Adresse", "Adress", navigation);
 	addNavActive("Crédits", "Credits", navigation);
 	addNavInactive("Historique d'enchères", "Auction", navigation);
+	addNavInactive("Mes annonces", "Annonces", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";

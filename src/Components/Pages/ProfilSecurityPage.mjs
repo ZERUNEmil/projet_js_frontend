@@ -33,6 +33,7 @@ export function addSecurityChoiceNav(account, user, images){
 	addNavInactive("Adresse", "adress", navigation);
 	addNavInactive("Crédits", "credits", navigation);
 	addNavInactive("Historique d'enchères", "auction", navigation);
+	addNavInactive("Mes annonces", "Annonces", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
@@ -45,7 +46,6 @@ export function addSecurityChoiceNav(account, user, images){
 	choices.appendChild(navigation);
 	account.appendChild(choices);
 }
-
 
 export function addSecurityInfoNav(account, user){
 	const infoTop = document.createElement("div");
