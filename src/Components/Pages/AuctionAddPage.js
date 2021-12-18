@@ -222,7 +222,7 @@ async function onSubmit(e) {
     let duration = document.getElementById("duration").value;
     if (duration === "") duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '') startTime = '2021-12-16 12:32';
+    if (startTime === '') startTime = '2000-01-01 00:00';
     let coverPhoto = document.getElementById("coverPhoto").value;
 
     // Piece
@@ -253,9 +253,13 @@ async function onSubmit(e) {
     else if (artMovement === 4) type = "Autre";
     let location = document.getElementById("location").value;
     let millenium = document.getElementById("millenium").value;
+    if (millenium === '') millenium = 0;
     let firstCentury = document.getElementById("firstCentury").value;
+    if (firstCentury === '') firstCentury = 0;
     let secondCentury = document.getElementById("secondCentury").value;
+    if (secondCentury === '') secondCentury = 0;
     let preciseDate = document.getElementById("preciseDate").value;
+    if (preciseDate === '') preciseDate = '2000-01-01';
 
     // Piece_Picture TODO comment géré ça ? ...
     let piecePictures = document.getElementById("piecePictures").value;
@@ -282,8 +286,6 @@ async function onSubmit(e) {
         if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'ajout de l'annonce.");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
-
-        alert("Création de l'annonce réussie.");
 
         // Add Piece
 
@@ -319,7 +321,7 @@ async function onSubmit(e) {
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        alert("Création de l'oeuvre réussie.")
+        alert("Création de l'annonce et de l'oeuvre réussie.")
 
         // Add PiecePictures
 
