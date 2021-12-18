@@ -53,7 +53,7 @@ async function addTabContent(structure){
 	structure.className = "my-3";
 
 	const container = document.createElement("div");
-	container.classList.add("container");
+	container.classList.add("container-fluid");
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
@@ -119,7 +119,7 @@ export async function generateAuctionPage(){
 
     addAuctionChoiceNav(account, user, images);
 
-	addAuctionInfoNav(account, user);
+	await addAuctionInfoNav(account, user);
 }
 
 export async function generateAdressPage(){
@@ -217,6 +217,30 @@ export function addInfoContentNotModify(row, content, contentName){
 	info.appendChild(textContent);
 
 	row.appendChild(info);
+}
+
+export function addInfoLine(body, content){
+	let first = true;
+	content.forEach((line) => {
+		const tr = document.createElement("tr");
+		for (let [key, value] of Object.entries(line)){
+			if (first){
+				const th = document.createElement("th");
+				th.setAttribute("scope", "row");
+				th.innerText = value;
+				tr.appendChild(th);
+				first = false;
+			}else {
+				const td = document.createElement("td");
+				if (key === "Date") {
+					td.innerText = value.substring(0,10);
+				}else td.innerText = value;
+				tr.appendChild(td);
+			}
+		}
+		first = true;
+		body.appendChild(tr);
+	})
 }
 
 export function addNavActive(nameNav, namePage, destination){

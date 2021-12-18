@@ -29,6 +29,7 @@ body {
 	margin: 10px;
 	cursor: pointer;
 }
+
 .nav-pills a.nav-link i {
 	width: 20px;
 }
@@ -48,3 +49,16 @@ body {
 .btn {
 	margin: 10px;
 }
+
+th, tr{
+	color: #fff;
+}
+
+table{
+	table-layout: fixed;
+	min-width: inherit;
+}
+
+/* .tab-content{
+	max-width: 80%;
+} */
