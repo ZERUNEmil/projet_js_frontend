@@ -8,8 +8,11 @@ if (! rows) return;
 return rows[0];
 */
 
+
 const HomePage = () => {
 	const pageDiv = document.querySelector("#page");
+
+  
 	pageDiv.innerHTML = `
   
   <br><h1> All'Astra <h1>
