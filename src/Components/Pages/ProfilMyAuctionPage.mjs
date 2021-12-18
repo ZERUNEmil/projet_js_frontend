@@ -136,7 +136,8 @@ async function addInfoLine(body, content){
 						td.innerText = new Date(date).toLocaleDateString('be-BE', options);
 					}else if (key === "Statut"){
 						if (value === "Sold") td.innerText = "Vendue";
-						else td.innerText = "En cours";
+						else if (value === "In progress") td.innerText = "En cours de rédaction";
+                        else td.innerText = "En cours";
 					}else if (key === "Prix actuel"){
 						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
 					}else td.innerText = value;
