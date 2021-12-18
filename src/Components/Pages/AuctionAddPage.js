@@ -277,8 +277,6 @@ async function onSubmit(e) {
             },
         };
 
-        console.log(optionsAuction);
-
         const responseAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
 
         if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'ajout de l'annonce.");

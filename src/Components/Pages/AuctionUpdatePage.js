@@ -4,7 +4,6 @@ import {getSessionObject, setSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
 // TODO chopper TOUTES les infos de l'enchere à modif
-let idAuction = 1;
 
 let auctionUpdatePage = `
   <form id="auctionUpdateForm">
@@ -19,7 +18,7 @@ let auctionUpdatePage = `
 				</div>
 				
                 <div class="pb-1">
-                    <button class="btn btn-outline-light btn-danger px-5" onclick="deleteAuction(idAuction)">Supprimer votre annonce</button>
+                    <button class="btn btn-outline-light btn-danger px-5" id="delete">Supprimer votre annonce</button>
                 </div>
                 
                 <div class="pb-3">
@@ -200,30 +199,29 @@ let auctionUpdatePage = `
 
 
 function AuctionUpdatePage() {
+    let user = getSessionObject("user");
+    if (!user) return Redirect("/login");
+
     // reset #page div
     const pageDiv = document.querySelector("#page");
+
     pageDiv.innerHTML = "";
-
     pageDiv.innerHTML = auctionUpdatePage;
-    const auctionUpdateForm = document.getElementById("auctionUpdateForm");
 
-    let user = getSessionObject("user");
-    if (!user) {
-        Navbar();
-        Redirect("/login");
-    } else {
-        auctionUpdateForm.addEventListener("submit", onSubmit);
-    }
+    const auctionUpdateForm = document.getElementById("auctionUpdateForm");
+    auctionUpdateForm.addEventListener("submit", onSubmit);
+
+    const deleteFunction = document.getElementById("delete");
+    deleteFunction.addEventListener("click", deleteAuction);
 }
 
-function deleteAuction(id) {
-    let text = "Vous êtes sur le point de supprimer votre annonce !\n";
-    // if (confirm(text) === true) {
-    //
-    // } else {
-    //
-    // }
-    document.getElementById("demo").innerHTML = text;
+async function onSubmit(e) {
+    e.preventDefault();
+
+}
+
+function deleteAuction() {
+    return Redirect("/");
 }
 
 export default AuctionUpdatePage;
