@@ -43,24 +43,13 @@ const Router = () => {
       NB : for the components that include JS, we want to assure that the JS included 
       is not runned when the JS file is charged by the browser
       therefore, those components have to be either a function or a class*/
-			const componentToRender = routes[uri];
-			if (routes[uri]) {
-				componentToRender();
-			} else {
-				throw Error("The " + uri + " ressource does not exist");
-			}
+			redirection(uri);
 		}
 	});
 
 	/* Route the right component when the page is loaded / refreshed */
 	window.addEventListener("load", e => {
-		const componentToRender = routes[window.location.pathname];
-		if (!componentToRender)
-			throw Error(
-				"The " + window.location.pathname + " ressource does not exist."
-			);
-
-		componentToRender();
+		redirection(window.location.pathname);
 	});
 
 	// Route the right component when the user use the browsing history
@@ -80,12 +69,19 @@ const Redirect = uri => {
 	// use Web History API to add current page URL to the user's navigation history & set right URL in the browser (instead of "#")
 	window.history.pushState({}, uri, window.location.origin + uri);
 	// render the requested component
+	redirection(uri);
+};
+
+function redirection(URLPath){
+	const parsedURL = URLPath.split('?');
+	const uri = parsedURL[0];
+	const params = parsedURL[1];
 	const componentToRender = routes[uri];
 	if (routes[uri]) {
-		componentToRender();
+		componentToRender(params);
 	} else {
 		throw Error("The " + uri + " ressource does not exist");
 	}
-};
+}
 
 export { Router, Redirect };

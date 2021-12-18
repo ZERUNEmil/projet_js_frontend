@@ -4,7 +4,7 @@ import "../../stylesheets/profileStyle.css";
 import { addAccountChoiceNav, addAccountInfoNav } from "./ProfilAccountPage.mjs";
 import { addCreditsChoiceNav, addCreditsInfoNav } from "./ProfilCreditsPage.mjs";
 import { addSecurityChoiceNav, addSecurityInfoNav } from "./ProfilSecurityPage.mjs";
-import { addAuctionChoiceNav, addAuctionInfoNav } from "./ProfilAuctionPage.mjs";
+import { addAuctionChoiceNav, addAuctionInfoNav, onClickAuction } from "./ProfilAuctionPage.mjs";
 import { addMyAuctionChoiceNav, addMyAuctionInfoNav } from "./ProfilMyAuctionPage.mjs";
 import { addAdressChoiceNav, addAdressInfoNav } from "./ProfilAdressPage.mjs";
 
@@ -233,7 +233,9 @@ export function addInfoContentNotModify(row, content, contentName){
 	row.appendChild(info);
 }
 
-export function addInfoLine(body, content){
+export async function addInfoLine(body, content){
+	const user = await getUser();
+
 	let first = true;
 	content.forEach((line) => {
 		const tr = document.createElement("tr");
@@ -245,11 +247,21 @@ export function addInfoLine(body, content){
 				tr.appendChild(th);
 				first = false;
 			}else {
-				const td = document.createElement("td");
-				if (key === "Date") {
-					td.innerText = value.substring(0,10);
-				}else td.innerText = value;
-				tr.appendChild(td);
+				if (key === "email"){
+				}else if(key === "id_auction"){
+					tr.addEventListener("click", onClickAuction);
+					tr.setAttribute("id_auction", value);
+				}else {
+					const td = document.createElement("td");
+					if (key === "Date") {
+						td.innerText = value.substring(0,10);
+					}else if (key === "Statut"){
+						td.innerText = "Oui";
+					}else if (key === "Montant" || key === "Enchère max"){
+						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
+					}else td.innerText = value;
+					tr.appendChild(td);
+				}
 			}
 		}
 		first = true;

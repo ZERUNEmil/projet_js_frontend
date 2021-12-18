@@ -1,7 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { addInfoContent, addInfoLine, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, generateAuctionPage } from "./ProfilPage.js";
+import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, generateAuctionPage, getUser } from "./ProfilPage.js";
 
 
 
@@ -66,7 +66,7 @@ export async function addAuctionInfoNav(account, user){
 	const divTable = document.createElement("div");
 	divTable.className = "table-responsive-xl";
 	const table = document.createElement("table");
-	table.className = "table";
+	table.className = "table table-hover";
 
 
 	const header = document.createElement("thead");
@@ -77,7 +77,7 @@ export async function addAuctionInfoNav(account, user){
 	addHeaderTable(tr, auctionsBids);
 
 	const body = document.createElement("tbody");
-	addInfoLine(body, auctionsBids);
+	await addInfoLine(body, auctionsBids);
 
 	info.appendChild(title);
 	header.appendChild(tr);
@@ -92,12 +92,52 @@ export async function addAuctionInfoNav(account, user){
 
 function addHeaderTable(tr, info){
 	for (let key of Object.keys(info[0])){
-		const th = document.createElement("th");
-		th.setAttribute("scope", "col");
-		th.innerText = key;
-		tr.appendChild(th);
+		if (key != "id_user" && key != "id_auction" && key != "email"){
+			const th = document.createElement("th");
+			th.setAttribute("scope", "col");
+			th.innerText = key;
+			tr.appendChild(th);
+		}
 	}
 
+}
+
+async function addInfoLine(body, content){
+	const user = await getUser();
+
+	let first = true;
+	content.forEach((line) => {
+		const tr = document.createElement("tr");
+		for (let [key, value] of Object.entries(line)){
+			if (first){
+				const th = document.createElement("th");
+				th.setAttribute("scope", "row");
+				th.innerText = value;
+				tr.appendChild(th);
+				first = false;
+			}else {
+				if (key === "email"){
+				}else if(key === "id_auction"){
+					tr.addEventListener("click", onClickAuction);
+					tr.setAttribute("id_auction", value);
+				}else {
+					const td = document.createElement("td");
+					if (key === "Date") {
+						td.innerText = value.substring(0,10);
+					}else if (key === "Statut"){
+						if (line["email"] === user.email && line["Statut"]) td.innerText = "Remportée";
+						else if (line["Statut"]) td.innerText = "Perdue";
+						else td.innerText = "En cours";
+					}else if (key === "Montant" || key === "Enchère max"){
+						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
+					}else td.innerText = value;
+					tr.appendChild(td);
+				}
+			}
+		}
+		first = true;
+		body.appendChild(tr);
+	})
 }
 
 async function getAuctionBids(){
@@ -126,6 +166,11 @@ async function getAuctionBids(){
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
 	}
+}
+
+
+export function onClickAuction(e){
+	return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
 }
 
 
