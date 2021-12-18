@@ -6,6 +6,7 @@ body {
 
 .shadow {
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.76) !important;
+	background: #3f1739;
 }
 
 .profile-tab-nav {
@@ -26,14 +27,16 @@ body {
 	border-radius: 0;
 	color: #FBDCC4;
 	margin: 10px;
+	cursor: pointer;
 }
+
 .nav-pills a.nav-link i {
 	width: 20px;
 }
 
 .nav-pills .nav-link.active {
 	color: #F2A07B;
-	background-color: #31112C;
+	background-color: #3f1739;
 }
 
 .img-circle img {
@@ -42,3 +45,20 @@ body {
 	border-radius: 100%;
 	border: 5px solid #fff;
 }
+
+.btn {
+	margin: 10px;
+}
+
+th, tr{
+	color: #fff;
+}
+
+table{
+	table-layout: fixed;
+	min-width: inherit;
+}
+
+/* .tab-content{
+	max-width: 80%;
+} */

@@ -1,6 +1,5 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./stylesheets/style.css"; // If you prefer to style your app with vanilla CSS rather than with Bootstrap
-import "../node_modules/@fortawesome/fontawesome-free/js/all";
+
 import Navbar from "./Components/Navbar/Navbar";
 import { Router } from "./Components/Router/Router";
 import Footer from "./Components/Footer/Footer";

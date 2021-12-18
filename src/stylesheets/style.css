@@ -46,7 +46,7 @@ footer , #infosFooter {
 
 
 
-.login-form , .signup-form{
+.login-form , .signup-form, .auctionAdd-form, .auctionUpdate-form {
 	background-color: #3f1739;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.76) !important;
 }

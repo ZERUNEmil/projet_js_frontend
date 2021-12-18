@@ -70,6 +70,11 @@ import { getSessionObject } from "../../utils/session";
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
                         </li>
+                            <a class="nav-link" href="#" data-uri="/auction/add">Add</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-uri="/auction/update">Update</a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav w-100 justify-content-center">
                         <li>

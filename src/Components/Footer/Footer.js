@@ -10,27 +10,6 @@ const Footer = () => {
   <div class="container p-4" id="infosFooter">
 
 
-    <!-- Section: Names -->
-    <section class="">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Vanmuysewinkel</h5>
-        </div>
-  
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Croquet</h5>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Edwards</h5>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-          <h5 class="text-uppercase">Zerun</h5>
-        </div>
-      </div><br><br>
-    </section>
-    <!-- Section: Links -->
 
 
     
@@ -70,10 +49,33 @@ const Footer = () => {
     © 2020 Copyright:
     <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
   <!-- Copyright -->
         `;
         footerDiv.innerHTML = footer;     
 };
 
+
+// <!-- Section: Names -->
+// <section class="">
+//   <div class="row">
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Vanmuysewinkel</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Croquet</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Edwards</h5>
+//     </div>
+
+//     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+//       <h5 class="text-uppercase">Zerun</h5>
+//     </div>
+//   </div><br><br>
+// </section>
+// <!-- Section: Links -->
 
 export default Footer;

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "start": "webpack serve --mode development"
+    "start": "webpack serve --mode production"
   },
   "author": "e-baron",
   "license": "CC-BY-SA-4.0",
@@ -18,12 +18,11 @@
     "html-webpack-plugin": "^5.3.1",
     "style-loader": "^2.0.0",
     "webpack": "^5.38.1",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
-    "@glidejs/glide": "^3.5.2",
     "@popperjs/core": "^2.9.2",
     "bootstrap": "^5.0.1"
   }
