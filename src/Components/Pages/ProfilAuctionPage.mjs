@@ -1,7 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { addInfoContent, addNavActive, addNavInactive, emptyErrorMessage, errorMessage } from "./ProfilPage.js";
+import { addInfoContent, addInfoLine, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, generateAuctionPage } from "./ProfilPage.js";
 
 
 
@@ -48,7 +48,7 @@ export function addAuctionChoiceNav(account, user, images){
 	account.appendChild(choices);
 }
 
-export function addAuctionInfoNav(account, user){
+export async function addAuctionInfoNav(account, user){
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
@@ -59,103 +59,72 @@ export function addAuctionInfoNav(account, user){
 	title.className = "mb-4";
 	title.innerText = "Historique d'enchères";
 
-	const rows = document.createElement("div");
-	rows.className = "row";
+	const div = document.createElement("div");
+	div.className = "row";
+
+	const divTable = document.createElement("div");
+	divTable.className = "table-responsive-xl";
+	const table = document.createElement("table");
+	table.className = "table";
+
+
+	const header = document.createElement("thead");
+	const tr = document.createElement("tr");
 	
-	// addInfoContent(rows, "", "Nouveau mot de passe");
-	// addInfoContent(rows, "", "Confirmer le nouveau mot de passe");
+	const auctionsBids = await getAuctionBids();
 
-	const buttons = document.createElement("div");
+	addHeaderTable(tr, auctionsBids);
 
-	const submitButton = document.createElement("button");
-	submitButton.className = "btn btn-outline-light btn-lg px-5";
-	submitButton.type = "submit";
-	submitButton.innerText = "Mettre à jour";
-
-	const cancelButton = document.createElement("button");
-	cancelButton.className = "btn btn-outline-secondary btn-lg px-5";
-	cancelButton.type = "cancel";
-	cancelButton.innerText = "Annuler";
-
-	const message = document.createElement("div");
-	message.id = "message";
-
-
+	const body = document.createElement("tbody");
+	addInfoLine(body, auctionsBids);
 
 	info.appendChild(title);
-	info.appendChild(rows);
-	submitButton.addEventListener("click", onSubmit, user);
-	buttons.appendChild(submitButton);
-	cancelButton.addEventListener("click", onCancel);
-	buttons.appendChild(cancelButton);
-	info.appendChild(buttons);
-	info.appendChild(message);
+	header.appendChild(tr);
+	table.appendChild(header);
+	table.appendChild(body);
+	divTable.appendChild(table);
+	div.appendChild(divTable);
+	info.appendChild(div);
 	infoTop.appendChild(info);
 	account.appendChild(infoTop);
 }
 
-async function onSubmit(e){
-	e.preventDefault();
-
-	const newFirstname = document.getElementById("Prénom").value;
-	if (newFirstname === ""){
-		errorMessage("Veuillez remplir votre prénom.");
-		return;
-	} 
-	const newLastname = document.getElementById("Nom de famille").value;
-	if (newLastname === "") {
-		errorMessage("Veuillez remplir votre nom de famille.");
-		return;
-	}
-	const newEmail = document.getElementById("Email").value;
-	if (newEmail === "") {
-		errorMessage("Veuillez remplir votre email.");
-		return;
+function addHeaderTable(tr, info){
+	for (let key of Object.keys(info[0])){
+		const th = document.createElement("th");
+		th.setAttribute("scope", "col");
+		th.innerText = key;
+		tr.appendChild(th);
 	}
 
+}
+
+async function getAuctionBids(){
 	let userEmail = getSessionObject("user");
-
-	emptyErrorMessage();
 
 	try {
 		const options = {
-		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
-		  body: JSON.stringify({
-			email: newEmail,
-			firstname: newFirstname,
-			lastname: newLastname,
-		  }), // body data type must match "Content-Type" header
+		  method: "GET", // *GET, POST, PUT, DELETE, etc.
 		  headers: {
 			"Content-Type": "application/json",
 		  },
 		};
 		
 	   
-		const response = await fetch("/api/users/" + userEmail.email + "/updateProfil", options); // fetch return a promise => we wait for the response
+		const response = await fetch("/api/users/" + userEmail.email + "/getAuctionBids", options); // fetch return a promise => we wait for the response
   
 		if (!response.ok) {
-			if (response.status === 304) errorMessage("Compte non-modifié");
 			if (response.status === 420) errorMessage("Paramètres invalides");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
-		const user = await response.json(); // json() returns a promise => we wait for the data
-  
-		Redirect("/profil");
-
+		const auctionBids = await response.json(); // json() returns a promise => we wait for the data
+		
+		return auctionBids;
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
 	}
-
-
-}
-
-async function onCancel(e){
-	e.preventDefault();
-	document.getElementById("Prénom").value = document.getElementById("Prénom").getAttribute("content");
-	document.getElementById("Nom de famille").value = document.getElementById("Nom de famille").getAttribute("content");
-	document.getElementById("Email").value = document.getElementById("Email").getAttribute("content");
 }
 
 
