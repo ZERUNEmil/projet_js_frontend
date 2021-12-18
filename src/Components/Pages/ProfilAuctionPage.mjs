@@ -74,6 +74,8 @@ export async function addAuctionInfoNav(account, user){
 	
 	const auctionsBids = await getAuctionBids();
 
+	// TODO Gérer quand y en a pas
+
 	addHeaderTable(tr, auctionsBids);
 
 	const body = document.createElement("tbody");

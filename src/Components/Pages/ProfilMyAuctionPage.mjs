@@ -74,6 +74,8 @@ export async function addMyAuctionInfoNav(account, user){
 	
 	const auctionsBids = await getAuctions();
 
+    // TODO Gérer quand y en a pas
+
 	addHeaderTable(tr, auctionsBids);
 
 	const body = document.createElement("tbody");
@@ -124,14 +126,13 @@ async function addInfoLine(body, content){
 				}else if(key === "id_auction"){
 					tr.addEventListener("click", onClickAuction);
 					tr.setAttribute("id_auction", value);
+                    tr.setAttribute("status", line["Statut"]);
 				}else {
 					const td = document.createElement("td");
 					if (key === "start_time") {
                         let date = new Date(value)
                         date = date.setDate(date.getDate() + line['day_duration']);
                         const options = { weekday: 'long',  month: 'numeric', year: 'numeric', day: 'numeric' };
-                        // console.log(date.getDate() + line['day_duration']);
-                        // console.log(date.setDate(date.getDate() + line['day_duration']));
 						td.innerText = new Date(date).toLocaleDateString('be-BE', options);
 					}else if (key === "Statut"){
 						if (value === "Sold") td.innerText = "Vendue";
@@ -177,5 +178,9 @@ async function getAuctions(){
 }
 
 export function onClickAuction(e){
-	return Redirect("/auction/update?"+e.currentTarget.getAttribute("id_auction"));
+    const status = e.currentTarget.getAttribute("status");
+
+    if (status === "In progress") return Redirect("/auction/update?"+e.currentTarget.getAttribute("id_auction"));
+    else return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
+
 }
