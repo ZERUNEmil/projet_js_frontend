@@ -61,7 +61,7 @@ let auctionUpdatePage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="file" id="auctionPicture" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse"/>
+					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder=""/>
 				</div>
 			
 				<hr>
@@ -190,7 +190,7 @@ let auctionUpdatePage = `
 				</div>
 				
                 <div>
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Modifier votre annonce</button>
+                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Ajouter votre annonce</button>
                 </div>
             </div>
         </div>
