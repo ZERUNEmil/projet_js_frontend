@@ -24,13 +24,13 @@ let auctionUpdatePage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Nom de l'annonce - <i style="color: red;">Requis</i>
-							<input type="text" id="auctionName" class="form-control form-control-lg" placeholder="" required />
+							<input type="text" id="auctionName" class="form-control form-control-lg"required />
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Date de début
-							<input type="datetime-local" id="startTime" class="form-control form-control-lg" placeholder=""/>
+							<input type="datetime-local" id="startTime" class="form-control form-control-lg"/>
 						</div>
 					</div>
 				</div>
@@ -38,22 +38,22 @@ let auctionUpdatePage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Prix de départ
-							<input type="number" min="0" step="1" id="startPrice" class="form-control form-control-lg" placeholder=""/>
+							<input type="number" min="0" step="1" id="startPrice" class="form-control form-control-lg"/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Durée de l'enchère <i style="color: grey; font-size: 12px;">(en nombre de jours)</i>
-							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg" placeholder=""/>
+							<input type="number" min="1" step="1" id="duration" class="form-control form-control-lg"/>
 					</div>
 				</div>
 				<div class="form-outline form-white mb-4">
 					Description
-					<input type="text" id="auctionDescription" class="form-control form-control-lg" placeholder=""/>
+					<input type="text" id="auctionDescription" class="form-control form-control-lg"/>
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder=""/>
+					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
 				</div>
 			
 				<hr>
@@ -65,13 +65,13 @@ let auctionUpdatePage = `
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Nom de l'oeuvre
-							<input type="text" id="pieceName" class="form-control form-control-lg" placeholder=""/>
+							<input type="text" id="pieceName" class="form-control form-control-lg"/>
 						</div>
 					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Nom de l'artiste
-							<input type="text" id="artist" class="form-control form-control-lg" placeholder=""/>
+							<input type="text" id="artist" class="form-control form-control-lg"/>
 						</div>
 					</div>
 					<div class="col">
@@ -180,7 +180,7 @@ let auctionUpdatePage = `
                         <button class="btn btn-danger btn-lg" id="delete">Supprimer votre annonce</button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-light btn-lg" type="submit">Modifier votre annonce</button>
+                        <button class="btn btn-outline-light btn-lg" type="submit" id="id_auction">Modifier votre annonce</button>
                     </div>
                     <div class="col">
                         <button class="btn btn-outline-info btn-lg" id="posted">Poster votre annonce</button>
@@ -193,11 +193,9 @@ let auctionUpdatePage = `
   `;
 
 
-function AuctionUpdatePage(param) {
+async function AuctionUpdatePage(param) {
     let user = getSessionObject("user");
     if (!user) return Redirect("/login");
-
-    console.log(param);
 
     // reset #page div
     const pageDiv = document.querySelector("#page");
@@ -210,6 +208,85 @@ function AuctionUpdatePage(param) {
 
     const deleteFunction = document.getElementById("delete");
     deleteFunction.addEventListener("click", deleteAuction);
+
+    const id_auction = document.getElementById("id_auction");
+    id_auction.value = param;
+
+    let auctionInfos, pieceInfos;
+    [auctionInfos, pieceInfos] = await getAuctionInfos(param);
+
+    console.log(auctionInfos, pieceInfos);
+
+    const auctionName = document.getElementById("auctionName");
+    auctionName.value = auctionInfos.name;
+    const auctionDescription = document.getElementById("auctionDescription");
+    auctionDescription.value = auctionInfos.description;
+    const startPrice = document.getElementById("startPrice");
+    startPrice.value = auctionInfos.start_price;
+    const duration = document.getElementById("duration");
+    duration.value = auctionInfos.day_duration;
+    const startTime = document.getElementById("startTime");
+    startTime.value = auctionInfos.start_time.substring(0,10);
+    const coverPhoto = document.getElementById("coverPhoto");
+    coverPhoto.value = auctionInfos.cover_photo;
+
+    const pieceName = document.getElementById("pieceName");
+    pieceName.value = pieceInfos.name;
+    const pieceDescription = document.getElementById("pieceDescription");
+    pieceDescription.value = pieceInfos.description;
+    const artist = document.getElementById("artist");
+    artist.value = pieceInfos.artists;
+    const signed = document.getElementById("signed");
+    signed.value = pieceInfos.signed;
+    const partner = document.getElementById("partner");
+    partner.value = pieceInfos.partner;
+    const collection = document.getElementById("collection");
+    collection.value = pieceInfos.collection;
+    const type = document.getElementById("type");
+    type.value = pieceInfos.type;
+    const size = document.getElementById("size");
+    size.size = pieceInfos.size;
+    const artMovement = document.getElementById("artMovement");
+    artMovement.value = pieceInfos.art_movement;
+    const location = document.getElementById("location");
+    location.value = pieceInfos.location;
+    const date = document.getElementById("date");
+    date.value = pieceInfos.date;
+}
+
+async function getAuctionInfos(id) {
+    try {
+        const options = {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        const responseAuction = await fetch("/api/auctions/" + id, options); // fetch return a promise => we wait for the response
+
+        if (!responseAuction.ok) {
+            if (responseAuction.status === 420)
+            throw new Error(
+                "fetch error : " + responseAuction.status + " : " + responseAuction.statusText
+            );
+        }
+        const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
+
+        const responsePiece = await fetch("/api/pieces/" + id, options); // fetch return a promise => we wait for the response
+
+        if (!responsePiece.ok) {
+            if (responsePiece.status === 420)
+            throw new Error(
+                "fetch error : " + responsePiece.status + " : " + responsePiece.statusText
+            );
+        }
+        const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
+
+        return [auction, piece];
+
+    } catch (error) {
+        console.error("ProfilPage::error: ", error);
+    }
 }
 
 async function onSubmit(e) {
@@ -266,15 +343,16 @@ async function onSubmit(e) {
             },
         };
 
-        const responseAuction = await fetch("/api/auctions/" + userEmail + "/updateAuction", optionsAuction); // fetch return a promise => we wait for the response
+        const idAuctionSelected = document.getElementById("id_auction").value;
+
+
+        const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/updateAuction", optionsAuction); // fetch return a promise => we wait for the response
 
         if (!responseAuction.ok) alert("Une erreur s'est produite lors de la modification de l'annonce.");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
         // Add Piece
-
-        let idAuction = auction.id_auction;
 
         const optionsPiece = {
             method: "PUT", // *GET, POST, PUT, DELETE, etc.
@@ -297,7 +375,7 @@ async function onSubmit(e) {
             },
         };
 
-        const responsePiece = await fetch("/api/pieces/" + idAuction + "/updatePiece", optionsPiece);
+        const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/updatePiece", optionsPiece);
 
         if (!responsePiece.ok) alert("Une erreur s'est produite lors de la modification de l'oeuvre.");
 
