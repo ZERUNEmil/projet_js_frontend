@@ -219,14 +219,27 @@ async function onSubmit(e) {
         return;
     }
 
+    let dateNow = new Date();
+    let dateStr =
+        ("00" + dateNow.getDate()).slice(-2) + "/" +
+        ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
+        dateNow.getFullYear() +
+        " " + "23" + ":" + "59";
+    console.log(dateStr);
+
     let auctionDescription = document.getElementById("auctionDescription").value;
     let startPrice = document.getElementById("startPrice").value;
     if (startPrice === "") startPrice = 0;
     let duration = document.getElementById("duration").value;
     if (duration === "") duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '') startTime = '2000-01-01 00:00';
+    if (startTime === '') startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
+    // Upload cover_photo
+    alert("Upload de votre image pour l'annonce !");
+    const filePicture = e.target[5].files[0];
+    let urlPicture = "";
+    if (filePicture != undefined) urlPicture = await uploadImage(filePicture);
 
     // Piece
     let pieceName = document.getElementById("pieceName").value;
@@ -244,12 +257,8 @@ async function onSubmit(e) {
     let date = document.getElementById("date").value;
     if (date === '') date = '2000-01-01';
 
-    // Piece_Picture TODO comment géré ça ? ...
-
-    const filePicture = e.target[5].files[0];
-    let urlPicture = "";
-    if (filePicture != undefined) urlPicture = await uploadImage(filePicture);
-
+    // Piece_Picture
+    alert("Upload de votre/vos image/s pour l'oeuvre !");
     const piecePictures = e.target[18].files;
     const urlPiecePictures = [];
     if (piecePictures.length != 0) {
@@ -353,11 +362,16 @@ async function postAuction() {
         return;
     }
 
-
     let userEmail = getSessionObject("user").email;
 
-    // Check no Null fields
+    let dateNow = new Date();
+    let dateStr =
+        ("00" + dateNow.getDate()+1).slice(-2) + 1 + "/" +
+        ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
+        dateNow.getFullYear() +
+        " " + "00" + ":" + "01";
 
+    // Check no Null fields
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
@@ -370,7 +384,7 @@ async function postAuction() {
     let duration = document.getElementById("duration").value;
     if (duration === "" || duration <= 0) duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '' || startTime < Date.now()) startTime = '2000-01-01 00:00';
+    if (startTime === '' || startTime < dateStr) startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
     if (coverPhoto === "") coverPhoto = "Frontend/src/img/users/user.jpg";
 

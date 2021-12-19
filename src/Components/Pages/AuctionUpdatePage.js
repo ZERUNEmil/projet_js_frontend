@@ -308,13 +308,20 @@ async function onSubmit(e) {
         return;
     }
 
+    let dateNow = new Date();
+    let dateStr =
+        ("00" + dateNow.getDate()+1).slice(-2) + 1 + "/" +
+        ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
+        dateNow.getFullYear() +
+        " " + "00" + ":" + "01";
+
     let auctionDescription = document.getElementById("auctionDescription").value;
     let startPrice = document.getElementById("startPrice").value;
     if (startPrice === "") startPrice = 0;
     let duration = document.getElementById("duration").value;
     if (duration === "") duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '') startTime = '2000-01-01 00:00';
+    if (startTime === '') startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
 
     // Piece
@@ -419,8 +426,14 @@ async function postAuction() {
         return;
     }
 
-    // Check no Null fields
+    let dateNow = new Date();
+    let dateStr =
+        ("00" + dateNow.getDate()+1).slice(-2) + "/" +
+        ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
+        dateNow.getFullYear() +
+        " " + "00" + ":" + "01";
 
+    // Check no Null fields
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
@@ -433,7 +446,7 @@ async function postAuction() {
     let duration = document.getElementById("duration").value;
     if (duration === "" || duration <= 0) duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '' || startTime < Date.now()) startTime = '2000-01-01 00:00';
+    if (startTime === '' || startTime < dateStr) startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
     if (coverPhoto === "") coverPhoto = "Frontend/src/img/users/user.jpg";
 
