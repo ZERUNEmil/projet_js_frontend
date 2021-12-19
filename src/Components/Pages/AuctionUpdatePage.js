@@ -2,7 +2,8 @@ import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
-import swal from "sweetalert";
+
+const Swal = require('sweetalert2')
 
 
 let auctionUpdatePage = `
@@ -289,7 +290,7 @@ async function onSubmit(e) {
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
-        swal("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
+        Swal.fire("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
         return;
     }
 
@@ -322,7 +323,7 @@ async function onSubmit(e) {
     let artMovement = document.getElementById("artMovement").value;
     let location = document.getElementById("location").value;
     let date = document.getElementById("date").value;
-    if (date === '') date = '2000-01-01';
+    if (date === '') date = '';
 
     try {
         // Add auction
@@ -348,7 +349,7 @@ async function onSubmit(e) {
         const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/updateAuction", optionsAuction); // fetch return a promise => we wait for the response
 
         if (!responseAuction.ok)
-            swal("Erreur", "Une erreur s'est produite lors de la modification de l'annonce !", "error");
+            Swal.fire("Erreur", "Une erreur s'est produite lors de la modification de l'annonce !", "error");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
@@ -378,11 +379,11 @@ async function onSubmit(e) {
         const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/updatePiece", optionsPiece);
 
         if (!responsePiece.ok)
-            swal("Erreur", "Une erreur s'est produite lors de la modification de l'oeuvre !", "error")
+            Swal.fire("Erreur", "Une erreur s'est produite lors de la modification de l'oeuvre !", "error")
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        swal("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
+        Swal.fire("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
 
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);
@@ -392,97 +393,191 @@ async function onSubmit(e) {
 }
 
 async function postAuction() {
-    swal({
-        title: "Mise en ligne",
-        text: "Vous êtes sur le point de mettre en ligne votre annonce !\n" +
-            "Vous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné !",
-        icon: "warning",
-        buttons: {
-            cancel: "Annuler",
-            catch: {
-                text: "Valider",
-                value: "catch",
-            },
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
         },
+        buttonsStyling: false
     })
-        .then((value) => {
-            switch (value) {
-                case "catch":
-                    break;
-                default:
-                    swal({
-                        title: "Mise en ligne",
-                        text: "Vous avez annuler la mise en ligne de votre annonce !",
-                        icon: "info",
-                    });
-                    return;
+
+    swalWithBootstrapButtons.fire({
+        title: "Mise en ligne",
+        text: "Vous êtes sur le point de mettre votre annonce en ligne,\n" +
+            "Êtes vous sûr ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui, poster la !",
+        cancelButtonText: "Non, annuler !",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            post();
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                "Mise en ligne",
+                "Vous avez annulé la mise en ligne de votre annonce",
+                "info",
+            )
+        }
+    });
+
+    async function post(){
+        let dateNow = new Date();
+        let dateStr =
+            ("00" + dateNow.getDate()).slice(-2) + "/" +
+            ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
+            dateNow.getFullYear() +
+            "T" + "23" + ":" + "59";
+
+        // Check no Null fields
+        // Auction
+        let auctionName = document.getElementById("auctionName").value;
+        if (auctionName === "") {
+            Swal.fire("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
+            return;
+        }
+
+        let auctionDescription = document.getElementById("auctionDescription").value;
+        let startPrice = document.getElementById("startPrice").value;
+        if (startPrice === "" || startPrice < 0) startPrice = 0;
+        let duration = document.getElementById("duration").value;
+        if (duration === "" || duration <= 0) duration = 1;
+        let startTime = document.getElementById("startTime").value;
+        if (startTime === '' || startTime < dateStr) startTime = dateStr;
+
+        // Piece
+        let pieceName = document.getElementById("pieceName").value;
+        if (pieceName === "") {
+            Swal.fire("Attention !", "Veuillez remplir le nom de l'oeuvre.", "warning");
+            return;
+        }
+        ;
+        let pieceDescription = document.getElementById("pieceDescription").value;
+        let artist = document.getElementById("artist").value;
+        if (artist === "") artist = "Non renseigné";
+        let signed;
+        if (document.getElementById('signedTrue').checked == true && artist != "Non renseigné") signed = true;
+        else signed = false;
+        let partner = document.getElementById("partner").value;
+        if (partner === "") partner = "Non renseigné";
+        let collection = document.getElementById("collection").value;
+        if (collection === "") collection = "Non renseigné";
+        let type = document.getElementById("type").value;
+        if (type === "") type = "Non Renseigné";
+        let size = document.getElementById("size").value;
+        if (size === "") size = "Non Renseigné";
+        let artMovement = document.getElementById("artMovement").value;
+        if (artMovement === "") artMovement = "Non renseigné";
+        let location = document.getElementById("location").value;
+        if (location === "") artMovement = "Non renseigné";
+        let date = document.getElementById("date").value;
+        if (date === "") date = "Non renseigné";
+
+        try {
+            // Add auction
+            const optionsAuction = {
+                method: "PUT", // *GET, POST, PUT, DELETE, etc.
+                body: JSON.stringify({
+                    name: auctionName,
+                    description: auctionDescription,
+                    start_price: startPrice,
+                    day_duration: duration,
+                    start_time: startTime,
+                    status: "Posted",
+                }), // body data type must match "Content-Type" header
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            const idAuctionSelected = document.getElementById("id_auction").value;
+
+            const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/postAuction", optionsAuction); // fetch return a promise => we wait for the response
+            if (!responseAuction.ok) {
+                Swal.fire("Erreur", "Une erreur s'est produite lors de la mise en ligne de l'annonce !", "error");
+                return;
             }
-        });
 
-    let dateNow = new Date();
-    let dateStr =
-        ("00" + dateNow.getDate()).slice(-2) + "/" +
-        ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
-        dateNow.getFullYear() +
-        "T" + "23" + ":" + "59";
-    console.log(dateStr);
+            // Add Piece
 
-    // Check no Null fields
-    // Auction
-    let auctionName = document.getElementById("auctionName").value;
-    if (auctionName === "") {
-        swal("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
-        return;
+            const optionsPiece = {
+                method: "PUT", // *GET, POST, PUT, DELETE, etc.
+                body: JSON.stringify({
+                    name: pieceName,
+                    description: pieceDescription,
+                    artist: artist,
+                    signed: signed,
+                    partner: partner,
+                    collection: collection,
+                    type: type,
+                    size: size,
+                    art_movement: artMovement,
+                    location: location,
+                    id_auction: idAuctionSelected,
+                    date: date,
+                }), // body data type must match "Content-Type" header
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/postPiece", optionsPiece);
+
+            if (!responsePiece.ok) {
+                Swal.fire("Erreur", "Une erreur s'est produite lors de la mise en ligne de l'oeuvre !", "error");
+                return;
+            }
+
+            Swal.fire("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
+            return Redirect("/annonces/id?" + idAuctionSelected);
+
+        } catch (error) {
+            console.error("AuctionAddPage::error: ", error);
+        }
     }
-    ;
-    let auctionDescription = document.getElementById("auctionDescription").value;
-    let startPrice = document.getElementById("startPrice").value;
-    if (startPrice === "" || startPrice < 0) startPrice = 0;
-    let duration = document.getElementById("duration").value;
-    if (duration === "" || duration <= 0) duration = 1;
-    let startTime = document.getElementById("startTime").value;
-    if (startTime === '' || startTime < dateStr) startTime = dateStr;
+}
 
-    // Piece
-    let pieceName = document.getElementById("pieceName").value;
-    if (pieceName === "") {
-        swal("Attention !", "Veuillez remplir le nom de l'oeuvre.", "warning");
-        return;
-    }
-    ;
-    let pieceDescription = document.getElementById("pieceDescription").value;
-    let artist = document.getElementById("artist").value;
-    if (artist === "") artist = "Non renseigné";
-    let signed;
-    if (document.getElementById('signedTrue').checked == true && artist != "Non renseigné") signed = true;
-    else signed = false;
-    let partner = document.getElementById("partner").value;
-    if (partner === "") partner = "Non renseigné";
-    let collection = document.getElementById("collection").value;
-    if (collection === "") collection = "Non renseigné";
-    let type = document.getElementById("type").value;
-    if (type === "") type = "Non Renseigné";
-    let size = document.getElementById("size").value;
-    if (size === "") size = "Non Renseigné";
-    let artMovement = document.getElementById("artMovement").value;
-    if (artMovement === "") artMovement = "Non renseigné";
-    let location = document.getElementById("location").value;
-    if (location === "") artMovement = "Non renseigné";
-    let date = document.getElementById("date").value;
-    if (date === "") date = "Non renseigné";
 
-    try {
-        // Add auction
-        const optionsAuction = {
-            method: "PUT", // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify({
-                name: auctionName,
-                description: auctionDescription,
-                start_price: startPrice,
-                day_duration: duration,
-                start_time: startTime,
-                status: "Posted",
-            }), // body data type must match "Content-Type" header
+async function deleteAuction() {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+        title: "Supressions",
+        text: "Vous êtes sur le point de supprimer votre annonce,\n" +
+            "Êtes vous sûr ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer !",
+        cancelButtonText: "Non, annuler !",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            delAuction();
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                "Suppresion",
+                "Vous avez annulé la suppression de l'annonce !",
+                "info",
+            )
+        }
+    });
+
+    async function delAuction() {
+        const options = {
+            method: "DELETE", // *GET, POST, PUT, DELETE, etc.
             headers: {
                 "Content-Type": "application/json",
             },
@@ -490,96 +585,18 @@ async function postAuction() {
 
         const idAuctionSelected = document.getElementById("id_auction").value;
 
-        const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/postAuction", optionsAuction); // fetch return a promise => we wait for the response
+        const responseDeletePiece = await fetch("/api/pieces/" + idAuctionSelected + "/deletePiece", options);
+        const responseDeleteAuction = await fetch("/api/auctions/" + idAuctionSelected + "/deleteAuction", options);
 
-        if (!responseAuction.ok) alert("Une erreur s'est produite lors de la mise en ligne de l'annonce.");
-
-        const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
-
-        // Add Piece
-
-        const optionsPiece = {
-            method: "PUT", // *GET, POST, PUT, DELETE, etc.
-            body: JSON.stringify({
-                name: pieceName,
-                description: pieceDescription,
-                artist: artist,
-                signed: signed,
-                partner: partner,
-                collection: collection,
-                type: type,
-                size: size,
-                art_movement: artMovement,
-                location: location,
-                id_auction: idAuctionSelected,
-                date: date,
-            }), // body data type must match "Content-Type" header
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-
-        const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/postPiece", optionsPiece);
-
-        if (!responsePiece.ok) {
-            swal("Erreur", "Une erreur s'est produite lors de la mise en ligne de l'oeuvre !", "error");
-            return;
+        if (!responseDeletePiece || !responseDeleteAuction)
+            Swal.fire("Erreur", "Une erreur s'est produite lors de la suppresion de l'annonce !", "error")
+        else {
+            Swal.fire("Supression", "Vous avez bien suprimer votre annonce !", "success");
+            return Redirect("/");
         }
-
-        swal("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
-        return Redirect("/annonces/id?" + idAuctionSelected);
-
-    } catch (error) {
-        console.error("AuctionAddPage::error: ", error);
     }
-}
 
 
-async function deleteAuction() {
-    swal({
-        title: "Suppression",
-        text: "Vous êtes sur le point de supprimer votre annonce !\n" +
-            "Ceci est définitif, êtes-vous sur de vouloir la supprimée ?",
-        icon: "warning",
-        buttons: {
-            cancel: "Annuler",
-            valider: true,
-        },
-    })
-        .then((value) => {
-            switch (value) {
-                case "valider":
-                    break;
-                case "annuler":
-                    swal({
-                        title: "Suppression",
-                        text: "Vous avez annuler la supression de votre annonce !",
-                        icon: "info",
-                    });
-                    break;
-                default:
-                    return;
-            }
-        });
-
-    const options = {
-        method: "DELETE", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            "Content-Type": "application/json",
-        },
-    };
-
-    const idAuctionSelected = document.getElementById("id_auction").value;
-
-    const responseDeletePiece = await fetch("/api/pieces/" + idAuctionSelected + "/deletePiece", options);
-    const responseDeleteAuction = await fetch("/api/auctions/" + idAuctionSelected + "/deleteAuction", options);
-
-    if (!responseDeletePiece || !responseDeleteAuction)
-        swal("Erreur", "Une erreur s'est produite lors de la suppresion de l'annonce !", "error")
-    else {
-        swal("Supression", "Vous avez bien suprimer votre annonce !", "success");
-        return Redirect("/profil");
-    }
 }
 
 export default AuctionUpdatePage;

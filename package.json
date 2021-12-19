@@ -27,7 +27,6 @@
     "axios": "^0.24.0",
     "bootstrap": "^5.0.1",
     "img-reduce-size-js": "^1.4.0",
-    "messg": "^2.2.1",
-    "sweetalert": "^2.1.2"
+    "sweetalert2": "^11.3.0"
   }
 }
