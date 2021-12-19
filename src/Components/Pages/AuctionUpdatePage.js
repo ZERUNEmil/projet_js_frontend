@@ -197,8 +197,6 @@ function AuctionUpdatePage(param) {
     let user = getSessionObject("user");
     if (!user) return Redirect("/login");
 
-    console.log(param);
-
     // reset #page div
     const pageDiv = document.querySelector("#page");
 
