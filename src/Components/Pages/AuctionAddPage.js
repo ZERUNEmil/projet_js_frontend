@@ -52,7 +52,7 @@ let auctionAddPage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
+					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
 				</div>
 			
 				<hr>
@@ -165,7 +165,7 @@ let auctionAddPage = `
 				    <div class="col">
 				        <div class="form-outline form-white mb-4">
                             Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-                            <input type="url" id="piecePictures" class=" form-control form-control-lg" placeholder=""/>
+                            <input type="file" id="piecePictures" class=" form-control form-control-lg" placeholder="" multiple/>
 				        </div>
                     </div>
 				</div>

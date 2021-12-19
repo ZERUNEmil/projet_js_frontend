@@ -4,10 +4,6 @@
  import {Redirect} from "../Router/Router";
  import Navbar from "../Navbar/Navbar";
  import "../../stylesheets/homePageStyle.css";
-/*const  { rows } = await pool.query('SELECT * FROM project.user WHERE id_user = $1', [id]);
-if (! rows) return;
-return rows[0];
-*/
 
 const HomePage = async () => {
 	const pageDiv = document.querySelector("#page");

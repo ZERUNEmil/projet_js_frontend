@@ -3,6 +3,7 @@
  */
  import {Redirect, Router} from "../Router/Router";
  import Navbar from "../Navbar/Navbar";
+ import { createTab } from "./HomePage";
 
 const AnnoncesPage = async () => {
 	
