@@ -1,5 +1,6 @@
 import HomePage from "../Pages/HomePage";
 import AnnoncesPage from "../Pages/AnnoncesPage";
+import AnnoncesIdPage from "../Pages/AnnoncesIdPage";
 import AuctionAddPage from "../Pages/AuctionAddPage"
 import AuctionUpdatePage from "../Pages/AuctionUpdatePage";
 import VendeursPage from "../Pages/VendeursPage";
@@ -12,6 +13,7 @@ import ProfilPage from "../Pages/ProfilPage";
 const routes = {
 	"/": HomePage,
 	"/annonces": AnnoncesPage,
+	"/annonces/id": AnnoncesIdPage,
 	"/auction/add": AuctionAddPage,
 	"/auction/update": AuctionUpdatePage,
 	"/vendeurs": VendeursPage,

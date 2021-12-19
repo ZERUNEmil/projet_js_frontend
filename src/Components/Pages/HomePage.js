@@ -9,7 +9,7 @@ if (! rows) return;
 return rows[0];
 */
 
-const HomePage = () => {
+const HomePage = async () => {
 	const pageDiv = document.querySelector("#page");
     pageDiv.innerHTML='';
     let tabEndSoon = await getEndingData();
@@ -72,7 +72,6 @@ function appendRow(row, picture, alternate){
 	image.className = "img-fluid img-thumbnail mb-3";
     image.src = picture.cover_photo;
     image.style = "cursor: pointer;";
-    console.log(image);
     image.addEventListener("click", onSubmit, false);
     image.setAttribute("id_auction", picture.id_auction);
 
@@ -90,8 +89,7 @@ function appendRow(row, picture, alternate){
 };
 
 function onSubmit(e){
-    console.log("Coucou ?");
-    return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
+    return Redirect("/annonces/id?"+e.currentTarget.getAttribute("id_auction"));
 };
     
 async function getEndingData() {
