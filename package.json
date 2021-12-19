@@ -26,6 +26,8 @@
     "@popperjs/core": "^2.9.2",
     "axios": "^0.24.0",
     "bootstrap": "^5.0.1",
-    "img-reduce-size-js": "^1.4.0"
+    "img-reduce-size-js": "^1.4.0",
+    "messg": "^2.2.1",
+    "sweetalert": "^2.1.2"
   }
 }
