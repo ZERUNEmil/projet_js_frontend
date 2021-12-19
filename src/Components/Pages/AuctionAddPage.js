@@ -232,7 +232,9 @@ async function onSubmit(e) {
     let pieceName = document.getElementById("pieceName").value;
     let pieceDescription = document.getElementById("pieceDescription").value;
     let artist = document.getElementById("artist").value;
-    let signed = document.getElementById("signed").value;
+    let signed;
+    if (document.getElementById('signedTrue').checked == true) signed = true;
+    else signed = false;
     let partner = document.getElementById("partner").value;
     let collection = document.getElementById("collection").value;
     let type = document.getElementById("type").value;
