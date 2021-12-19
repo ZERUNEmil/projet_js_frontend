@@ -81,16 +81,15 @@ import "../../stylesheets/profileStyle.css";
  //    version 2     align-items-center 
   let signupPage =`
   <form id="signupForm">
-	<div class="container-md">
+	<div class="container-sm">
 		<br>
 		<br>
-		<div class="signup-form" style="border-radius: 1rem;">
+		<div class="signup-form px-4 " style="border-radius: 1rem;">
 			<div class="card-body px-5 py-4 text-center">
-				<h2 class="fw-bold mb-4 text-uppercase">Signup</h2>
+				<h2 class="fw-bold mb-4 text-uppercase">Sign up</h2>
 				<p class="text-white-50 mb-5">
 					Remplissez les champs avec vos données
 				</p>
-				<br>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
@@ -122,11 +121,6 @@ import "../../stylesheets/profileStyle.css";
 							<input type="password" id="password2" class="form-control form-control-lg" placeholder="Confirmation du mot de passe" required /></div>
 					</div>
 				</div>
-				<div class="form-outline form-white mb-4">
-					<i class="fa fa-user"></i>
-					<input type="text" id="address" class="form-control form-control-lg" placeholder="Adresse " />
-					<label class="form-label" for="address">Optionnel</label><br>
-			<br><br>
 					<button class="btn btn-outline-light btn-lg px-5" type="submit">Sign Up</button>
 					<br>
 					<p class="mt-4">
@@ -169,7 +163,10 @@ function SignupPage() {
     const password = document.getElementById("password1");
     const password2 = document.getElementById("password2");
     const email = document.getElementById("email");
-    const address = document.getElementById("address");  
+
+    if(username.value === "" || userlastname.value === "" || password.value === "" ){
+      errorMessage('Tous les champs sont obligatoires');
+    }
 
     if(password.value !== password2.value){
       errorMessage('Les mots de passe ne corespondent pas');
@@ -179,7 +176,7 @@ function SignupPage() {
       errorMessage('Cette email n\'est pas valide');
     }
 
-    console.log("credentials", username.value, userlastname.value, password.value, email.value, address.value,  );
+    console.log("credentials", username.value, userlastname.value, password.value, email.value  );
     try {
       const options = {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -187,8 +184,7 @@ function SignupPage() {
           username: username.value,
           userlastname: userlastname.value,
           password: password.value,
-          email: email.value,
-          address: address.value,
+          email: email.value
         }), // body data type must match "Content-Type" header
         headers: {
           "Content-Type": "application/json",
@@ -196,9 +192,14 @@ function SignupPage() {
       };
 
       const response = await fetch("/api/auths/signup", options); // fetch return a promise => we wait for the response
-
-      if (!response.ok) {
-        errorMessage('Cette email existe déjà');
+     
+        if (!response.ok) {
+          if (response.status === 304) errorMessage("Compte non-modifié");
+          if (response.status === 420) errorMessage("Paramètres invalides");
+            throw new Error(
+            "fetch error : " + response.status + " : " + response.statusText
+          );
+       
       }
 
       const user = await response.json(); // json() returns a promise => we wait for the data

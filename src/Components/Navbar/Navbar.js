@@ -46,10 +46,10 @@ import { getSessionObject } from "../../utils/session";
                     </ul>
                     <ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/signup">Sign Up</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/login">Log in</a>
+                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-uri="/signup">Sign Up</a>
                         </li>
                     </ul>
                 </div>
@@ -89,10 +89,10 @@ import { getSessionObject } from "../../utils/session";
                     </ul>
                     <ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/logout">Log out</a>
+                            <a class="nav-link" href="#" data-uri="/profil">Profil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/profil">Profil</a>
+                            <a class="nav-link" href="#" data-uri="/logout">Log out</a>
                         </li>
                     </ul>
                 </div>

@@ -139,7 +139,6 @@ function LoginPage() {
   }
 
 function errorMessage(message) {
-  console.log("alert");
   const alertDiv = document.getElementById("message");
   alertDiv.innerHTML=
   '<br><div class="alert alert-danger" role="alert">  Attention : '+ message  + ' </div>';
