@@ -4,7 +4,6 @@ import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
 
-
 let auctionUpdatePage = `
   <form id="auctionUpdateForm">
   <br>
@@ -226,7 +225,7 @@ async function AuctionUpdatePage(param) {
     const duration = document.getElementById("duration");
     duration.value = auctionInfos.day_duration;
     const startTime = document.getElementById("startTime");
-    startTime.value = auctionInfos.start_time.substring(0,16);
+    startTime.value = auctionInfos.start_time.substring(0, 16);
     const coverPhoto = document.getElementById("coverPhoto");
     coverPhoto.value = auctionInfos.cover_photo;
 
@@ -271,9 +270,9 @@ async function getAuctionInfos(id) {
 
         if (!responseAuction.ok) {
             if (responseAuction.status === 420)
-            throw new Error(
-                "fetch error : " + responseAuction.status + " : " + responseAuction.statusText
-            );
+                throw new Error(
+                    "fetch error : " + responseAuction.status + " : " + responseAuction.statusText
+                );
         }
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
@@ -281,9 +280,9 @@ async function getAuctionInfos(id) {
 
         if (!responsePiece.ok) {
             if (responsePiece.status === 420)
-            throw new Error(
-                "fetch error : " + responsePiece.status + " : " + responsePiece.statusText
-            );
+                throw new Error(
+                    "fetch error : " + responsePiece.status + " : " + responsePiece.statusText
+                );
         }
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
@@ -296,6 +295,9 @@ async function getAuctionInfos(id) {
 
 async function onSubmit(e) {
     e.preventDefault();
+
+    console.log(e);
+
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
@@ -317,7 +319,7 @@ async function onSubmit(e) {
     let pieceDescription = document.getElementById("pieceDescription").value;
     let artist = document.getElementById("artist").value;
     let signed;
-    if(document.getElementById('signedTrue').checked == true) signed = true;
+    if (document.getElementById('signedTrue').checked == true) signed = true;
     else signed = false;
     let partner = document.getElementById("partner").value;
     let collection = document.getElementById("collection").value;
@@ -382,8 +384,6 @@ async function onSubmit(e) {
             },
         };
 
-        console.log(optionsPiece.body);
-
         const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/updatePiece", optionsPiece);
 
         if (!responsePiece.ok) alert("Une erreur s'est produite lors de la modification de l'oeuvre.");
@@ -404,8 +404,135 @@ async function onSubmit(e) {
         console.error("AuctionAddPage::error: ", error);
     }
 
-    return;
-    // return Redirect("/");
+    return Redirect("/profil");
+}
+
+async function postAuction() {
+    let text = "Vous êtes sur le point de mettre en ligne votre annonce !" +
+        "\nVous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné" +
+        "\nConfirmez par OK ou annulez la suppression.";
+    if (confirm(text) == false) {
+        alert("Vous avez annulé la mise en ligne de l'annonce !");
+        return;
+    }
+
+    // Check no Null fields
+
+    // Auction
+    let auctionName = document.getElementById("auctionName").value;
+    if (auctionName === "") {
+        alert("Veuillez remplir le nom de l'annonce.");
+        return;
+    }
+    let auctionDescription = document.getElementById("auctionDescription").value;
+    let startPrice = document.getElementById("startPrice").value;
+    if (startPrice === "" || startPrice < 0) startPrice = 0;
+    let duration = document.getElementById("duration").value;
+    if (duration === "" || duration <= 0) duration = 1;
+    let startTime = document.getElementById("startTime").value;
+    if (startTime === '' || startTime < Date.now()) startTime = '2000-01-01 00:00';
+    let coverPhoto = document.getElementById("coverPhoto").value;
+    if (coverPhoto === "") coverPhoto = "Frontend/src/img/users/user.jpg";
+
+    // Piece
+    let pieceName = document.getElementById("pieceName").value;
+    if (pieceName === "") {
+        alert("Veuillez remplir le nom de l'oeuvre.");
+        return;
+    }
+    let pieceDescription = document.getElementById("pieceDescription").value;
+    let artist = document.getElementById("artist").value;
+    if (artist === "") artist = "Non renseigné";
+    let signed;
+    if (document.getElementById('signedTrue').checked == true && artist != "Non renseigné") signed = true;
+    else signed = false;
+    let partner = document.getElementById("partner").value;
+    if (partner === "") partner = "Non renseigné";
+    let collection = document.getElementById("collection").value;
+    if (collection === "") collection = "Non renseigné";
+    let type = document.getElementById("type").value;
+    if (type === "") type = "Non Renseigné";
+    let size = document.getElementById("size").value;
+    if (size === "") size = "Non Renseigné";
+    let artMovement = document.getElementById("artMovement").value;
+    if (artMovement === "") artMovement = "Non renseigné";
+    let location = document.getElementById("location").value;
+    if (location === "") artMovement = "Non renseigné";
+    let date = document.getElementById("date").value;
+    if (date === "") date = "Non renseigné";
+
+    // Piece_Picture
+    let piecePictures = document.getElementById("piecePictures").value;
+
+    try {
+        // Add auction
+        const optionsAuction = {
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: auctionName,
+                description: auctionDescription,
+                start_price: startPrice,
+                day_duration: duration,
+                start_time: startTime,
+                status: "Posted",
+                cover_photo: coverPhoto,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const idAuctionSelected = document.getElementById("id_auction").value;
+
+        const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/postAuction", optionsAuction); // fetch return a promise => we wait for the response
+
+        if (!responseAuction.ok) alert("Une erreur s'est produite lors de la modification de l'annonce.");
+
+        const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
+
+        // Add Piece
+
+        const optionsPiece = {
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: pieceName,
+                description: pieceDescription,
+                artist: artist,
+                signed: signed,
+                partner: partner,
+                collection: collection,
+                type: type,
+                size: size,
+                art_movement: artMovement,
+                location: location,
+                id_auction: idAuctionSelected,
+                date: date,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/postPiece", optionsPiece);
+
+        if (!responsePiece.ok) alert("Une erreur s'est produite lors de la modification de l'oeuvre.");
+
+        const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
+
+        alert("Modification de l'annonce et de l'oeuvre réussie.")
+
+        // Add PiecePictures
+
+        let idPiece = piece.id_piece;
+
+        const optionsPiecePicture = {
+            id_piece: idPiece,
+        }
+
+    } catch (error) {
+        console.error("AuctionAddPage::error: ", error);
+    }
+
 }
 
 
