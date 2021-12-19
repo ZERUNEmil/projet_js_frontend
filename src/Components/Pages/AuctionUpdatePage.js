@@ -176,13 +176,13 @@ let auctionUpdatePage = `
 				
                 <div class="row px-5">
                     <div class="col">
-                        <button class="btn btn-danger btn-lg" id="delete">Supprimer votre annonce</button>
+                        <div class="btn btn-danger btn-lg" id="delete">Supprimer votre annonce</div>
                     </div>
                     <div class="col">
                         <button class="btn btn-outline-light btn-lg" type="submit" id="id_auction">Modifier votre annonce</button>
                     </div>
                     <div class="col">
-                        <button class="btn btn-outline-info btn-lg" id="posted">Poster votre annonce</button>
+                        <div class="btn btn-outline-info btn-lg" id="posted">Poster votre annonce</div>
                     </div>
                 </div>
             </div>
@@ -207,6 +207,9 @@ async function AuctionUpdatePage(param) {
 
     const deleteFunction = document.getElementById("delete");
     deleteFunction.addEventListener("click", deleteAuction);
+
+    const postFunction = document.getElementById("posted");
+    postFunction.addEventListener("click", postAuction);
 
     const id_auction = document.getElementById("id_auction");
     id_auction.value = param;
@@ -486,7 +489,7 @@ async function postAuction() {
 
         const responseAuction = await fetch("/api/auctions/" + idAuctionSelected + "/postAuction", optionsAuction); // fetch return a promise => we wait for the response
 
-        if (!responseAuction.ok) alert("Une erreur s'est produite lors de la modification de l'annonce.");
+        if (!responseAuction.ok) alert("Une erreur s'est produite lors de la mise en ligne de l'annonce.");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
@@ -515,11 +518,12 @@ async function postAuction() {
 
         const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/postPiece", optionsPiece);
 
-        if (!responsePiece.ok) alert("Une erreur s'est produite lors de la modification de l'oeuvre.");
+        if (!responsePiece.ok) alert("Une erreur s'est produite lors de la mise en ligne de l'oeuvre.");
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        alert("Modification de l'annonce et de l'oeuvre réussie.")
+        alert("La mise en ligne de l'annonce a réussie.");
+        return Redirect("/profil");
 
         // Add PiecePictures
 
@@ -532,7 +536,6 @@ async function postAuction() {
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);
     }
-
 }
 
 
@@ -550,12 +553,14 @@ async function deleteAuction() {
         },
     };
 
-    const responseDeletePiece = await fetch("/api/pieces/" + idSelectedAuction + "/deletePiece", options);
-    const responseDeleteAuction = await fetch("/api/auctions/" + idSelectedAuction + "/deleteAuction", options);
+    const idAuctionSelected = document.getElementById("id_auction").value;
 
-    if (!responseDeletePiece || !responseDeleteAuction) {
+    const responseDeletePiece = await fetch("/api/pieces/" + idAuctionSelected + "/deletePiece", options);
+    const responseDeleteAuction = await fetch("/api/auctions/" + idAuctionSelected + "/deleteAuction", options);
+
+    if (!responseDeletePiece || !responseDeleteAuction)
         alert("Une erreur s'est produite lors de la suppresion de l'annonce !");
-    } else {
+    else {
         alert("Vous avez bien suprimer votre annonce !");
         return Redirect("/profil");
     }
