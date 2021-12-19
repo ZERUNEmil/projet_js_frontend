@@ -3,6 +3,7 @@ import Navbar from "../Navbar/Navbar";
 import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 import axios from "axios";
+import swal from 'sweetalert';
 
 let auctionAddPage = `
   <form id="auctionAddForm">
@@ -52,7 +53,7 @@ let auctionAddPage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
+					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" required/>
 				</div>
                 <div>
                     <img id="IMAGE" style="display:none"/>
@@ -164,14 +165,6 @@ let auctionAddPage = `
                         </div>
                     </div>
                 </div>
-				<div class="row">
-				    <div class="col">
-				        <div class="form-outline form-white mb-4">
-                            Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-                            <input type="file" id="piecePictures" class=" form-control form-control-lg" placeholder="" multiple/>
-				        </div>
-                    </div>
-				</div>
 				
 				<div class="px-5">
 				    <hr>
@@ -196,6 +189,7 @@ const AuctionAddPage = async () => {
     let user = getSessionObject("user");
 
     if (!user) return Redirect("/login");
+    ;
 
     // reset #page div
     const pageDiv = document.querySelector("#page");
@@ -218,7 +212,7 @@ async function onSubmit(e) {
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
-        alert("Veuillez remplir le nom de l'annonce.");
+        swal("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
         return;
     }
 
@@ -227,8 +221,7 @@ async function onSubmit(e) {
         ("00" + dateNow.getDate()).slice(-2) + "/" +
         ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
         dateNow.getFullYear() +
-        " " + "23" + ":" + "59";
-    console.log(dateStr);
+        "T" + "23" + ":" + "59";
 
     let auctionDescription = document.getElementById("auctionDescription").value;
     let startPrice = document.getElementById("startPrice").value;
@@ -239,10 +232,14 @@ async function onSubmit(e) {
     if (startTime === '') startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
     // Upload cover_photo
-    alert("Upload de votre image pour l'annonce !");
+    swal("Upload en cours", "Upload de votre image pour l'annonce", "info");
     const filePicture = e.target[5].files[0];
     let urlPicture = "";
     if (filePicture != undefined) urlPicture = await uploadImage(filePicture);
+    else {
+        swal("Attention", "Veuillez selectionner une image pour l'annonce.", "warning");
+        return;
+    }
 
     // Piece
     let pieceName = document.getElementById("pieceName").value;
@@ -260,16 +257,6 @@ async function onSubmit(e) {
     let date = document.getElementById("date").value;
     if (date === '') date = '2000-01-01';
 
-    // Piece_Picture
-    alert("Upload de votre/vos image/s pour l'oeuvre !");
-
-    const piecePictures = e.target[18].files;
-    const urlPiecePictures = [];
-    if (piecePictures.length != 0) {
-        for (let picture of Object.entries(piecePictures)){
-            urlPiecePictures.push(await uploadImage(filesToUpload));
-        }
-    }
 
     try {
         // Add auction
@@ -290,7 +277,8 @@ async function onSubmit(e) {
 
         const responseAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
 
-        if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'ajout de l'annonce.");
+        if (!responseAuction.ok)
+            swal("Erreur", "Une erreur s'est produite lors de l'ajout de l'annonce !", "error");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
 
@@ -321,50 +309,48 @@ async function onSubmit(e) {
 
         const responsePiece = await fetch("/api/pieces/" + idAuction + "/addPiece", optionsPiece);
 
-        if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de l'oeuvre.");
+        if (!responsePiece.ok)
+            swal("Erreur", "Une erreur s'est produite lors de l'ajout de l'oeuvre !", "error")
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
         let idPiece = piece.id_piece;
 
-        for (let picture of urlPiecePictures){
-            const optionsPiece = {
-                method: "PUT", // *GET, POST, PUT, DELETE, etc.
-                body: JSON.stringify({
-                    name: "",
-                    picture: picture,
-                    label: ""
-                }), // body data type must match "Content-Type" header
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            };
-    
-            const responsePiece = await fetch("/api/pieces/" + idPiece + "/addPicture", optionsPiece);
-    
-            if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de la photo.");
-        }
-       
+        swal("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
 
-        alert("Création de l'annonce et de l'oeuvre réussie.")
-
-
+        return Redirect("/annonces/id?" + responseAuction.id_auction);
 
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);
     }
-
-    return Redirect("/");
 }
 
 async function postAuction() {
-    let text = "Vous êtes sur le point de mettre en ligne votre annonce !\n" +
-        "Vous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné\n" +
-        "\nConfirmez par OK ou annulez la suppression.";
-    if (confirm(text) == false) {
-        alert("Vous avez annulé la mise en ligne de l'annonce !");
-        return;
-    }
+    swal({
+        title: "Mise en ligne",
+        text: "Vous êtes sur le point de mettre en ligne votre annonce !\n" +
+            "Vous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné !",
+        icon: "warning",
+        buttons: {
+            cancel: "Annuler",
+            valider: true,
+        },
+    })
+        .then((value) => {
+            switch (value) {
+                case "valider":
+                    break;
+                case "annuler":
+                    swal({
+                        title: "Mise en ligne",
+                        text: "Vous avez annuler la mise en ligne de votre annonce !",
+                        icon: "info",
+                    });
+                    break;
+                default:
+                    return;
+            }
+        });
 
     let userEmail = getSessionObject("user").email;
 
@@ -373,16 +359,15 @@ async function postAuction() {
         ("00" + dateNow.getDate()).slice(-2) + "/" +
         ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
         dateNow.getFullYear() +
-        " " + "23" + ":" + "59";
-    console.log(dateStr);
+        "T" + "23" + ":" + "59";
 
     // Check no Null fields
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
-        alert("Veuillez remplir le nom de l'annonce.");
+        swal("Attention !", "Veuillez remplir le nom de l'annonce.", "warning");
         return;
-    }
+    };
     let auctionDescription = document.getElementById("auctionDescription").value;
     let startPrice = document.getElementById("startPrice").value;
     if (startPrice === "" || startPrice < 0) startPrice = 0;
@@ -390,13 +375,20 @@ async function postAuction() {
     if (duration === "" || duration <= 0) duration = 1;
     let startTime = document.getElementById("startTime").value;
     if (startTime === '' || startTime.toString() <= dateStr.toString()) startTime = dateStr;
-    let coverPhoto = document.getElementById("coverPhoto").value;
-    if (coverPhoto === "") coverPhoto = "Frontend/src/img/users/user.jpg";
+    // Upload cover_photo
+    swal("Upload en cours", "Upload de votre image pour l'annonce", "info");
+    const filePicture = e.target[5].files[0];
+    let urlPicture = "";
+    if (filePicture != undefined) urlPicture = await uploadImage(filePicture);
+    else {
+        swal("Attention", "Veuillez selectionner une image pour l'annonce.", "warning");
+        return;
+    }
 
     // Piece
     let pieceName = document.getElementById("pieceName").value;
     if (pieceName === "") {
-        alert("Veuillez remplir le nom de l'oeuvre.");
+        swal("Attention !", "Veuillez renseigné le nom de l'oeuvre.", "warning");
         return;
     }
     let pieceDescription = document.getElementById("pieceDescription").value;
@@ -420,9 +412,6 @@ async function postAuction() {
     let date = document.getElementById("date").value;
     if (date === "") date = "Non renseigné";
 
-    // Piece_Picture
-    let piecePictures = document.getElementById("piecePictures").value;
-
     try {
         // Add auction
         const optionsAuction = {
@@ -434,7 +423,7 @@ async function postAuction() {
                 day_duration: duration,
                 start_time: startTime,
                 status: "Posted",
-                cover_photo: coverPhoto,
+                cover_photo: urlPicture,
             }), // body data type must match "Content-Type" header
             headers: {
                 "Content-Type": "application/json",
@@ -445,7 +434,8 @@ async function postAuction() {
 
         const responseAddAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
 
-        if (!responseAddAuction.ok) alert("Une erreur s'est produite lors l'ajout de l'annonce.");
+        if (!responseAddAuction.ok)
+            swal("Erreur", "Une erreur s'est produite lors de l'ajout de l'annonce !", "error");
 
         const auction = await responseAddAuction.json(); // json() returns a promise => we wait for the data
 
@@ -472,26 +462,21 @@ async function postAuction() {
             },
         };
 
-        const responsePostAuction = await fetch("/api/auctions/" + auction.id_auction + "/postAuction", optionsAuction);
-
-        if (!responsePostAuction.ok) alert("Une erreur s'est produite lors de la mise en ligne de l'oeuvre.");
-
         const responsePiece = await fetch("/api/pieces/" + auction.id_auction + "/postPiece", optionsPiece);
-
-        if (!responsePiece.ok) alert("Une erreur s'est produite lors de la mise en ligne de l'oeuvre.");
-
-        const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
-
-        alert("La mise en ligne de l'oeuvre a réussie.");
-        // return Redirect("/profil");
-
-        // Add PiecePictures
-
-        let idPiece = piece.id_piece;
-
-        const optionsPiecePicture = {
-            id_piece: idPiece,
+        if (!responsePiece.ok) {
+            swal("Erreur", "Une erreur s'est produite lors de l'ajout de l'annonce !", "error");
+            return;
         }
+
+
+        const responsePostAuction = await fetch("/api/auctions/" + auction.id_auction + "/postAuction", optionsAuction);
+        if (!responsePostAuction.ok) {
+            swal("Erreur", "Une erreur s'est produite lors de la mise en ligne de l'annonce !", "error");
+            return;
+        }
+
+        swal("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
+        return Redirect("/annonces/id?" + auction.id_auction);
 
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);
@@ -504,14 +489,14 @@ async function uploadImage(img) {
     body.append('image', img)
 
     let response = await axios({
-      method: 'post',
-      url: 'https://api.imgbb.com/1/upload',
-      data: body
+        method: 'post',
+        url: 'https://api.imgbb.com/1/upload',
+        data: body
     })
 
     let json = JSON.parse(response.request.response);
 
     return json.data.url;
-  }
+}
 
 export default AuctionAddPage;
