@@ -65,7 +65,7 @@ function appendRow(row, picture, alternate){
     }
 
 	const image = document.createElement("img");
-	image.className = "img-fluid img-thumbnail mb-3";
+	image.className = "img-responsive img-fluid img-thumbnail mb-3";
     image.src = picture.cover_photo;
     image.style = "cursor: pointer;";
     image.addEventListener("click", onSubmit, false);

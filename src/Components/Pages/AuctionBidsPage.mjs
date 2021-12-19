@@ -1,4 +1,4 @@
-import { addNavActive, addNavInactive,  } from "./AuctionIdPage.js";
+import { addNavActive, addNavInactive, getAuction, addHeaderTable, addInfoLine, getAuctionBids } from "./AuctionIdPage.js";
 
 
 export function addBidsChoiceNav(account, auction){
@@ -40,7 +40,6 @@ export function addBidsChoiceNav(account, auction){
 
 export async function addBidsInfoNav(account, auction){
     const auctionsBids = await getAuctionBids(auction.id_auction);
-    // const auctionsBids = 0;
 
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
@@ -57,6 +56,7 @@ export async function addBidsInfoNav(account, auction){
 
 	const rows = document.createElement("div");
 	rows.className = "row";
+
     if (auctionsBids != 0){
 		const divTable = document.createElement("div");
 		divTable.className = "table-responsive-xl";
@@ -80,7 +80,7 @@ export async function addBidsInfoNav(account, auction){
 		div.appendChild(divTable);
 	}else{
 		const div2 = document.createElement("div");
-        div2.innerText = "Vous n'avez pas d'enchères.";
+        div2.innerText = "Il n'y a pas d'enchères.";
         div.appendChild(div2);
 	}
 
@@ -88,37 +88,10 @@ export async function addBidsInfoNav(account, auction){
 	message.id = "message";
 
 	info.appendChild(title);
+	rows.appendChild(div);
 	info.appendChild(rows);
 	info.appendChild(message);
 	infoTop.appendChild(info);
 	account.appendChild(infoTop);
 }
 
-async function getAuctionBids(){
-    const idAuction = document.getElementById("idAuction").getAttribute("id_auction");
-    const auction = await getAuction(idAuction);
-
-	try {
-		const options = {
-		  method: "GET", // *GET, POST, PUT, DELETE, etc.
-		  headers: {
-			"Content-Type": "application/json",
-		  },
-		};
-		
-	   
-		const response = await fetch("/api/users/" + userEmail.email + "/getAuctionBids", options); // fetch return a promise => we wait for the response
-  
-		if (!response.ok) {
-			if (response.status === 420) errorMessage("Paramètres invalides");
-		  	throw new Error(
-				"fetch error : " + response.status + " : " + response.statusText
-		  	);
-		}
-		const auctionBids = await response.json(); // json() returns a promise => we wait for the data
-		
-		return auctionBids;
-	} catch (error) {
-	console.error("ProfilPage::error: ", error);
-	}
-}

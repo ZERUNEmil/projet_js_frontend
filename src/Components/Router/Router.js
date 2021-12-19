@@ -51,13 +51,13 @@ const Router = () => {
 
 	/* Route the right component when the page is loaded / refreshed */
 	window.addEventListener("load", e => {
-		redirection(window.location.pathname);
+		redirection(window.location.pathname+window.location.search);
 	});
 
 	// Route the right component when the user use the browsing history
 	window.addEventListener("popstate", () => {
 		const componentToRender = routes[window.location.pathname];
-		componentToRender();
+		componentToRender(window.location.search);
 	});
 };
 

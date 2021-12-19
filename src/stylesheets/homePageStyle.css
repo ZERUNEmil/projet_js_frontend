@@ -19,16 +19,18 @@ td, th {
     transform: translate(-50%, -50%);
     z-index: 10;
     opacity: 0;
-    transition: all 1s ease;      
+    transition: all 1s ease;
 }
 .column#caption .text h1 {    
     margin: 0;    
     color: white;
+    text-shadow: 6px 6px #3f1739;
+    
 }
 .column#caption:hover .text {
   opacity: 1;
   
 }
-.column#caption:hover img {
+.column#caption:not(:hover) img {
   -webkit-filter: sepia(80%);
 }

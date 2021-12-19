@@ -23,7 +23,7 @@ import { addAddBidChoiceNav, addAddBidInfoNav } from "./AuctionAddBidsPage.mjs";
 	pageDiv.appendChild(structure);
 };
 
-async function getUser(){
+export async function getUser(){
     let userEmail = getSessionObject("user");
 	if(! userEmail) return Redirect("/login");
 
@@ -45,7 +45,34 @@ async function getUser(){
     }
 }
 
-async function getAuction(idAuction){
+export async function getAuctionBids(id_auction){
+
+	try {
+		const options = {
+		  method: "GET", // *GET, POST, PUT, DELETE, etc.
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		};
+		
+	   
+		const response = await fetch("/api/bids/" + id_auction + "/getBidsByAction", options); // fetch return a promise => we wait for the response
+  
+		if (!response.ok) {
+			if (response.status === 420) errorMessage("Paramètres invalides");
+		  	throw new Error(
+				"fetch error : " + response.status + " : " + response.statusText
+		  	);
+		}
+		const auctionBids = await response.json(); // json() returns a promise => we wait for the data
+		
+		return auctionBids;
+	} catch (error) {
+	console.error("ProfilPage::error: ", error);
+	}
+}
+
+export async function getAuction(idAuction){
 	// Collecting the info of the user
 	try{
 		const response = await fetch("/api/auctions/"+idAuction);
@@ -105,7 +132,7 @@ async function generateAnnouncePage(){
 	addAnnounceInfoNav(account, auction);
 }
 
-async function generateBidsPage(){
+export async function generateBidsPage(){
     
     const idAuction = document.getElementById("idAuction").getAttribute("id_auction");
     const auction = await getAuction(idAuction);
@@ -242,10 +269,12 @@ export function addInfoContentNotModify(row, content, contentName){
 
 export function addHeaderTable(tr, info){
 	for (let key of Object.keys(info[0])){
-		if (key != "id_user" && key != "id_auction" && key != "email"){
+		if (key != "id_bid" && key != "id_auction" && key != "sold"){
 			const th = document.createElement("th");
 			th.setAttribute("scope", "col");
-			th.innerText = key;
+			if (key === "time")th.innerText = "Enchère";
+			else if(key === "price")th.innerText = "Prix";
+			else if(key === "lastname")th.innerText = "Enchérisseur";
 			tr.appendChild(th);
 		}
 	}
@@ -253,16 +282,18 @@ export function addHeaderTable(tr, info){
 }
 
 export async function addInfoLine(body, content){
-	const user = await getUser();
 
 	let first = true;
+	let number = 15;
 	content.forEach((line) => {
 		const tr = document.createElement("tr");
 		for (let [key, value] of Object.entries(line)){
 			if (first){
 				const th = document.createElement("th");
 				th.setAttribute("scope", "row");
-				th.innerText = value;
+				if (key === "time") {
+					th.innerText = value.substring(0,10);
+				}
 				tr.appendChild(th);
 				first = false;
 			}else {
@@ -270,21 +301,19 @@ export async function addInfoLine(body, content){
 				}else if(key === "id_auction"){
 				}else {
 					const td = document.createElement("td");
-					if (key === "Date") {
-						td.innerText = value.substring(0,10);
-					}else if (key === "Statut"){
-						if (line["email"] === user.email && line["Statut"]) td.innerText = "Remportée";
-						else if (line["Statut"]) td.innerText = "Perdue";
-						else td.innerText = "En cours";
-					}else if (key === "Votre enchère max" || key === "Enchère max"){
+					if (key === "price"){
 						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
-					}else td.innerText = value;
+					}else if (key === "lastname"){
+						td.innerText = value;
+					}
 					tr.appendChild(td);
 				}
 			}
 		}
 		first = true;
 		body.appendChild(tr);
+		number --;
+		if (number === 0) return;
 	})
 }
 

@@ -1,4 +1,5 @@
 import { addNavActive, addNavInactive,  } from "./AuctionIdPage.js";
+import { getUser, addInfoContentNotModify, addInfoContent, errorMessage, getAuctionBids, emptyErrorMessage, generateBidsPage } from "./AuctionIdPage.js";
 
 
 export function addAddBidChoiceNav(account, auction){
@@ -39,9 +40,7 @@ export function addAddBidChoiceNav(account, auction){
 }
 
 export async function addAddBidInfoNav(account, auction){
-    // const auctionsBids = await getAuctionBids(auction.id_auction);
-    const auctionsBids = 0;
-
+	const user = await getUser();
 	const infoTop = document.createElement("div");
 	infoTop.className = "tab-content p-4 p-md-5 my-5";
 
@@ -52,73 +51,93 @@ export async function addAddBidInfoNav(account, auction){
 	title.className = "mb-4";
 	title.innerText = "Soumettre une enchère";
 
-    const div = document.createElement("div");
-	div.className = "row";
-
 	const rows = document.createElement("div");
 	rows.className = "row";
-    if (auctionsBids != 0){
-		const divTable = document.createElement("div");
-		divTable.className = "table-responsive-xl";
-		const table = document.createElement("table");
-		table.className = "table table-hover";
+	
+	addInfoContentNotModify(rows, new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(user.shadow_balance), "Crédités pré-débité");
+	addInfoContent(rows, "", "Enchère");
 
 
-		const header = document.createElement("thead");
-		const tr = document.createElement("tr");
+	const buttons = document.createElement("div");
 
-
-		addHeaderTable(tr, auctionsBids);
-
-		const body = document.createElement("tbody");
-		await addInfoLine(body, auctionsBids);
-
-		header.appendChild(tr);
-		table.appendChild(header);
-		table.appendChild(body);
-		divTable.appendChild(table);
-		div.appendChild(divTable);
-	}else{
-		const div2 = document.createElement("div");
-        div2.innerText = "Vous n'avez pas d'enchères.";
-        div.appendChild(div2);
-	}
+	const submitButton = document.createElement("button");
+	submitButton.className = "btn btn-outline-light btn-lg px-5";
+	submitButton.type = "submit";
+	submitButton.innerText = "Enchérir";
 
 	const message = document.createElement("div");
 	message.id = "message";
+	message.setAttribute("idAuction", auction.id_auction);
+	
 
 	info.appendChild(title);
 	info.appendChild(rows);
+	submitButton.addEventListener("click", onSubmit, user);
+	buttons.appendChild(submitButton);
+	info.appendChild(buttons);
 	info.appendChild(message);
 	infoTop.appendChild(info);
 	account.appendChild(infoTop);
 }
 
-async function getAuctionBids(){
-    const idAuction = document.getElementById("idAuction").getAttribute("id_auction");
-    const auction = await getAuction(idAuction);
+async function onSubmit(e){
+	e.preventDefault();
+
+	const credits = document.getElementById("Enchère").value;
+	const idAuction = document.getElementById("idAuction").getAttribute("id_auction");
+	const bids = await getAuctionBids(idAuction);
+
+	if (credits === ""){
+		errorMessage("Combien de crédits voulez-vous ajouter ?");
+		return;
+	}
+
+	const user = await getUser();
+
+	if (credits >= user.shadow_balance){
+		errorMessage("Vous n'avez pas assez de crédits.");
+		return;
+	}
+
+	if (bids[0] != undefined && credits <= bids[0].price){
+		errorMessage("Vous êtes en dessous de la dernière enchère.");
+		return;
+	}
+
+	emptyErrorMessage();
 
 	try {
 		const options = {
-		  method: "GET", // *GET, POST, PUT, DELETE, etc.
+		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
+		  body: JSON.stringify({
+			price: credits,
+		  }), // body data type must match "Content-Type" header
 		  headers: {
 			"Content-Type": "application/json",
 		  },
 		};
 		
+		const user2 = await getUser();
 	   
-		const response = await fetch("/api/users/" + userEmail.email + "/getAuctionBids", options); // fetch return a promise => we wait for the response
+		const response = await fetch("/api/bids/" + user2.email + "/" + idAuction + "/addBid", options); // fetch return a promise => we wait for the response
   
 		if (!response.ok) {
+			if (response.status === 304) errorMessage("Crédits non-ajoutés");
 			if (response.status === 420) errorMessage("Paramètres invalides");
+			else errorMessage("Erreur lors de l'ajout");
 		  	throw new Error(
 				"fetch error : " + response.status + " : " + response.statusText
 		  	);
 		}
-		const auctionBids = await response.json(); // json() returns a promise => we wait for the data
-		
-		return auctionBids;
+		const user = await response.json(); // json() returns a promise => we wait for the data
+  
+		await generateBidsPage();
+
+		notificationMessage("Enchère réussie !");
+
 	} catch (error) {
 	console.error("ProfilPage::error: ", error);
 	}
+
+
 }

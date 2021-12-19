@@ -54,6 +54,9 @@ let auctionAddPage = `
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
 					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
 				</div>
+                <div>
+                    <img id="IMAGE" style="display:none"/>
+                </div>
 			
 				<hr>
 				
@@ -203,10 +206,10 @@ const AuctionAddPage = async () => {
     const auctionAddForm = document.getElementById("auctionAddForm");
     auctionAddForm.addEventListener("submit", onSubmit, user);
 
+
     const postAuctionFunction = document.getElementById("posted");
     postAuctionFunction.addEventListener("click", postAuction);
 }
-
 
 async function onSubmit(e) {
     e.preventDefault();
@@ -259,11 +262,12 @@ async function onSubmit(e) {
 
     // Piece_Picture
     alert("Upload de votre/vos image/s pour l'oeuvre !");
+
     const piecePictures = e.target[18].files;
     const urlPiecePictures = [];
     if (piecePictures.length != 0) {
         for (let picture of Object.entries(piecePictures)){
-            urlPiecePictures.push(await uploadImage(picture[1]));
+            urlPiecePictures.push(await uploadImage(filesToUpload));
         }
     }
 
@@ -479,7 +483,7 @@ async function postAuction() {
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
         alert("La mise en ligne de l'oeuvre a réussie.");
-        return Redirect("/profil");
+        // return Redirect("/profil");
 
         // Add PiecePictures
 
