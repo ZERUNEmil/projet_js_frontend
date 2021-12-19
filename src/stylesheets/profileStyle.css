@@ -29,6 +29,7 @@ body {
 	margin: 10px;
 	cursor: pointer;
 }
+
 .nav-pills a.nav-link i {
 	width: 20px;
 }
@@ -48,3 +49,18 @@ body {
 .btn {
 	margin: 10px;
 }
+
+th, tr{
+	color: #fff;
+}
+
+table{
+	table-layout: fixed;
+	min-width: inherit;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+	background-color: #FBDCC4;
+	cursor: pointer;
+  }
+

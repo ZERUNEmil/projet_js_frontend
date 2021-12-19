@@ -4,7 +4,8 @@ import "../../stylesheets/profileStyle.css";
 import { addAccountChoiceNav, addAccountInfoNav } from "./ProfilAccountPage.mjs";
 import { addCreditsChoiceNav, addCreditsInfoNav } from "./ProfilCreditsPage.mjs";
 import { addSecurityChoiceNav, addSecurityInfoNav } from "./ProfilSecurityPage.mjs";
-import { addAuctionChoiceNav, addAuctionInfoNav } from "./ProfilAuctionPage.mjs";
+import { addAuctionChoiceNav, addAuctionInfoNav, onClickAuction } from "./ProfilAuctionPage.mjs";
+import { addMyAuctionChoiceNav, addMyAuctionInfoNav } from "./ProfilMyAuctionPage.mjs";
 import { addAdressChoiceNav, addAdressInfoNav } from "./ProfilAdressPage.mjs";
 
 
@@ -24,7 +25,7 @@ const ProfilPage = async () => {
 	pageDiv.appendChild(structure);
 };
 
-async function getUser(){
+export async function getUser(){
     let userEmail = getSessionObject("user");
 	if(! userEmail) return Redirect("/login");
 
@@ -53,7 +54,7 @@ async function addTabContent(structure){
 	structure.className = "my-3";
 
 	const container = document.createElement("div");
-	container.classList.add("container");
+	container.classList.add("container-fluid");
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
@@ -119,7 +120,7 @@ export async function generateAuctionPage(){
 
     addAuctionChoiceNav(account, user, images);
 
-	addAuctionInfoNav(account, user);
+	await addAuctionInfoNav(account, user);
 }
 
 export async function generateAdressPage(){
@@ -132,6 +133,19 @@ export async function generateAdressPage(){
     addAdressChoiceNav(account, user, images);
 
 	await addAdressInfoNav(account, user);
+
+}
+
+export async function generateMyAuctionPage(){
+    const user = await getUser();
+    const images = document.getElementById("UsersPicture").src;
+
+    const account = document.getElementById("accountPage");
+    account.innerHTML = "";
+
+    addMyAuctionChoiceNav(account, user, images);
+
+	await addMyAuctionInfoNav(account, user);
 
 }
 
@@ -219,6 +233,42 @@ export function addInfoContentNotModify(row, content, contentName){
 	row.appendChild(info);
 }
 
+export async function addInfoLine(body, content){
+	const user = await getUser();
+
+	let first = true;
+	content.forEach((line) => {
+		const tr = document.createElement("tr");
+		for (let [key, value] of Object.entries(line)){
+			if (first){
+				const th = document.createElement("th");
+				th.setAttribute("scope", "row");
+				th.innerText = value;
+				tr.appendChild(th);
+				first = false;
+			}else {
+				if (key === "email"){
+				}else if(key === "id_auction"){
+					tr.addEventListener("click", onClickAuction);
+					tr.setAttribute("id_auction", value);
+				}else {
+					const td = document.createElement("td");
+					if (key === "Date") {
+						td.innerText = value.substring(0,10);
+					}else if (key === "Statut"){
+						td.innerText = "Oui";
+					}else if (key === "Montant" || key === "Enchère max"){
+						td.innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value);
+					}else td.innerText = value;
+					tr.appendChild(td);
+				}
+			}
+		}
+		first = true;
+		body.appendChild(tr);
+	})
+}
+
 export function addNavActive(nameNav, namePage, destination){
 	const nav = document.createElement("a");
 	nav.className="nav-link active";
@@ -240,6 +290,8 @@ export function addNavActive(nameNav, namePage, destination){
 		name.className = "fa fa-lock text-center mr-1";
 	}else if(nameNav === "Adresse"){
 		name.className = "fa fa-home text-center mr-1";
+	}else if(nameNav === "Mes annonces"){
+		name.className = "fa fa-scroll text-center mr-1";
 	}
 	
 
@@ -277,6 +329,9 @@ export function addNavInactive(nameNav, namePage, destination){
 	}else if(nameNav === "Adresse"){
 		name.className = "fa fa-home text-center mr-1";
         nav.addEventListener("click",  generateAdressPage, false);
+	}else if(nameNav === "Mes annonces"){
+		name.className = "fa fa-scroll text-center mr-1";
+		nav.addEventListener("click", generateMyAuctionPage, false)
 	}
 
 	nav.appendChild(name);

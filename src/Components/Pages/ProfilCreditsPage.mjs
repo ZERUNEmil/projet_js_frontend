@@ -1,7 +1,7 @@
 import { Redirect } from "../Router/Router.js";
 import { getSessionObject } from "../../utils/session.js";
 import "../../stylesheets/profileStyle.css";
-import { generateCreditsPage, addInfoContent, addInfoContentNotModify, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage } from "./ProfilPage.js";
+import { generateCreditsPage, addInfoContent, addInfoContentNotModify, addNavActive, addNavInactive, emptyErrorMessage, errorMessage, notificationMessage, getUser } from "./ProfilPage.js";
 
 export function addCreditsChoiceNav(account, user, images){
 	const choices = document.createElement("div");
@@ -33,6 +33,7 @@ export function addCreditsChoiceNav(account, user, images){
 	addNavInactive("Adresse", "Adress", navigation);
 	addNavActive("Crédits", "Credits", navigation);
 	addNavInactive("Historique d'enchères", "Auction", navigation);
+	addNavInactive("Mes annonces", "Annonces", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
@@ -60,10 +61,10 @@ export function addCreditsInfoNav(account, user){
 	const rows = document.createElement("div");
 	rows.className = "row";
 	
-	addInfoContentNotModify(rows, user.effective_balance, "Vos crédits");
-	addInfoContentNotModify(rows, user.shadow_balance, "Crédités pré-débité");
-	// rows.innerHTML += "<p></p>";
+	addInfoContentNotModify(rows, new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(user.effective_balance), "Vos crédits");
+	addInfoContentNotModify(rows, new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(user.shadow_balance), "Crédités pré-débité");
 	addInfoContent(rows, "", "Crédits à ajouter");
+	addInfoContent(rows, "", "Crédits à retirer");
 
 
 	const buttons = document.createElement("div");
@@ -73,14 +74,22 @@ export function addCreditsInfoNav(account, user){
 	submitButton.type = "submit";
 	submitButton.innerText = "Ajouter des crédits";
 
+	const secondSubmitButton = document.createElement("button");
+	secondSubmitButton.className = "btn btn-outline-light btn-lg px-5";
+	secondSubmitButton.type = "submit";
+	secondSubmitButton.innerText = "Retirer des crédits";
+
 
 	const message = document.createElement("div");
 	message.id = "message";
 	
 
 	info.appendChild(title);
-	info.appendChild(rows);submitButton.addEventListener("click", onSubmit, user);
+	info.appendChild(rows);
+	submitButton.addEventListener("click", onSubmit, user);
 	buttons.appendChild(submitButton);
+	secondSubmitButton.addEventListener("click", onWithdrawal, user);
+	buttons.appendChild(secondSubmitButton);
 	info.appendChild(buttons);
 	info.appendChild(message);
 	infoTop.appendChild(info);
@@ -134,5 +143,61 @@ async function onSubmit(e){
 
 
 }
+
+async function onWithdrawal(e){
+	e.preventDefault();
+
+	const user = await getUser();
+
+	const credits = user.shadow_balance;
+	const retrait = document.getElementById("Crédits à retirer").value;
+
+	console.log(credits + " /// " + retrait);
+	if (retrait === ""){
+		errorMessage("Combien de crédits voulez-vous ajouter ?");
+		return;
+	}else if(retrait > credits){
+		errorMessage("Vous ne pouvez pas retirer cette somme .");
+		return;
+	}
+
+
+	let userEmail = getSessionObject("user");
+
+	emptyErrorMessage();
+
+	try {
+		const options = {
+		  method: "PUT", // *GET, POST, PUT, DELETE, etc.
+		  body: JSON.stringify({
+			credits: 0-retrait,
+		  }), // body data type must match "Content-Type" header
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		};
+		
+	   
+		const response = await fetch("/api/users/" + userEmail.email + "/addCredits", options); // fetch return a promise => we wait for the response
+  
+		if (!response.ok) {
+			if (response.status === 304) errorMessage("Crédits non-ajoutés");
+			if (response.status === 420) errorMessage("Paramètres invalides");
+			else errorMessage("Erreur lors de l'ajout");
+		  	throw new Error(
+				"fetch error : " + response.status + " : " + response.statusText
+		  	);
+		}
+		const user = await response.json(); // json() returns a promise => we wait for the data
+  
+		await generateCreditsPage();
+
+		notificationMessage("Retrait réussi !");
+
+	} catch (error) {
+	console.error("ProfilPage::error: ", error);
+	}
+}
+
 
 
