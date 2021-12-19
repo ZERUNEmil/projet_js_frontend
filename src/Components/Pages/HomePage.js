@@ -9,36 +9,102 @@ return rows[0];
 */
 
 
-const HomePage = () => {
+const HomePage = async () => {
+ 
 	const pageDiv = document.querySelector("#page");
+  pageDiv.innerHTML='';
+  let tab = await getEndingData();
+  let tableAuctions = '';  
+  console.log("WA")
 
+  Array.prototype.forEach.call(tab,auction => {
+    let htmlSegment = `<div class="auction">
+    <img src="${auction.cover_photo}" >
+    <h2>${auction.name}</h2>
+</div>`;
+
+tableAuctions += htmlSegment;
+
+});
+
+pageDiv.innerHTML += `<br> 
+	<div class="row">		
+	<div class="column">
+	`;
+pageDiv.innerHTML += tableAuctions;
+pageDiv.innerHTML +=`</div> 
+
+<div style ="background:purple; border-radius:25px; margin:150px; padding:50px; font-size:35px;">
+Les annonces actives récemment
+</div>`
+
+let tabRecent = await getRecentData();
+console.log("RECENT"+tabRecent)
+let tableRecent = '';  
+Array.prototype.forEach.call(tabRecent,auction => {
+  let htmlSegment = `<div class="auction">
+  <img src="${auction.cover_photo}" >
+  <h2>${auction.name}</h2>
+</div>`;
+
+tableRecent += htmlSegment;
+pageDiv.innerHTML += tableRecent;
+});
+
+    
+async function getEndingData() {
   
-	pageDiv.innerHTML = `
-  
-  <br><h1> All'Astra <h1>
-  <div class="container">
+  try {
+      const optionsAuction = {
+          method: "GET", // *GET, POST, PUT, DELETE, etc.
+           // body data type must match "Content-Type" header
+          headers: {
+              "Content-Type": "application/json",
+          },
+      };
 
+      const responseAuction = await fetch('/api/auctions/endingAuctions', optionsAuction); // fetch return a promise => we wait for the response
+      
+      if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'affichage des annonces.");
 
-<div style="padding:25px;  background:#9D4F96; border-radius:25px; margin:200px " >
-<h1>Les enchères les plus actives du moment</h1>
-</div>
-
-<div class="row">		
-<div class="columnHome">
-  <img src="https://i.ibb.co/wCbQPWM/veil.png">
-</div>
-<div class="columnHome">
-  <img src="https://i.ibb.co/kKfRzVr/diner.jpg">
-</div>
-<div class="columnHome">
-  <img src="https://i.ibb.co/QNvvyQX/pearl.jpg">
-</div>
-<div class="columnHome">
-  <img src="https://i.ibb.co/QNvvyQX/pearl.jpg">
-</div>
-`;
+      const data = await responseAuction.json(); // json() returns a promise => we wait for the data
+      console.log("ENDING"+data)
+      return data;
+      
+  } catch (error) {
+      console.error("Page::error: ", error);
+      return undefined;
+  }
 
 };
 
+
+async function getRecentData() {
+  
+  try {
+      const optionsAuction = {
+          method: "GET", // *GET, POST, PUT, DELETE, etc.
+           // body data type must match "Content-Type" header
+          headers: {
+              "Content-Type": "application/json",
+          },
+      };
+
+      console.log(optionsAuction);
+
+      const responseAuction = await fetch('/api/auctions/recentAuctions', optionsAuction); // fetch return a promise => we wait for the response
+
+      if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'affichage des annonces.");
+
+      const data = await responseAuction.json(); // json() returns a promise => we wait for the data
+      return data;
+      
+  } catch (error) {
+      console.error("Page::error: ", error);
+      return undefined;
+  }
+
+}
+}
 
 export default HomePage;
