@@ -63,30 +63,37 @@ export async function addAuctionInfoNav(account, user){
 	const div = document.createElement("div");
 	div.className = "row";
 
-	const divTable = document.createElement("div");
-	divTable.className = "table-responsive-xl";
-	const table = document.createElement("table");
-	table.className = "table table-hover";
-
-
-	const header = document.createElement("thead");
-	const tr = document.createElement("tr");
-	
 	const auctionsBids = await getAuctionBids();
-
-	// TODO Gérer quand y en a pas
-
-	addHeaderTable(tr, auctionsBids);
-
-	const body = document.createElement("tbody");
-	await addInfoLine(body, auctionsBids);
-
+	
 	info.appendChild(title);
-	header.appendChild(tr);
-	table.appendChild(header);
-	table.appendChild(body);
-	divTable.appendChild(table);
-	div.appendChild(divTable);
+
+	if (auctionsBids != 0){
+		const divTable = document.createElement("div");
+		divTable.className = "table-responsive-xl";
+		const table = document.createElement("table");
+		table.className = "table table-hover";
+
+
+		const header = document.createElement("thead");
+		const tr = document.createElement("tr");
+
+
+		addHeaderTable(tr, auctionsBids);
+
+		const body = document.createElement("tbody");
+		await addInfoLine(body, auctionsBids);
+
+		header.appendChild(tr);
+		table.appendChild(header);
+		table.appendChild(body);
+		divTable.appendChild(table);
+		div.appendChild(divTable);
+	}else{
+		const div2 = document.createElement("div");
+        div2.innerText = "Vous n'avez pas d'enchères.";
+        div.appendChild(div2);
+	}
+
 	info.appendChild(div);
 	infoTop.appendChild(info);
 	account.appendChild(infoTop);

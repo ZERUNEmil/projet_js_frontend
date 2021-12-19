@@ -29,9 +29,6 @@ import { getSessionObject } from "../../utils/session";
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-                        </li>
                     </ul>
                     <ul class="navbar-nav w-100 justify-content-center">
                         <li>
@@ -68,9 +65,7 @@ import { getSessionObject } from "../../utils/session";
                             <a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-                        </li>
-                            <a class="nav-link" href="#" data-uri="/auction/add">Add</a>
+                            <a class="nav-link" href="#" data-uri="/auction/add">Ajouter</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/auction/update">Update</a>
