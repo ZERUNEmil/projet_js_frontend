@@ -354,8 +354,8 @@ async function onSubmit(e) {
 }
 
 async function postAuction() {
-    let text = "Vous êtes sur le point de mettre en ligne votre annonce !" +
-        "\nVous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné" +
+    let text = "Vous êtes sur le point de mettre en ligne votre annonce !\n" +
+        "Vous ne pourrez plus la modifiée et tout champs non remplis sera specifié : Non renseigné\n" +
         "\nConfirmez par OK ou annulez la suppression.";
     if (confirm(text) == false) {
         alert("Vous avez annulé la mise en ligne de l'annonce !");
@@ -366,10 +366,11 @@ async function postAuction() {
 
     let dateNow = new Date();
     let dateStr =
-        ("00" + dateNow.getDate()+1).slice(-2) + 1 + "/" +
+        ("00" + dateNow.getDate()).slice(-2) + "/" +
         ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
         dateNow.getFullYear() +
-        " " + "00" + ":" + "01";
+        " " + "23" + ":" + "59";
+    console.log(dateStr);
 
     // Check no Null fields
     // Auction
@@ -384,7 +385,7 @@ async function postAuction() {
     let duration = document.getElementById("duration").value;
     if (duration === "" || duration <= 0) duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '' || startTime < dateStr) startTime = dateStr;
+    if (startTime === '' || startTime.toString() <= dateStr.toString()) startTime = dateStr;
     let coverPhoto = document.getElementById("coverPhoto").value;
     if (coverPhoto === "") coverPhoto = "Frontend/src/img/users/user.jpg";
 

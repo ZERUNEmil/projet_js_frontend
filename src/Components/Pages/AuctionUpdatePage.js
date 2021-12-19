@@ -52,7 +52,7 @@ let auctionUpdatePage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
+					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg"/>
 				</div>
 			
 				<hr>
@@ -165,7 +165,7 @@ let auctionUpdatePage = `
 				    <div class="col">
 				        <div class="form-outline form-white mb-4">
                             Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-                            <input type="url" id="piecePictures" class=" form-control form-control-lg" placeholder=""/>
+                            <input type="file" id="piecePictures" class=" form-control form-control-lg" placeholder="" multiple/>
 				        </div>
                     </div>
 				</div>
@@ -310,10 +310,11 @@ async function onSubmit(e) {
 
     let dateNow = new Date();
     let dateStr =
-        ("00" + dateNow.getDate()+1).slice(-2) + 1 + "/" +
+        ("00" + dateNow.getDate()).slice(-2) + "/" +
         ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
         dateNow.getFullYear() +
-        " " + "00" + ":" + "01";
+        " " + "23" + ":" + "59";
+    console.log(dateStr);
 
     let auctionDescription = document.getElementById("auctionDescription").value;
     let startPrice = document.getElementById("startPrice").value;
@@ -428,10 +429,11 @@ async function postAuction() {
 
     let dateNow = new Date();
     let dateStr =
-        ("00" + dateNow.getDate()+1).slice(-2) + "/" +
+        ("00" + dateNow.getDate()).slice(-2) + "/" +
         ("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" +
         dateNow.getFullYear() +
-        " " + "00" + ":" + "01";
+        " " + "23" + ":" + "59";
+    console.log(dateStr);
 
     // Check no Null fields
     // Auction
