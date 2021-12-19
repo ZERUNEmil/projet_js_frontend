@@ -191,6 +191,6 @@ export function onClickAuction(e){
     const status = e.currentTarget.getAttribute("status");
 
     if (status === "In progress") return Redirect("/auction/update?"+e.currentTarget.getAttribute("id_auction"));
-    else return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
+    else return Redirect("/annonces/id?"+e.currentTarget.getAttribute("id_auction"));
 
 }
