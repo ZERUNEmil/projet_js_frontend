@@ -54,7 +54,7 @@ async function addTabContent(structure){
 	structure.className = "my-3";
 
 	const container = document.createElement("div");
-	container.classList.add("container-fluid");
+	container.classList.add("container");
 
 	const title = document.createElement("h1");
 	title.className = "mb-5";
