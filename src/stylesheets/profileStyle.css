@@ -59,6 +59,8 @@ table{
 	min-width: inherit;
 }
 
-/* .tab-content{
-	max-width: 80%;
-} */
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+	background-color: #FBDCC4;
+	cursor: pointer;
+  }
+

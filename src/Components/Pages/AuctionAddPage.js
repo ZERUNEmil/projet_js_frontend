@@ -1,6 +1,6 @@
 import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
-import {getSessionObject, setSessionObject} from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
 let auctionAddPage = `
@@ -79,10 +79,10 @@ let auctionAddPage = `
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="1">Oui</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="true">Oui</input>
                                 </div>
                                 <div class="col form-check mr-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="2" checked>Non</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="false" checked>Non</input>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -93,11 +93,11 @@ let auctionAddPage = `
 						<div class="form-outline form-white mb-4">
 							Type
 							<select class="form-select form-select-lg mb-3" id="type">
-                                <option selected value="0">Selectionnez le type</option>
-                                <option value="1">Peinture</option>
-                                <option value="2">Sculpture</option>
-                                <option value="3">Photographie</option>
-                                <option value="4">Autre</option>
+                                <option selected value="Inconnu">Selectionnez le type</option>
+                                <option value="Peinture">Peinture</option>
+                                <option value="Sculpture">Sculpture</option>
+                                <option value="Photographie">Photographie</option>
+                                <option value="Autre">Autre</option>
                             </select>
 						</div>
 					</div>
@@ -105,15 +105,15 @@ let auctionAddPage = `
 						<div class="form-outline form-white mb-4">
 							Mouvement
                             <select class="form-select form-select-lg mb-3" id="artMovement">
-                                <option selected value="0">Selectionnez le mouvement</option>
-                                <option value="1">Réalisme</option>
-                                <option value="2">Impressionnisme</option>
-                                <option value="3">Fauvisme</option>
-                                <option value="4">Expressionnisme</option>
-                                <option value="5">Cubisme</option>
-                                <option value="6">Futurisme</option>
-                                <option value="7">Surréalisme</option>
-                                <option value="8">Autre</option>
+                                <option selected value="Inconnu">Selectionnez le mouvement</option>
+                                <option value="Réalisme">Réalisme</option>
+                                <option value="Impressionnisme">Impressionnisme</option>
+                                <option value="Fauvisme">Fauvisme</option>
+                                <option value="Expressionnisme">Expressionnisme</option>
+                                <option value="Cubisme">Cubisme</option>
+                                <option value="Futurisme">Futurisme</option>
+                                <option value="Surréalisme">Surréalisme</option>
+                                <option value="Autre">Autre</option>
                             </select>
 						</div>
 					</div>
@@ -137,55 +137,54 @@ let auctionAddPage = `
 							<input type="text" id="collection" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
+                </div>
+				<div class="row">
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							Date
+							<input type="text" id="date" class="form-control form-control-lg" placeholder=""/>
+						</div>
+					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Localisation actuelle
 							<input type="text" id="location" class="form-control form-control-lg" placeholder=""/>
 						</div>
 				    </div>
+				</div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-outline form-white mb-4">
+                            Description
+                            <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
+                        </div>
+                    </div>
                 </div>
 				<div class="row">
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Date Precise <i style="color: grey; font-size: 12px;">(si connue)</i>
-							<input type="date" id="preciseDate" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Millenaire
-							<input type="number" min="-10" max="2" step="1" id="millenium" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Siècle - 1
-							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Siècle - 2
-							<input type="number" min="1" max="21" step="1" id="secondCentury" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-				</div>
-                <div class="form-outline form-white mb-4">
-                    Description
-                    <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
-                </div>
-				<div class="form-outline form-white mb-4 pb-4">
-					Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple/>
+				    <div class="col">
+				        <div class="form-outline form-white mb-4">
+                            Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
+                            <input type="url" id="piecePictures" class=" form-control form-control-lg" placeholder=""/>
+				        </div>
+                    </div>
 				</div>
 				
-                <div>
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Ajouter votre annonce</button>
+				<div class="px-5">
+				    <hr>
+				</div>
+				
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-outline-light btn-lg" type="submit">Modifier votre annonce</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-outline-info btn-lg" id="posted">Poster votre annonce</button>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
-	<div class="pb-5"></div>
+	<div class="pb-3"></div>
   `;
 
 
@@ -222,7 +221,7 @@ async function onSubmit(e) {
     let duration = document.getElementById("duration").value;
     if (duration === "") duration = 1;
     let startTime = document.getElementById("startTime").value;
-    if (startTime === '') startTime = '2021-12-16 12:32';
+    if (startTime === '') startTime = '2000-01-01 00:00';
     let coverPhoto = document.getElementById("coverPhoto").value;
 
     // Piece
@@ -230,32 +229,14 @@ async function onSubmit(e) {
     let pieceDescription = document.getElementById("pieceDescription").value;
     let artist = document.getElementById("artist").value;
     let signed = document.getElementById("signed").value;
-    if (signed === 1) signed = true;
-    else signed = false;
     let partner = document.getElementById("partner").value;
     let collection = document.getElementById("collection").value;
     let type = document.getElementById("type").value;
-    if (type === 0) type = "";
-    else if (type === 1) type = "Réalisme";
-    else if (type === 2) type = "Impressionnisme";
-    else if (type === 3) type = "Fauvisme";
-    else if (type === 4) type = "Expressionnisme";
-    else if (type === 5) type = "Cubisme";
-    else if (type === 6) type = "Futurisme";
-    else if (type === 7) type = "Surréalisme";
-    else if (type === 8) type = "Autre";
     let size = document.getElementById("size").value;
     let artMovement = document.getElementById("artMovement").value;
-    if (artMovement === 0) type = "";
-    else if (artMovement === 1) type = "Peinture";
-    else if (artMovement === 2) type = "Sculpture";
-    else if (artMovement === 3) type = "Photographie";
-    else if (artMovement === 4) type = "Autre";
     let location = document.getElementById("location").value;
-    let millenium = document.getElementById("millenium").value;
-    let firstCentury = document.getElementById("firstCentury").value;
-    let secondCentury = document.getElementById("secondCentury").value;
-    let preciseDate = document.getElementById("preciseDate").value;
+    let date = document.getElementById("date").value;
+    if (date === '') date = '2000-01-01';
 
     // Piece_Picture TODO comment géré ça ? ...
     let piecePictures = document.getElementById("piecePictures").value;
@@ -277,15 +258,11 @@ async function onSubmit(e) {
             },
         };
 
-        console.log(optionsAuction);
-
         const responseAuction = await fetch("/api/auctions/" + userEmail + "/addAuction", optionsAuction); // fetch return a promise => we wait for the response
 
         if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'ajout de l'annonce.");
 
         const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
-
-        alert("Création de l'annonce réussie.");
 
         // Add Piece
 
@@ -305,10 +282,7 @@ async function onSubmit(e) {
                 art_movement: artMovement,
                 location: location,
                 id_auction: idAuction,
-                millenium: millenium,
-                first_century: firstCentury,
-                second_century: secondCentury,
-                precise_date: preciseDate,
+                date: date,
             }), // body data type must match "Content-Type" header
             headers: {
                 "Content-Type": "application/json",
@@ -317,19 +291,16 @@ async function onSubmit(e) {
 
         const responsePiece = await fetch("/api/pieces/" + idAuction + "/addPiece", optionsPiece);
 
-        if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de l'oeuvre.")
+        if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de l'oeuvre.");
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        alert("Création de l'oeuvre réussie.")
-
-        // Add PiecePictures
+        alert("Création de l'annonce et de l'oeuvre réussie.")
 
         let idPiece = piece.id_piece;
 
-        const optionsPiecePicture = {
-            id_piece: idPiece,
-        }
+        // Add PiecePictures
+
 
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);

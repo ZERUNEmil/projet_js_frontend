@@ -29,17 +29,14 @@ import { getSessionObject } from "../../utils/session";
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-                        </li>
                     </ul>
                     
                     <ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/signup">Sign Up</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/login">Log in</a>
+                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-uri="/signup">Sign Up</a>
                         </li>
                     </ul>
                 </div>
@@ -58,9 +55,7 @@ import { getSessionObject } from "../../utils/session";
                             <a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/vendeurs">Vendeurs</a>
-                        </li>
-                            <a class="nav-link" href="#" data-uri="/auction/add">Add</a>
+                            <a class="nav-link" href="#" data-uri="/auction/add">Ajouter</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/auction/update">Update</a>
@@ -79,10 +74,10 @@ import { getSessionObject } from "../../utils/session";
                     </ul>
                     <ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/logout">Log out</a>
+                            <a class="nav-link" href="#" data-uri="/profil">Profil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-uri="/profil">Profil</a>
+                            <a class="nav-link" href="#" data-uri="/logout">Log out</a>
                         </li>
                     </ul>
                 </div>

@@ -33,6 +33,7 @@ export function addCreditsChoiceNav(account, user, images){
 	addNavInactive("Adresse", "Adress", navigation);
 	addNavActive("Crédits", "Credits", navigation);
 	addNavInactive("Historique d'enchères", "Auction", navigation);
+	addNavInactive("Mes annonces", "Annonces", navigation);
 
 	const content = document.createElement("div");
 	content.className = "tab-content p-4 p-md-5";
@@ -60,8 +61,8 @@ export function addCreditsInfoNav(account, user){
 	const rows = document.createElement("div");
 	rows.className = "row";
 	
-	addInfoContentNotModify(rows, user.effective_balance, "Vos crédits");
-	addInfoContentNotModify(rows, user.shadow_balance, "Crédités pré-débité");
+	addInfoContentNotModify(rows, new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(user.effective_balance), "Vos crédits");
+	addInfoContentNotModify(rows, new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(user.shadow_balance), "Crédités pré-débité");
 	addInfoContent(rows, "", "Crédits à ajouter");
 	addInfoContent(rows, "", "Crédits à retirer");
 
@@ -148,7 +149,7 @@ async function onWithdrawal(e){
 
 	const user = await getUser();
 
-	const credits = user.effective_balance;
+	const credits = user.shadow_balance;
 	const retrait = document.getElementById("Crédits à retirer").value;
 
 	console.log(credits + " /// " + retrait);
@@ -197,5 +198,6 @@ async function onWithdrawal(e){
 	console.error("ProfilPage::error: ", error);
 	}
 }
+
 
 
