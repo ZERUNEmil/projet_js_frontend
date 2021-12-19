@@ -3,6 +3,7 @@
  */
  import {Redirect} from "../Router/Router";
  import Navbar from "../Navbar/Navbar";
+ import "../../stylesheets/homePageStyle.css";
 /*const  { rows } = await pool.query('SELECT * FROM project.user WHERE id_user = $1', [id]);
 if (! rows) return;
 return rows[0];
@@ -12,45 +13,88 @@ return rows[0];
 const HomePage = async () => {
  
 	const pageDiv = document.querySelector("#page");
-  pageDiv.innerHTML='';
-  let tab = await getEndingData();
-  let tableAuctions = '';  
-  console.log("WA")
+    pageDiv.innerHTML='';
+    let tabEndSoon = await getEndingData();
 
-  Array.prototype.forEach.call(tab,auction => {
-    let htmlSegment = `<div class="auction">
-    <img src="${auction.cover_photo}" >
-    <h2>${auction.name}</h2>
-</div>`;
+    let alternate = false;
+    
+    createTab(pageDiv, tabEndSoon, "Annonces finissant bientôt", alternate);
 
-tableAuctions += htmlSegment;
+    let tabRecentDate = await getRecentData();
 
-});
+    pageDiv.innerHTML += `<p></p>`;
 
-pageDiv.innerHTML += `<br> 
-	<div class="row">		
-	<div class="column">
-	`;
-pageDiv.innerHTML += tableAuctions;
-pageDiv.innerHTML +=`</div> 
+    createTab(pageDiv, tabRecentDate, "Nouvelles annonces", alternate);
 
-<div style ="background:purple; border-radius:25px; margin:150px; padding:50px; font-size:35px;">
-Les annonces actives récemment
-</div>`
+};
 
-let tabRecent = await getRecentData();
-console.log("RECENT"+tabRecent)
-let tableRecent = '';  
-Array.prototype.forEach.call(tabRecent,auction => {
-  let htmlSegment = `<div class="auction">
-  <img src="${auction.cover_photo}" >
-  <h2>${auction.name}</h2>
-</div>`;
+export function createTab(page, pictures, titleTab, alternate){
+    const info = document.createElement("div");
+	info.className = "tab-content p-4 p-md-5 my-5";
 
-tableRecent += htmlSegment;
-pageDiv.innerHTML += tableRecent;
-});
+	const title = document.createElement("h2");
+	title.className = "mb-4";
+	title.innerText = titleTab;
 
+	const rows = document.createElement("div");
+	rows.className = "row";
+
+	pictures.forEach(picture =>{
+        appendRow(rows, picture, alternate);
+        if (alternate) alternate = false;
+        else alternate = true;
+    })
+
+	info.appendChild(title);
+	info.appendChild(rows);
+	page.appendChild(info);
+};
+
+function appendRow(row, picture, alternate){
+    const info = document.createElement("div");
+	info.className = "col-md-6";
+
+    const a = document.createElement("a");
+    a.className = "column col-xs-6"
+    a.id = "caption";
+
+    const span = document.createElement("span");
+    span.className = "text";
+
+    const h1 = document.createElement("h1");
+    h1.innerText = picture.name;
+    
+    if (alternate) {
+        const test = document.createElement("div");
+        test.className = "col-md-6";
+        row.appendChild(test);
+    }
+
+	const image = document.createElement("img");
+	image.className = "img-fluid img-thumbnail mb-3";
+    image.src = picture.cover_photo;
+    image.style = "cursor: pointer;";
+    console.log(image);
+    image.addEventListener("click", onSubmit, false);
+    image.setAttribute("id_auction", picture.id_auction);
+
+    span.appendChild(h1);
+    a.appendChild(span);
+    a.appendChild(image);
+	info.appendChild(a);
+	row.appendChild(info);
+
+    if (! alternate) {
+        const test = document.createElement("div");
+        test.className = "col-md-6";
+        row.appendChild(test);
+    }
+};
+
+function onSubmit(e){
+    console.log("Coucou ?");
+    return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
+};
     
 async function getEndingData() {
   
@@ -68,7 +112,6 @@ async function getEndingData() {
       if (!responseAuction.ok) alert("Une erreur s'est produite lors de l'affichage des annonces.");
 
       const data = await responseAuction.json(); // json() returns a promise => we wait for the data
-      console.log("ENDING"+data)
       return data;
       
   } catch (error) {
@@ -77,7 +120,6 @@ async function getEndingData() {
   }
 
 };
-
 
 async function getRecentData() {
   
@@ -89,8 +131,6 @@ async function getRecentData() {
               "Content-Type": "application/json",
           },
       };
-
-      console.log(optionsAuction);
 
       const responseAuction = await fetch('/api/auctions/recentAuctions', optionsAuction); // fetch return a promise => we wait for the response
 
@@ -104,7 +144,6 @@ async function getRecentData() {
       return undefined;
   }
 
-}
-}
+};
 
 export default HomePage;
