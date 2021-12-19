@@ -81,10 +81,10 @@ let auctionUpdatePage = `
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="true">Oui</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signedTrue">Oui</input>
                                 </div>
                                 <div class="col form-check mr-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="false" checked>Non</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signedFalse">Non</input>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -226,7 +226,7 @@ async function AuctionUpdatePage(param) {
     const duration = document.getElementById("duration");
     duration.value = auctionInfos.day_duration;
     const startTime = document.getElementById("startTime");
-    startTime.value = auctionInfos.start_time.substring(0,10);
+    startTime.value = auctionInfos.start_time.substring(0,16);
     const coverPhoto = document.getElementById("coverPhoto");
     coverPhoto.value = auctionInfos.cover_photo;
 
@@ -236,8 +236,13 @@ async function AuctionUpdatePage(param) {
     pieceDescription.value = pieceInfos.description;
     const artist = document.getElementById("artist");
     artist.value = pieceInfos.artists;
-    const signed = document.getElementById("signed");
-    signed.value = pieceInfos.signed;
+    if (pieceInfos.signed) {
+        const signed = document.getElementById("signedTrue");
+        signed.checked = true;
+    } else {
+        const signed = document.getElementById("signedFalse");
+        signed.checked = true;
+    }
     const partner = document.getElementById("partner");
     partner.value = pieceInfos.partner;
     const collection = document.getElementById("collection");
@@ -245,7 +250,7 @@ async function AuctionUpdatePage(param) {
     const type = document.getElementById("type");
     type.value = pieceInfos.type;
     const size = document.getElementById("size");
-    size.size = pieceInfos.size;
+    size.value = pieceInfos.size;
     const artMovement = document.getElementById("artMovement");
     artMovement.value = pieceInfos.art_movement;
     const location = document.getElementById("location");
@@ -291,8 +296,6 @@ async function getAuctionInfos(id) {
 
 async function onSubmit(e) {
     e.preventDefault();
-    let userEmail = getSessionObject("user").email;
-
     // Auction
     let auctionName = document.getElementById("auctionName").value;
     if (auctionName === "") {
@@ -313,7 +316,9 @@ async function onSubmit(e) {
     let pieceName = document.getElementById("pieceName").value;
     let pieceDescription = document.getElementById("pieceDescription").value;
     let artist = document.getElementById("artist").value;
-    let signed = document.getElementById("signed").value;
+    let signed;
+    if(document.getElementById('signedTrue').checked == true) signed = true;
+    else signed = false;
     let partner = document.getElementById("partner").value;
     let collection = document.getElementById("collection").value;
     let type = document.getElementById("type").value;
@@ -323,7 +328,7 @@ async function onSubmit(e) {
     let date = document.getElementById("date").value;
     if (date === '') date = '2000-01-01';
 
-    // Piece_Picture TODO comment géré ça ? ...
+    // Piece_Picture
     let piecePictures = document.getElementById("piecePictures").value;
 
     try {
@@ -342,6 +347,8 @@ async function onSubmit(e) {
                 "Content-Type": "application/json",
             },
         };
+
+        console.log(optionsAuction.body);
 
         const idAuctionSelected = document.getElementById("id_auction").value;
 
@@ -367,13 +374,15 @@ async function onSubmit(e) {
                 size: size,
                 art_movement: artMovement,
                 location: location,
-                id_auction: idAuction,
+                id_auction: idAuctionSelected,
                 date: date,
             }), // body data type must match "Content-Type" header
             headers: {
                 "Content-Type": "application/json",
             },
         };
+
+        console.log(optionsPiece.body);
 
         const responsePiece = await fetch("/api/pieces/" + idAuctionSelected + "/updatePiece", optionsPiece);
 
@@ -395,7 +404,8 @@ async function onSubmit(e) {
         console.error("AuctionAddPage::error: ", error);
     }
 
-    return Redirect("/");
+    return;
+    // return Redirect("/");
 }
 
 
