@@ -1,9 +1,9 @@
 import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
-import {getSessionObject, setSessionObject} from "../../utils/session";
+import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
 
-// TODO chopper TOUTES les infos de l'enchere à modif
+
 
 let auctionUpdatePage = `
   <form id="auctionUpdateForm">
@@ -15,18 +15,11 @@ let auctionUpdatePage = `
 				
 				<div class="pb-1">
 				    <hr>
-				</div>
-				
-                <div class="pb-1">
-                    <button class="btn btn-outline-light btn-danger px-5" id="delete">Supprimer votre annonce</button>
-                </div>
-                
-                <div class="pb-3">
-				    <hr>
-				</div>
+				</div>	
 				
 				<p class="text-white-50 mb-4">
 					Remplissez les champs necessaire pour l'ANNONCE ci-dessous
+                </p>
 				<div class="row">
 					<div class="col">
 						<div class="form-outline form-white mb-4">
@@ -88,10 +81,10 @@ let auctionUpdatePage = `
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="col form-check ml-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="1">Oui</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="true">Oui</input>
                                 </div>
                                 <div class="col form-check mr-3">
-                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="2" checked>Non</input>
+                                    <input type="radio" class="form-check-input" name="signed" id="signed" value="false" checked>Non</input>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -102,11 +95,11 @@ let auctionUpdatePage = `
 						<div class="form-outline form-white mb-4">
 							Type
 							<select class="form-select form-select-lg mb-3" id="type">
-                                <option selected value="0">Selectionnez le type</option>
-                                <option value="1">Peinture</option>
-                                <option value="2">Sculpture</option>
-                                <option value="3">Photographie</option>
-                                <option value="4">Autre</option>
+                                <option selected value="Inconnu">Selectionnez le type</option>
+                                <option value="Peinture">Peinture</option>
+                                <option value="Sculpture">Sculpture</option>
+                                <option value="Photographie">Photographie</option>
+                                <option value="Autre">Autre</option>
                             </select>
 						</div>
 					</div>
@@ -114,15 +107,15 @@ let auctionUpdatePage = `
 						<div class="form-outline form-white mb-4">
 							Mouvement
                             <select class="form-select form-select-lg mb-3" id="artMovement">
-                                <option selected value="0">Selectionnez le mouvement</option>
-                                <option value="1">Réalisme</option>
-                                <option value="2">Impressionnisme</option>
-                                <option value="3">Fauvisme</option>
-                                <option value="4">Expressionnisme</option>
-                                <option value="5">Cubisme</option>
-                                <option value="6">Futurisme</option>
-                                <option value="7">Surréalisme</option>
-                                <option value="8">Autre</option>
+                                <option selected value="Inconnu">Selectionnez le mouvement</option>
+                                <option value="Réalisme">Réalisme</option>
+                                <option value="Impressionnisme">Impressionnisme</option>
+                                <option value="Fauvisme">Fauvisme</option>
+                                <option value="Expressionnisme">Expressionnisme</option>
+                                <option value="Cubisme">Cubisme</option>
+                                <option value="Futurisme">Futurisme</option>
+                                <option value="Surréalisme">Surréalisme</option>
+                                <option value="Autre">Autre</option>
                             </select>
 						</div>
 					</div>
@@ -146,61 +139,65 @@ let auctionUpdatePage = `
 							<input type="text" id="collection" class="form-control form-control-lg" placeholder=""/>
 						</div>
 					</div>
+                </div>
+				<div class="row">
+					<div class="col">
+						<div class="form-outline form-white mb-4">
+							Date
+							<input type="text" id="date" class="form-control form-control-lg" placeholder=""/>
+						</div>
+					</div>
 					<div class="col">
 						<div class="form-outline form-white mb-4">
 							Localisation actuelle
 							<input type="text" id="location" class="form-control form-control-lg" placeholder=""/>
 						</div>
 				    </div>
+				</div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-outline form-white mb-4">
+                            Description
+                            <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
+                        </div>
+                    </div>
                 </div>
 				<div class="row">
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Date Precise <i style="color: grey; font-size: 12px;">(si connue)</i>
-							<input type="date" id="preciseDate" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Millenaire
-							<input type="number" min="-10" max="2" step="1" id="millenium" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Siècle - 1
-							<input type="number" min="1" max="21" step="1" id="firstCentury" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-outline form-white mb-4">
-							Siècle - 2
-							<input type="number" min="1" max="21" step="1" id="secondCentury" class="form-control form-control-lg" placeholder=""/>
-						</div>
-					</div>
-				</div>
-                <div class="form-outline form-white mb-4">
-                    Description
-                    <input type="text" id="pieceDescription" class="form-control form-control-lg" placeholder=""/>
-                </div>
-				<div class="form-outline form-white mb-4 pb-4">
-					Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="file" id="piecePictures" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder="Adresse" multiple/>
+				    <div class="col">
+				        <div class="form-outline form-white mb-4">
+                            Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
+                            <input type="url" id="piecePictures" class=" form-control form-control-lg" placeholder=""/>
+				        </div>
+                    </div>
 				</div>
 				
-                <div>
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Ajouter votre annonce</button>
+				<div class="px-5">
+				    <hr>
+				</div>
+				
+                <div class="row px-5">
+                    <div class="col">
+                        <button class="btn btn-danger btn-lg" id="delete">Supprimer votre annonce</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-outline-light btn-lg" type="submit">Modifier votre annonce</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-outline-info btn-lg" id="posted">Poster votre annonce</button>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
-	<div class="pb-5"></div>
+	<div class="pb-3"></div>
   `;
 
 
-function AuctionUpdatePage() {
+function AuctionUpdatePage(param) {
     let user = getSessionObject("user");
     if (!user) return Redirect("/login");
+
+    console.log(param);
 
     // reset #page div
     const pageDiv = document.querySelector("#page");
@@ -217,11 +214,136 @@ function AuctionUpdatePage() {
 
 async function onSubmit(e) {
     e.preventDefault();
+    let userEmail = getSessionObject("user").email;
 
+    // Auction
+    let auctionName = document.getElementById("auctionName").value;
+    if (auctionName === "") {
+        alert("Veuillez remplir le nom de l'annonce.");
+        return;
+    }
+
+    let auctionDescription = document.getElementById("auctionDescription").value;
+    let startPrice = document.getElementById("startPrice").value;
+    if (startPrice === "") startPrice = 0;
+    let duration = document.getElementById("duration").value;
+    if (duration === "") duration = 1;
+    let startTime = document.getElementById("startTime").value;
+    if (startTime === '') startTime = '2000-01-01 00:00';
+    let coverPhoto = document.getElementById("coverPhoto").value;
+
+    // Piece
+    let pieceName = document.getElementById("pieceName").value;
+    let pieceDescription = document.getElementById("pieceDescription").value;
+    let artist = document.getElementById("artist").value;
+    let signed = document.getElementById("signed").value;
+    let partner = document.getElementById("partner").value;
+    let collection = document.getElementById("collection").value;
+    let type = document.getElementById("type").value;
+    let size = document.getElementById("size").value;
+    let artMovement = document.getElementById("artMovement").value;
+    let location = document.getElementById("location").value;
+    let date = document.getElementById("date").value;
+    if (date === '') date = '2000-01-01';
+
+    // Piece_Picture TODO comment géré ça ? ...
+    let piecePictures = document.getElementById("piecePictures").value;
+
+    try {
+        // Add auction
+        const optionsAuction = {
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: auctionName,
+                description: auctionDescription,
+                start_price: startPrice,
+                day_duration: duration,
+                start_time: startTime,
+                cover_photo: coverPhoto,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const responseAuction = await fetch("/api/auctions/" + userEmail + "/updateAuction", optionsAuction); // fetch return a promise => we wait for the response
+
+        if (!responseAuction.ok) alert("Une erreur s'est produite lors de la modification de l'annonce.");
+
+        const auction = await responseAuction.json(); // json() returns a promise => we wait for the data
+
+        // Add Piece
+
+        let idAuction = auction.id_auction;
+
+        const optionsPiece = {
+            method: "PUT", // *GET, POST, PUT, DELETE, etc.
+            body: JSON.stringify({
+                name: pieceName,
+                description: pieceDescription,
+                artist: artist,
+                signed: signed,
+                partner: partner,
+                collection: collection,
+                type: type,
+                size: size,
+                art_movement: artMovement,
+                location: location,
+                id_auction: idAuction,
+                date: date,
+            }), // body data type must match "Content-Type" header
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const responsePiece = await fetch("/api/pieces/" + idAuction + "/updatePiece", optionsPiece);
+
+        if (!responsePiece.ok) alert("Une erreur s'est produite lors de la modification de l'oeuvre.");
+
+        const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
+
+        alert("Modification de l'annonce et de l'oeuvre réussie.")
+
+        // Add PiecePictures
+
+        let idPiece = piece.id_piece;
+
+        const optionsPiecePicture = {
+            id_piece: idPiece,
+        }
+
+    } catch (error) {
+        console.error("AuctionAddPage::error: ", error);
+    }
+
+    return Redirect("/");
 }
 
-function deleteAuction() {
-    return Redirect("/");
+
+async function deleteAuction() {
+    let text = "Vous êtes sur le point de supprimer votre annonce !\nConfirmez par OK ou annulez la suppression.";
+    if (confirm(text) == false) {
+        alert("Vous avez annulé la suppresion de l'annonce !");
+        return;
+    }
+
+    const options = {
+        method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
+    const responseDeletePiece = await fetch("/api/pieces/" + idSelectedAuction + "/deletePiece", options);
+    const responseDeleteAuction = await fetch("/api/auctions/" + idSelectedAuction + "/deleteAuction", options);
+
+    if (!responseDeletePiece || !responseDeleteAuction) {
+        alert("Une erreur s'est produite lors de la suppresion de l'annonce !");
+    } else {
+        alert("Vous avez bien suprimer votre annonce !");
+        return Redirect("/profil");
+    }
 }
 
 export default AuctionUpdatePage;
