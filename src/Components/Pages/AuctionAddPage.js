@@ -312,7 +312,7 @@ async function onSubmit(e) {
 
         Swal.fire("Reussite", "Création de l'annonce et de l'oeuvre réussie !", "success");
 
-        return Redirect("/annonces/id?" + responseAuction.id_auction);
+        return Redirect("/annonces/id?" + idAuction);
 
     } catch (error) {
         console.error("AuctionAddPage::error: ", error);
