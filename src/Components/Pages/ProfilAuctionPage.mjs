@@ -179,7 +179,7 @@ async function getAuctionBids(){
 
 
 export function onClickAuction(e){
-	return Redirect("/annonces?"+e.currentTarget.getAttribute("id_auction"));
+	return Redirect("/annonces/id?"+e.currentTarget.getAttribute("id_auction"));
 }
 
 
