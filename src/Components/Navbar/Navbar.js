@@ -30,7 +30,17 @@ import { getSessionObject } from "../../utils/session";
                             <a class="nav-link" href="#" data-uri="/annonces">Annonces</a>
                         </li>
                     </ul>
-                    
+                    <ul class="navbar-nav w-100 justify-content-center">
+                        <li>
+                            <div class="input-group rounded">
+                                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                    aria-describedby="search-addon" />
+                                <span class="input-group-text border-0" id="search-addon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
                     <ul class="nav navbar-nav ml-auto w-100 justify-content-end px-3">
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-uri="/login">Log in</a>
