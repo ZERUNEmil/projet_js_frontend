@@ -2,6 +2,7 @@ import {Redirect} from "../Router/Router";
 import Navbar from "../Navbar/Navbar";
 import {getSessionObject} from "../../utils/session";
 import "../../stylesheets/profileStyle.css";
+import axios from "axios";
 
 let auctionAddPage = `
   <form id="auctionAddForm">
@@ -51,7 +52,7 @@ let auctionAddPage = `
 				</div>
 				<div class="form-outline form-white mb-4 pb-4">
 					Image pour l'annonce <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-					<input type="url" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder=""/>
+					<input type="file" id="coverPhoto" accept="image/png, image/jpeg" class=" form-control form-control-lg" placeholder=""/>
 				</div>
 			
 				<hr>
@@ -164,7 +165,7 @@ let auctionAddPage = `
 				    <div class="col">
 				        <div class="form-outline form-white mb-4">
                             Image(s) pour illustrer l'oeuvre <i style="color: grey; font-size: 12px;">(jpeg ou png)</i>
-                            <input type="url" id="piecePictures" class=" form-control form-control-lg" placeholder=""/>
+                            <input type="file" id="piecePictures" class=" form-control form-control-lg" placeholder="" multiple/>
 				        </div>
                     </div>
 				</div>
@@ -239,7 +240,18 @@ async function onSubmit(e) {
     if (date === '') date = '2000-01-01';
 
     // Piece_Picture TODO comment géré ça ? ...
-    let piecePictures = document.getElementById("piecePictures").value;
+
+    const filePicture = e.target[5].files[0];
+    let urlPicture = "";
+    if (filePicture != undefined) urlPicture = await uploadImage(filePicture);
+
+    const piecePictures = e.target[18].files;
+    const urlPiecePictures = [];
+    if (piecePictures.length != 0) {
+        for (let picture of Object.entries(piecePictures)){
+            urlPiecePictures.push(await uploadImage(picture[1]));
+        }
+    }
 
     try {
         // Add auction
@@ -251,7 +263,7 @@ async function onSubmit(e) {
                 start_price: startPrice,
                 day_duration: duration,
                 start_time: startTime,
-                cover_photo: coverPhoto,
+                cover_photo: urlPicture,
             }), // body data type must match "Content-Type" header
             headers: {
                 "Content-Type": "application/json",
@@ -295,11 +307,29 @@ async function onSubmit(e) {
 
         const piece = await responsePiece.json(); // json() returns a promise => we wait for the data
 
-        alert("Création de l'annonce et de l'oeuvre réussie.")
-
         let idPiece = piece.id_piece;
 
-        // Add PiecePictures
+        for (let picture of urlPiecePictures){
+            const optionsPiece = {
+                method: "PUT", // *GET, POST, PUT, DELETE, etc.
+                body: JSON.stringify({
+                    name: "",
+                    picture: picture,
+                    label: ""
+                }), // body data type must match "Content-Type" header
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+    
+            const responsePiece = await fetch("/api/pieces/" + idPiece + "/addPicture", optionsPiece);
+    
+            if (!responsePiece.ok) alert("Une erreur s'est produite lors de l'ajout de la photo.");
+        }
+       
+
+        alert("Création de l'annonce et de l'oeuvre réussie.")
+
 
 
     } catch (error) {
@@ -308,5 +338,21 @@ async function onSubmit(e) {
 
     return Redirect("/");
 }
+
+async function uploadImage(img) {
+    let body = new FormData()
+    body.set('key', 'b799672908d39df77cd5a53f169de4ca')
+    body.append('image', img)
+
+    let response = await axios({
+      method: 'post',
+      url: 'https://api.imgbb.com/1/upload',
+      data: body
+    })
+
+    let json = JSON.parse(response.request.response);
+
+    return json.data.url;
+  }
 
 export default AuctionAddPage;
